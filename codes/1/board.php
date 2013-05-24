@@ -6,7 +6,7 @@ function h($s){ return htmlspecialchars($s); }
 function e($s){ global $mysqli; return $mysqli->real_escape_string($s); }
 
 if(isset($_POST["name"])){
-  $mysqli->query("INSERT INTO data (name, text) VALUES ('" . e($_POST["name"]) . "', '" . e($_POST["text"]) . "')");
+  $mysqli->query("INSERT INTO datas (name, text) VALUES ('" . e($_POST["name"]) . "', '" . e($_POST["text"]) . "')");
 }
 
 ?>
@@ -26,7 +26,7 @@ if(isset($_POST["name"])){
     </form>
     <hr />
     <?php
-      $result = $mysqli->query("SELECT * FROM data ORDER BY date DESC");
+      $result = $mysqli->query("SELECT * FROM datas ORDER BY date DESC");
       while($row = $result->fetch_object()){
         print("<b>" . h($row->name) . "</b> " . h($row->text) . " (" . h($row->date) . ")<hr />");
       }
