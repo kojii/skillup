@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Skillup by team-lab</title>
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <img src="../images/logo.jpg">
+        <h1>Skillup</h1>
+        <p>チームラボオンラインスキルアップ課題</p>
+        
+        <h3>STEP1 掲示板を作ろう</h3>
+        <ul>
+         <li><a href="../1/1.html">1.インターネットのしくみ</a>
+         <li><a href="../1/2.html">2.HTTPのしくみ</a>
+         <li><a href="../1/3.html">3.WEBサーバを立ててみる</a>
+         <li><a href="../1/4.html">4.HTML,CSSを書いてみる</a>
+         <li><a href="../1/5.html">5.PHPを書いてみる</a>
+         <li><a href="../1/6.html">6.PHPでGET,POSTを受け取る</a>
+         <li><a href="../1/7.html">7.データベースを作成してみる</a>
+         <li><a href="../1/8.html">8.SQLを書いてみる</a>
+         <li><a href="../1/9.html">9.PHPからデータベースを操作してみる</a>
+        </ul>
+        
+        <h3>STEP2 Twitterもどきを作ろう</h3>
+        <ul>
+         <li><a href="../2/1.html">1.IDEを使ってみる</a>
+         <li><a href="../2/2.html">2.JavaScriptを書いてみる</a>
+         <li><a href="../2/3.html">3.ログイン機能を作ってみる</a>
+         <li><a href="../2/4.html">4.入力チェックを作ってみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
+         <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
+         <li><a href="../2/8.html">8.画面仕様書とは</a>
+         <li><a href="../2/9.html">9.データベースを設計してみる</a>
+        </ul>
+        
+        <h3>STEP3 オリジナルサイトを作ろう</h3>
+        <ul>
+         <li><a href="../3/1.html">1.CentOSとは</a>
+         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
+         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
+         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/6.html">6.テストとは</a>
+         <li><a href="../3/7.html">7.テストを書いてみる</a>
+         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+        </ul>
+      </header>
+      <section><h1>STEP1-2.HTTPのしくみ</h1>
+
+<p>WebサーバはHTTPというプロトコルを用いてクライアントと通信します。HTTP通信は必ずクライアント側のリクエストから開始され、サーバはこれにレスポンスを返します。リクエストではメソッドと呼ばれるもので動作を指定します。メソッドには主に2種類あり、GETはデータの取得、POSTはデータの送信を表します。</p>
+
+<h3>GETメソッド</h3>
+
+<p>GETメソッドの例として<a href="http://www.team-lab.com/index.html">http://www.team-lab.com/index.html</a>にアクセスする場合の通信の様子を見てみましょう。</p>
+
+<p><img src="../images/1_2_1.png" alt=""></p>
+
+<p>まず、クライアント（主にブラウザ）がWEBサーバに以下のようなリクエストを送ります。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">GET /index.html HTTP/1.1
+Host: www.team-lab.com
+</code></pre></div>
+<p>これは、www.team-lab.comというホスト名のサーバに対し、GETメソッドで/index.htmlというURIを要求していることを表します。これを受けてサーバは以下のようなレスポンスを返します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 25069
+Date: Fri, 10 May 2013 06:17:55 GMT
+
+(コンテンツ本体)
+</code></pre></div>
+<p>先頭行にある200はステータスコードと呼ばれ、レスポンスの意味を表しています。「200 OK」「403 Forbidden」「404 Not Found」など様々なものがあります。
+2行目のContent-Typeは送信したファイルの種類を表しています。この場合はHTMLファイルですので「text/html」となっています。
+最後に1行の空行を挟み、ファイル本体が送信されます。
+これを受けてクライアントはファイルの内容を表示します。</p>
+
+<h3>POSTメソッド</h3>
+
+<p>POSTメソッドは掲示板などの動的なコンテンツに用いられます。例として実在しない掲示板に「teamlab」という名前で「こんにちは」と書き込みする際の通信の様子を見てみましょう。</p>
+
+<p><img src="../images/1_2_2.png" alt=""></p>
+
+<p>まず、クライアントがWEBサーバに以下のようなリクエストを送ります。（実在しないため実際にアクセスすると「404 Not Found」となります。）</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">POST /write.php HTTP/1.1
+Host: www.team-lab.com
+Content-Length: 93
+
+name=teamlab&amp;text=%82%B1%82%F1%82%C9%82%BF%82%CD
+</code></pre></div>
+<p>POSTの場合はレスポンスと同じように最後に1行の空白を挟みデータを送信します。データは&amp;で区切られ、各データごとに データの識別名=データ本体 という構造になっています。また、日本語など送信できない文字はURLエンコードされて送信されます。
+サーバではデータを処理するプログラムが起動し、掲示板の更新処理などを行った後にGETの場合と同様にレスポンスを返します。</p>
+
+<hr>
+
+<p><strong>[課題]実際の通信を見てみよう</strong><br>
+GoogleChromeには「要素を検証」という機能があり、Webページの情報や通信の様子を見ることができます。右クリック→「要素を検証」→「Network」タブで色々なWebページの通信の様子を見てみましょう。</p>
+</section>
+      <footer></footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

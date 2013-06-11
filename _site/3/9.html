@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Skillup by team-lab</title>
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <img src="../images/logo.jpg">
+        <h1>Skillup</h1>
+        <p>チームラボオンラインスキルアップ課題</p>
+        
+        <h3>STEP1 掲示板を作ろう</h3>
+        <ul>
+         <li><a href="../1/1.html">1.インターネットのしくみ</a>
+         <li><a href="../1/2.html">2.HTTPのしくみ</a>
+         <li><a href="../1/3.html">3.WEBサーバを立ててみる</a>
+         <li><a href="../1/4.html">4.HTML,CSSを書いてみる</a>
+         <li><a href="../1/5.html">5.PHPを書いてみる</a>
+         <li><a href="../1/6.html">6.PHPでGET,POSTを受け取る</a>
+         <li><a href="../1/7.html">7.データベースを作成してみる</a>
+         <li><a href="../1/8.html">8.SQLを書いてみる</a>
+         <li><a href="../1/9.html">9.PHPからデータベースを操作してみる</a>
+        </ul>
+        
+        <h3>STEP2 Twitterもどきを作ろう</h3>
+        <ul>
+         <li><a href="../2/1.html">1.IDEを使ってみる</a>
+         <li><a href="../2/2.html">2.JavaScriptを書いてみる</a>
+         <li><a href="../2/3.html">3.ログイン機能を作ってみる</a>
+         <li><a href="../2/4.html">4.入力チェックを作ってみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
+         <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
+         <li><a href="../2/8.html">8.画面仕様書とは</a>
+         <li><a href="../2/9.html">9.データベースを設計してみる</a>
+        </ul>
+        
+        <h3>STEP3 オリジナルサイトを作ろう</h3>
+        <ul>
+         <li><a href="../3/1.html">1.CentOSとは</a>
+         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
+         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
+         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/6.html">6.テストとは</a>
+         <li><a href="../3/7.html">7.テストを書いてみる</a>
+         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+        </ul>
+      </header>
+      <section><h1>STEP3-9.セキュリティ対策をしてみる</h1>
+
+<p>今まではそれほど重視していませんでしたが、Webサイトを世界中に公開する場合はセキュリティ対策を必ずしなければなりません。</p>
+
+<h2>サーバの設定</h2>
+
+<h3>Apache</h3>
+
+<p>Apacheの設定ファイルはCentOSの場合/etc/httpd/conf/httpd.confです。これを編集します。まずはHTTPレスポンスにOSの情報が含まれているのでそれを消します。OSの情報が分かると、それを利用して攻撃される可能性があるためです。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">ServerSignature Off
+ServerTokens ProductOnly
+</code></pre></div>
+<p>次にindexが存在しないディレクトリにアクセスすると、そのディレクトリの一覧を表示するようになっているので、表示しないようにします。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;Directory &quot;/var/www/html&quot;&gt;
+  ~
+&lt;/Directory&gt;
+</code></pre></div>
+<p>内の</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">Options Indexes FollowSymLinks
+</code></pre></div>
+<p>を</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">Options -Indexes FollowSymLinks
+</code></pre></div>
+<p>に変更します。</p>
+
+<h3>MySQL</h3>
+
+<p>rootを含め、全てのユーザに必ずパスワードを設定します。ユーザには適切に権限を与えます。（例えば更新する必要がない場合はSELECTのみ許可するなど）可能であれば各データベースごとにユーザを作成します。ユーザの作成はMySQLコマンドラインツールから行います。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">mysql&gt; GRANT 権限 ON データベース名.テーブル名 TO &#39;ユーザ名@ホスト名&#39; INDENTIFIED BY &#39;パスワード&#39;;
+</code></pre></div>
+<p>権限にはALL(全権限), USAGE(無権限), INDEX(インデックス操作権限)と、CREATE, ALTER, DROP, SELECT, UPDATE, INSERT, DELETなどの個別の構文の使用権限があり、カンマで区切って指定します。権限を与えるデータベース名およびテーブル名は、全て許可する場合は*を使用します。アクセス可能なホスト名は外部から接続しない場合localhostにします。ユーザを追加したら以下の文を実行することでデータが反映されます。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">mysql&gt; FLUSH PRIVILEGES;
+</code></pre></div>
+<h3>ファイアウォール</h3>
+
+<p>iptablesというパケットフィルタリングツールを利用してSSHとHTTPしか接続できないファイアウォールを構築します。/etc/sysconfig/iptablesを以下のように編集します。</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="c1">#基本は全て許可</span>
+<span class="o">*</span><span class="n">filter</span>
+<span class="ss">:INPUT</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
+<span class="ss">:FORWARD</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
+<span class="ss">:OUTPUT</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
+
+<span class="c1">#ここからINPUTの個別設定</span>
+<span class="c1">#接続状態がRELATED,ESTABLISHEDなら許可</span>
+<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="n">m</span> <span class="n">state</span> <span class="o">--</span><span class="n">state</span> <span class="no">RELATED</span><span class="p">,</span><span class="no">ESTABLISHED</span> <span class="o">-</span><span class="n">j</span> <span class="no">ACCEPT</span>
+<span class="c1">#ループバックは許可</span>
+<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="n">i</span> <span class="n">lo</span> <span class="o">-</span><span class="n">j</span> <span class="no">ACCEPT</span>
+<span class="c1">#SSH(ポート22)は許可</span>
+<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="nb">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">m</span> <span class="n">state</span> <span class="o">--</span><span class="n">state</span> <span class="no">NEW</span> <span class="o">-</span><span class="n">m</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">22</span> <span class="o">-</span><span class="n">j</span> <span class="no">ACCEPT</span>
+<span class="c1">#HTTP(ポート80)は許可</span>
+<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="nb">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">m</span> <span class="n">state</span> <span class="o">--</span><span class="n">state</span> <span class="no">NEW</span> <span class="o">-</span><span class="n">m</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">80</span> <span class="o">-</span><span class="n">j</span> <span class="no">ACCEPT</span>
+<span class="c1">#それ以外は拒否</span>
+<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="n">j</span> <span class="no">REJECT</span> <span class="o">--</span><span class="n">reject</span><span class="o">-</span><span class="n">with</span> <span class="n">icmp</span><span class="o">-</span><span class="n">host</span><span class="o">-</span><span class="n">prohibited</span>
+
+<span class="c1">#反映させる</span>
+<span class="no">COMMIT</span>
+</code></pre></div>
+<p>iptablesを起動（再起動）します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">service iptables restart
+</code></pre></div>
+<h2>プログラムの書き方</h2>
+
+<h3>config</h3>
+
+<p>データベースの接続情報などの絶対に見えてはいけない情報は、外部からアクセスできないディレクトリに設置します。CakePHPの場合は自動でそのような設定になっていますが、自分で設定する場合は、アクセス制限をかけたいディレクトリに以下の内容を.htaccessという名前で保存します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">deny from all
+</code></pre></div>
+<h3>XSS対策</h3>
+
+<p>XSSとはクロスサイトスクリプティングの略で、送信されたデータを表示するようなWebサイトにおいて、HTMLタグやJavaScriptなどのデータを送信すことによる攻撃です。例えば任意のJavaScriptを実行されるなどの被害があります。対策として、phpで$<em>GETや$</em>POSTの値、またはデータベースから取り出した値などを表示する際に必ずhtmlspecialchars関数でエスケープしてから表示するようにします。</p>
+
+<h3>SQLインジェクション対策</h3>
+
+<p>SQLインジェクションとは、意図しないSQL文を実行させることによる攻撃です。例えばデータを全て削除されるなどの被害があります。対策として、SQLクエリにユーザの入力値を使用する場合は必ずmysqli::real<em>escape</em>string関数でエスケープしてから渡すようにします。また、CakePHPのモデルのfindやsaveなどのメソッドを利用すると自動でエスケープされます。</p>
+
+<h3>CSRF対策</h3>
+
+<p>CSRFとはクロスサイトリクエストフォージェリの略で、データを意図しない場所から送信することによる攻撃です。例えば掲示板の場合、意図しない内容が書き込まれたりするなどの被害があります。対策としてワンタイムトークンを利用する方法が挙げられます。これは、フォームを表示する際にサーバ側のセッションとユーザ側のhiddenパラメータにランダムな同じ値（トークン）をセットしておき、データの入力を受け付ける際にその値が同じかどうかチェックするというものです。これはCakePHPではCSRF対策を行いたいコントローラでSecurityコンポーネントを読み込むだけで簡単に実装できます。（ただしPOSTメソッドのみです。）この際改ざん対策も同時に行われるため、ビューでは必ずFormヘルパーのみを使ってフォームを生成するようにします。</p>
+</section>
+      <footer></footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

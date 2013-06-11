@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Skillup by team-lab</title>
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <img src="../images/logo.jpg">
+        <h1>Skillup</h1>
+        <p>チームラボオンラインスキルアップ課題</p>
+        
+        <h3>STEP1 掲示板を作ろう</h3>
+        <ul>
+         <li><a href="../1/1.html">1.インターネットのしくみ</a>
+         <li><a href="../1/2.html">2.HTTPのしくみ</a>
+         <li><a href="../1/3.html">3.WEBサーバを立ててみる</a>
+         <li><a href="../1/4.html">4.HTML,CSSを書いてみる</a>
+         <li><a href="../1/5.html">5.PHPを書いてみる</a>
+         <li><a href="../1/6.html">6.PHPでGET,POSTを受け取る</a>
+         <li><a href="../1/7.html">7.データベースを作成してみる</a>
+         <li><a href="../1/8.html">8.SQLを書いてみる</a>
+         <li><a href="../1/9.html">9.PHPからデータベースを操作してみる</a>
+        </ul>
+        
+        <h3>STEP2 Twitterもどきを作ろう</h3>
+        <ul>
+         <li><a href="../2/1.html">1.IDEを使ってみる</a>
+         <li><a href="../2/2.html">2.JavaScriptを書いてみる</a>
+         <li><a href="../2/3.html">3.ログイン機能を作ってみる</a>
+         <li><a href="../2/4.html">4.入力チェックを作ってみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
+         <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
+         <li><a href="../2/8.html">8.画面仕様書とは</a>
+         <li><a href="../2/9.html">9.データベースを設計してみる</a>
+        </ul>
+        
+        <h3>STEP3 オリジナルサイトを作ろう</h3>
+        <ul>
+         <li><a href="../3/1.html">1.CentOSとは</a>
+         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
+         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
+         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/6.html">6.テストとは</a>
+         <li><a href="../3/7.html">7.テストを書いてみる</a>
+         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+        </ul>
+      </header>
+      <section><h1>STEP3-7.テストを書いてみる</h1>
+
+<p>実際にテストコードを書いてみましょう。CakePHPではPHPUnitというテストツールを使用して単体テストを行うことができます。まずはPHPUnitをインストールします。phpをインストールしたディレクトリ（WindowsならC:\xampp\php）に移動し、以下のコマンドを管理者権限で実行します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">pear upgrade PEAR
+pear config-set auto_discover 1
+pear install pear.phpunit.de/PHPUnit
+</code></pre></div>
+<p>さらに、コード網羅率を調べるためにXDebugというデバッグツールをインストールします。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">pecl install xdebug
+</code></pre></div>
+<p>XDebugを有効にするため、php.iniを編集します。下部に以下のような行があるので先頭のセミコロンを削除してコメントアウトを外し、Apacheを再起動します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">;zend_extension = &quot;C:\xampp\php\ext\php_xdebug.dll&quot;
+</code></pre></div>
+<p>次にテスト用のデータベースを作成します。phpmyadminを利用して、構造のみをエクスポート・インポートすると簡単です。テスト用データベースの接続情報を/app/Config/database.php内のDATABASE_CONFIGクラスにある$testに記述します。これでテストを実行する準備が整いました。<a href="http://localhost/cakephp/test.php">http://localhost/cakephp/test.php</a>にアクセスするとCakePHP Test Suiteというページが表示されるはずです。</p>
+
+<p>テストケースを作成してみましょう。今回は<a href="../2/7.html">STEP2-7.CakePHPでログイン機能を書いてみる</a>で作成したUserモデルのバリデーションのテストを作成します。以下の内容を/app/Test/Case/Model/UserTest.phpという名前で保存します。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">//Authコンポーネントを読み込んでおく</span>
+<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AuthComponent&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller/Component&#39;</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">UserTest</span> <span class="k">extends</span> <span class="nx">CakeTestCase</span> <span class="p">{</span>
+  <span class="c1">//全てのテストの前に実行される</span>
+  <span class="k">public</span> <span class="k">function</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">parent</span><span class="o">::</span><span class="na">setUp</span><span class="p">();</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span> <span class="o">=</span> <span class="nx">ClassRegistry</span><span class="o">::</span><span class="na">init</span><span class="p">(</span><span class="s1">&#39;User&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="c1">//バリデーションのテスト用メソッド</span>
+  <span class="k">public</span> <span class="k">function</span> <span class="nf">testValidation</span><span class="p">(){</span>
+    <span class="c1">//isUniqueルールチェックのためにダミーユーザー追加</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testUser&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testPassword&#39;</span><span class="p">));</span>
+
+    <span class="c1">//テストケースを用意</span>
+    <span class="nv">$cases</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+      <span class="k">array</span><span class="p">(</span>
+        <span class="c1">//与えるデータ</span>
+        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">),</span>
+        <span class="c1">//期待される結果</span>
+        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//required</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//required</span>
+        <span class="p">)</span>
+      <span class="p">),</span>
+      <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;teamLab&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;short&#39;</span>
+        <span class="p">),</span>
+        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span> <span class="c1">//between</span>
+        <span class="p">)</span>
+      <span class="p">),</span>
+      <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;VerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrryLongName&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;nicePassword123&#39;</span>
+        <span class="p">),</span>
+        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//between</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span>
+        <span class="p">)</span>
+      <span class="p">),</span>
+      <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testUser&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;パスワード&#39;</span>
+        <span class="p">),</span>
+        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//isUnique</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//alphaNumeric</span>
+        <span class="p">)</span>
+      <span class="p">)</span>
+    <span class="p">);</span>
+
+    <span class="c1">//各ケースを実行</span>
+    <span class="k">foreach</span><span class="p">(</span><span class="nv">$cases</span> <span class="k">as</span> <span class="nv">$case</span><span class="p">){</span>
+      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]);</span>
+      <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">invalidFields</span><span class="p">();</span>
+      <span class="k">foreach</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;expect&#39;</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span>
+        <span class="c1">//引数が同値かどうかをテストする</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="o">!</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$result</span><span class="p">),</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>もう一度<a href="http://localhost/cakephp/app/webroot/test.php">http://localhost/cakephp/app/webroot/test.php</a>にアクセスしてみます。テストケースに「Model / User」という項目ができていると思います。クリックしてみましょう。クリックするとUserTestが実行されます。成功したケースは緑色、失敗したケースは赤色で示されます。「Analyze Code Coverage」をクリックするとコード網羅率を調べることもできます。</p>
+
+<p>モデルのほかにも様々なもののテストを作成できますが、もっとも重要なのはモデルです。今回のUserモデルは自作のメソッドが存在しませんでしたが、自作のメソッドを追加した場合はテストを作成することをお勧めします。</p>
+</section>
+      <footer></footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

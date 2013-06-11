@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Skillup by team-lab</title>
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <img src="../images/logo.jpg">
+        <h1>Skillup</h1>
+        <p>チームラボオンラインスキルアップ課題</p>
+        
+        <h3>STEP1 掲示板を作ろう</h3>
+        <ul>
+         <li><a href="../1/1.html">1.インターネットのしくみ</a>
+         <li><a href="../1/2.html">2.HTTPのしくみ</a>
+         <li><a href="../1/3.html">3.WEBサーバを立ててみる</a>
+         <li><a href="../1/4.html">4.HTML,CSSを書いてみる</a>
+         <li><a href="../1/5.html">5.PHPを書いてみる</a>
+         <li><a href="../1/6.html">6.PHPでGET,POSTを受け取る</a>
+         <li><a href="../1/7.html">7.データベースを作成してみる</a>
+         <li><a href="../1/8.html">8.SQLを書いてみる</a>
+         <li><a href="../1/9.html">9.PHPからデータベースを操作してみる</a>
+        </ul>
+        
+        <h3>STEP2 Twitterもどきを作ろう</h3>
+        <ul>
+         <li><a href="../2/1.html">1.IDEを使ってみる</a>
+         <li><a href="../2/2.html">2.JavaScriptを書いてみる</a>
+         <li><a href="../2/3.html">3.ログイン機能を作ってみる</a>
+         <li><a href="../2/4.html">4.入力チェックを作ってみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
+         <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
+         <li><a href="../2/8.html">8.画面仕様書とは</a>
+         <li><a href="../2/9.html">9.データベースを設計してみる</a>
+        </ul>
+        
+        <h3>STEP3 オリジナルサイトを作ろう</h3>
+        <ul>
+         <li><a href="../3/1.html">1.CentOSとは</a>
+         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
+         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
+         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/6.html">6.テストとは</a>
+         <li><a href="../3/7.html">7.テストを書いてみる</a>
+         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+        </ul>
+      </header>
+      <section><h1>STEP3-8.バージョン管理をしてみる</h1>
+
+<p>バージョン管理システムを利用すると簡単にバージョン管理をすることができます。バージョン管理システムには、変更履歴の保存・閲覧・復元や、複数人での開発のサポートなどの機能が含まれています。今回はSubversionというバージョン管理システムおよびTortoiseSVNというSubversionのクライアントを使用します。</p>
+
+<h2>サーバ側</h2>
+
+<p>まずはサーバ上にSubversionを導入します。mod<em>dav</em>svnというSubversionをHTTP経由で使えるようにするためのApacheのモジュールも一緒にインストールします。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">yum -y install subversion mod_dav_svn
+</code></pre></div>
+<p>次にSubversion用のディレクトリを作成します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">mkdir /var/www/svn
+</code></pre></div>
+<p>次にURLを設定します。/etc/httpd/conf.d/subversion.conf内に以下の内容を追加します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;Location /repos&gt;
+  DAV svn
+  SVNParentPath /var/www/svn
+  AuthType Basic
+  AuthName &quot;Authorization Realm&quot;
+  AuthUserFile /var/www/.htpasswd
+  Require valid-user
+&lt;/Location&gt;
+</code></pre></div>
+<p>上記の設定ではBasic認証によるアクセス制限をかけてあるため、認証するユーザを設定します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">htpasswd -c /var/www/.htpasswd ユーザ名
+</code></pre></div>
+<p>なお、ユーザを追加する場合は-cを外します。</p>
+
+<p>リポジトリを作成します。リポジトリとは各プロジェクトごとのファイル置き場です。今回は試しにtestリポジトリを作成します。作成したらApacheが読み書きできるよう、所有者と権限を変更しておきます。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">cd /var/www/svn
+svnadmin create test
+chown -R apache:apache test
+chmod -R u+rw test
+</code></pre></div>
+<p>最後にApacheを再起動して設定を反映させます。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">service httpd restart
+</code></pre></div>
+<p>http://IPアドレス/repos/test/にアクセスしてみましょう。認証画面が出た後、test - Revision 0: が表示されれば成功です。</p>
+
+<h2>クライアント側</h2>
+
+<p><a href="http://tortoisesvn.net/downloads.html">TortoiseSVN - Downloads</a>からインストーラーをダウンロード・インストールします。その後、言語パックもダウンロード・インストールします。インストールが終わったら適当なフォルダ上で右クリックするとTortoiseSVNという項目ができているはずです。ここからSettingsを選択し、Languageを日本語に変更します。</p>
+
+<p>また適当なフォルダ上で右クリックするとSVNチェックアウトという項目があります。チェックアウトとは、リポジトリをローカルにコピーすることです。先ほどのリポジトリをチェックアウトしてみましょう。ただし、まだ何もファイルがないため特に変化はありません。</p>
+
+<p>あとはここで普通に作業を行います。ファイルが完成したら右クリックメニューからSVNコミットを選択します。コミットによって作成・更新したファイルがリポジトリに反映されます。複数人での開発の際などは右クリックメニューのSVN更新から最新版を取得します。</p>
+</section>
+      <footer></footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Skillup by team-lab</title>
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <img src="../images/logo.jpg">
+        <h1>Skillup</h1>
+        <p>チームラボオンラインスキルアップ課題</p>
+        
+        <h3>STEP1 掲示板を作ろう</h3>
+        <ul>
+         <li><a href="../1/1.html">1.インターネットのしくみ</a>
+         <li><a href="../1/2.html">2.HTTPのしくみ</a>
+         <li><a href="../1/3.html">3.WEBサーバを立ててみる</a>
+         <li><a href="../1/4.html">4.HTML,CSSを書いてみる</a>
+         <li><a href="../1/5.html">5.PHPを書いてみる</a>
+         <li><a href="../1/6.html">6.PHPでGET,POSTを受け取る</a>
+         <li><a href="../1/7.html">7.データベースを作成してみる</a>
+         <li><a href="../1/8.html">8.SQLを書いてみる</a>
+         <li><a href="../1/9.html">9.PHPからデータベースを操作してみる</a>
+        </ul>
+        
+        <h3>STEP2 Twitterもどきを作ろう</h3>
+        <ul>
+         <li><a href="../2/1.html">1.IDEを使ってみる</a>
+         <li><a href="../2/2.html">2.JavaScriptを書いてみる</a>
+         <li><a href="../2/3.html">3.ログイン機能を作ってみる</a>
+         <li><a href="../2/4.html">4.入力チェックを作ってみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
+         <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
+         <li><a href="../2/8.html">8.画面仕様書とは</a>
+         <li><a href="../2/9.html">9.データベースを設計してみる</a>
+        </ul>
+        
+        <h3>STEP3 オリジナルサイトを作ろう</h3>
+        <ul>
+         <li><a href="../3/1.html">1.CentOSとは</a>
+         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
+         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
+         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/6.html">6.テストとは</a>
+         <li><a href="../3/7.html">7.テストを書いてみる</a>
+         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+        </ul>
+      </header>
+      <section><h1>STEP1-8.SQLを書いてみる</h1>
+
+<p>データベースの操作はブラウザ上で簡単に行うこともできますが、Webサイトで利用するにはプログラムで操作する必要があります。データベースの操作にはSQLという言語を使用します。画面上部のSQLというタブに移動してください。今回は試しにここにSQLを書いてみます。</p>
+
+<h2>INSERT文</h2>
+
+<p>データの追加にはINSERT文を使用します。</p>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">datas</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">text</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="ss">&quot;hoge&quot;</span><span class="p">,</span> <span class="ss">&quot;hugahuga&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>これはdatasテーブルにnameカラムの値がhogeでありtextカラムの値がhugahugaであるデータを追加するコマンドです。dateカラムは省略することができます。これはテーブルの作成時（<a href="7.html">7.データベースを作成してみる</a>）にデフォルト値を設定してあるためで、省略することでデフォルト値が設定されます。デフォルト値を設定していないカラムは省略できません。</p>
+
+<p>ちなみに値はカンマで区切ることで複数同時に追加することもできます。いくつか値を追加してみましょう。</p>
+
+<h2>SELECT文</h2>
+
+<p>データを取り出すときはSELECT文を使用します。</p>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">datas</span>
+</code></pre></div>
+<p>これはdatasテーブルの中身を全て取り出すコマンドです。SELECTの後には取り出すカラムを指定します。「*」は「全てのカラム」を意味します。SELECT文は後ろに句というものを付けて使用することが殆どです。句は複数組み合わせて使用することもできます。以下は基本的な句と使用例です。</p>
+
+<h3>WHERE句</h3>
+
+<p>データを取り出す条件を指定します。</p>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">data</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="o">=</span> <span class="ss">&quot;hoge&quot;</span>
+</code></pre></div>
+<p>これはnameカラムの値がhogeである行のみを取り出すコマンドです。</p>
+
+<h3>ORDER BY句</h3>
+
+<p>データの並び順を指定します。</p>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">datas</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="nb">date</span> <span class="k">DESC</span>
+</code></pre></div>
+<p>これは日付の若い順（降順）に取り出すコマンドです。</p>
+
+<h3>LIMIT句</h3>
+
+<p>データを取り出す件数を指定します。</p>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">datas</span> <span class="k">LIMIT</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+</code></pre></div>
+<p>これは2番目（最初の行は0番目）のデータから最大3件まで取り出すコマンドです。</p>
+
+<h3>GROUP BY句、COUNT関数</h3>
+
+<p>データをグループ化し、集計します。</p>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">datas</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">name</span>
+</code></pre></div>
+<p>これはnameカラムが同じ行をグループ化し、その個数を取り出すコマンドです。</p>
+
+<h2>DELETE文</h2>
+
+<p>データの削除にはDELETE文を使用します。</p>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">datas</span>
+</code></pre></div>
+<p>これはdatasテーブルの中身を全て削除するコマンドです。実際に使用する際は上記のWHERE句、LIMIT句などを利用して削除する行を指定します。</p>
+
+<h2>UPDATE文</h2>
+
+<p>データの更新にはUPDATE文を使用します。</p>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">UPDATE</span> <span class="n">datas</span> <span class="k">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="ss">&quot;piyo&quot;</span>
+</code></pre></div>
+<p>これはdatasテーブルの全ての行のnameカラムの値をpiyoに変更するコマンドです。実際に使用する際は上記のWHERE句を利用して更新する行を指定します。</p>
+
+<hr>
+
+<p><strong>[課題]SQLを使ってみよう</strong><br>
+まずはINSERT文で10個くらいデータを用意して、SELECT文を使ってみましょう。掲示板として表示する際はORDER BY句はどのように指定すればよいかも考えてみましょう。</p>
+</section>
+      <footer></footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

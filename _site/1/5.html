@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Skillup by team-lab</title>
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <img src="../images/logo.jpg">
+        <h1>Skillup</h1>
+        <p>チームラボオンラインスキルアップ課題</p>
+        
+        <h3>STEP1 掲示板を作ろう</h3>
+        <ul>
+         <li><a href="../1/1.html">1.インターネットのしくみ</a>
+         <li><a href="../1/2.html">2.HTTPのしくみ</a>
+         <li><a href="../1/3.html">3.WEBサーバを立ててみる</a>
+         <li><a href="../1/4.html">4.HTML,CSSを書いてみる</a>
+         <li><a href="../1/5.html">5.PHPを書いてみる</a>
+         <li><a href="../1/6.html">6.PHPでGET,POSTを受け取る</a>
+         <li><a href="../1/7.html">7.データベースを作成してみる</a>
+         <li><a href="../1/8.html">8.SQLを書いてみる</a>
+         <li><a href="../1/9.html">9.PHPからデータベースを操作してみる</a>
+        </ul>
+        
+        <h3>STEP2 Twitterもどきを作ろう</h3>
+        <ul>
+         <li><a href="../2/1.html">1.IDEを使ってみる</a>
+         <li><a href="../2/2.html">2.JavaScriptを書いてみる</a>
+         <li><a href="../2/3.html">3.ログイン機能を作ってみる</a>
+         <li><a href="../2/4.html">4.入力チェックを作ってみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
+         <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
+         <li><a href="../2/8.html">8.画面仕様書とは</a>
+         <li><a href="../2/9.html">9.データベースを設計してみる</a>
+        </ul>
+        
+        <h3>STEP3 オリジナルサイトを作ろう</h3>
+        <ul>
+         <li><a href="../3/1.html">1.CentOSとは</a>
+         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
+         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
+         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/6.html">6.テストとは</a>
+         <li><a href="../3/7.html">7.テストを書いてみる</a>
+         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+        </ul>
+      </header>
+      <section><h1>STEP1-5.PHPを書いてみる</h1>
+
+<p>HTMLやCSSはあらかじめ書かれた内容を表示しているだけのものでした。PHPは動的にHTMLを生成することで、動的なページを実現するためのプログラミング言語です。</p>
+
+<p>試しに日付を表示してみましょう。以下のプログラムをhello.phpとして保存します。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="x">&lt;!DOCTYPE html&gt;</span>
+<span class="x">&lt;html&gt;</span>
+<span class="x">  &lt;head&gt;</span>
+<span class="x">    &lt;meta charset=&quot;UTF-8&quot; /&gt;</span>
+<span class="x">    &lt;title&gt;PHPのサンプル&lt;/title&gt;</span>
+<span class="x">  &lt;/head&gt;</span>
+<span class="x">  &lt;body&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span>
+      <span class="nv">$date</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s2">&quot;Y/m/d H:i:s&quot;</span><span class="p">);</span>
+      <span class="k">print</span><span class="p">(</span><span class="nv">$date</span><span class="p">);</span>
+    <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;/body&gt;</span>
+<span class="x">&lt;/html&gt;</span>
+</code></pre></div>
+<p><a href="http://localhost/hello.php">http://localhost/hello.php</a>にアクセスしたら現在の日時が表示されたでしょうか。</p>
+
+<p>phpはHTMLの中に組み込んで書きます。&lt;?phpから?&gt;までがPHPのプログラム本体です。PHPでは変数は先頭に$を付ける決まりになっています。dateは日付を文字列で返す関数、printは内容を表示する関数です。</p>
+
+<hr>
+
+<p>以下はPHPの基本的な構文とコード例です。</p>
+
+<h3>if文</h3>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$a</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$a</span><span class="s2"> is 3&quot;</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$a</span><span class="s2"> is not 3&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">5 is not 3
+</code></pre></div>
+<ul>
+<li>ダブルクオーテーション内の変数は値に置き換わります。</li>
+<li>シングルクオーテーション内の変数は値に置き換わりません。</li>
+</ul>
+
+<h3>for文</h3>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$i</span><span class="s2"> &quot;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">0 1 2 3 4 5 6 7 8 9 
+</code></pre></div>
+<h3>関数</h3>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">function</span> <span class="nf">double_print</span><span class="p">(</span><span class="nv">$text</span><span class="p">){</span>
+  <span class="k">print</span><span class="p">(</span><span class="nv">$text</span> <span class="o">.</span> <span class="nv">$text</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">double_print</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">);</span>
+<span class="nx">double_print</span><span class="p">(</span><span class="s2">&quot;bc&quot;</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">aabcbc
+</code></pre></div>
+<ul>
+<li>文字列の結合は.演算子で行います。</li>
+</ul>
+
+<h3>オブジェクト</h3>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="k">stdClass</span><span class="p">;</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">data1</span> <span class="o">=</span> <span class="s1">&#39;hoge&#39;</span><span class="p">;</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">data2</span> <span class="o">=</span> <span class="s1">&#39;huga&#39;</span><span class="p">;</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">data3</span> <span class="o">=</span> <span class="k">new</span> <span class="k">stdClass</span><span class="p">;</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">data3</span><span class="o">-&gt;</span><span class="na">data5</span> <span class="o">=</span> <span class="s1">&#39;piyo&#39;</span><span class="p">;</span>
+<span class="nb">print_r</span><span class="p">(</span><span class="nv">$obj</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">stdClass Object ( [data1] =&gt; hoge [data2] =&gt; huga [data3] =&gt; stdClass Object ( [data5] =&gt; piyo ) )
+</code></pre></div>
+<ul>
+<li>print_rは変数の構造と内容を全て書き出す関数です。</li>
+<li>オブジェクトは子要素として好きなようにデータを保持することができます。</li>
+</ul>
+
+<h3>配列</h3>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$a1</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">);</span>
+<span class="nv">$a1</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&quot;four&quot;</span><span class="p">;</span>
+<span class="nv">$a1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;one?&quot;</span><span class="p">;</span>
+<span class="nb">print_r</span><span class="p">(</span><span class="nv">$a1</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">Array ( [0] =&gt; one? [1] =&gt; two [2] =&gt; three [3] =&gt; four )
+</code></pre></div>
+<ul>
+<li>$変数名[]は値の追加です。</li>
+</ul>
+
+<h3>連想配列</h3>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$hash</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">&quot;one&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;いち&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;に&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;さん&quot;</span><span class="p">);</span>
+<span class="nv">$hash</span><span class="p">[</span><span class="s2">&quot;four&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;し&quot;</span><span class="p">;</span>
+<span class="nb">print_r</span><span class="p">(</span><span class="nv">$hash</span><span class="p">);</span>
+<span class="k">foreach</span><span class="p">(</span><span class="nv">$hash</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$key</span><span class="s2"> is </span><span class="si">$val</span><span class="s2">. &quot;</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">Array ( [one] =&gt; いち [two] =&gt; に [three] =&gt; さん [four] =&gt; し ) one is いち. two is に. three is さん. four is し.
+</code></pre></div>
+<ul>
+<li>PHPでは配列の引数に文字列を使うことができ、これを連想配列と呼びます。</li>
+<li>foreachは配列や連想配列の各要素を取り出して処理する構文です。</li>
+</ul>
+
+<h3>正規表現</h3>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">if</span><span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/(-?)[0-9]+(\.[0-9]+)?/&#39;</span><span class="p">,</span> <span class="s1">&#39;q-6.83p&#39;</span><span class="p">,</span> <span class="nv">$m</span><span class="p">)){</span>
+  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;match: </span><span class="si">$m[0]</span><span class="s2"> &quot;</span><span class="p">);</span>
+  <span class="k">if</span><span class="p">(</span><span class="nv">$m</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;minus! &quot;</span><span class="p">);</span>
+  <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$m</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;decimal!&quot;</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;not match&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">match: -6.83 minus! decimal!
+</code></pre></div>
+<ul>
+<li>正規表現についての解説はしませんので各自で調べてください。</li>
+<li>preg_matchは第1引数の正規表現に第2引数がマッチしたかどうかを返します。
+
+<ul>
+<li>第3引数に配列を渡すと、0番目の要素はマッチした部分全体、1番目以降の要素はマッチした()内の部分が格納されます。</li>
+</ul></li>
+<li>issetは変数がセットされており、かつNULLではないかチェックする関数です。</li>
+</ul>
+</section>
+      <footer></footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

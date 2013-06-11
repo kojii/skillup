@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Skillup by team-lab</title>
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <img src="../images/logo.jpg">
+        <h1>Skillup</h1>
+        <p>チームラボオンラインスキルアップ課題</p>
+        
+        <h3>STEP1 掲示板を作ろう</h3>
+        <ul>
+         <li><a href="../1/1.html">1.インターネットのしくみ</a>
+         <li><a href="../1/2.html">2.HTTPのしくみ</a>
+         <li><a href="../1/3.html">3.WEBサーバを立ててみる</a>
+         <li><a href="../1/4.html">4.HTML,CSSを書いてみる</a>
+         <li><a href="../1/5.html">5.PHPを書いてみる</a>
+         <li><a href="../1/6.html">6.PHPでGET,POSTを受け取る</a>
+         <li><a href="../1/7.html">7.データベースを作成してみる</a>
+         <li><a href="../1/8.html">8.SQLを書いてみる</a>
+         <li><a href="../1/9.html">9.PHPからデータベースを操作してみる</a>
+        </ul>
+        
+        <h3>STEP2 Twitterもどきを作ろう</h3>
+        <ul>
+         <li><a href="../2/1.html">1.IDEを使ってみる</a>
+         <li><a href="../2/2.html">2.JavaScriptを書いてみる</a>
+         <li><a href="../2/3.html">3.ログイン機能を作ってみる</a>
+         <li><a href="../2/4.html">4.入力チェックを作ってみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
+         <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
+         <li><a href="../2/8.html">8.画面仕様書とは</a>
+         <li><a href="../2/9.html">9.データベースを設計してみる</a>
+        </ul>
+        
+        <h3>STEP3 オリジナルサイトを作ろう</h3>
+        <ul>
+         <li><a href="../3/1.html">1.CentOSとは</a>
+         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
+         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
+         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/6.html">6.テストとは</a>
+         <li><a href="../3/7.html">7.テストを書いてみる</a>
+         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+        </ul>
+      </header>
+      <section><h1>STEP1-6.PHPでGET,POSTを受け取る</h1>
+
+<p><a href="2.html">2.HTTPのしくみ</a>において、GETはデータの取得と説明しましたが、POSTと同様の形式のデータをURLの最後に付加することにより送信することもできます。この場合データが丸見えになることや、長さ制限がある場合があるなどの問題が発生します。</p>
+
+<p>GET,POSTで送信されたデータをPHPから受け取ってみましょう。以下のプログラムをpost.phpという名前で保存してください。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="x">&lt;!DOCTYPE html&gt;</span>
+<span class="x">&lt;html&gt;</span>
+<span class="x">  &lt;head&gt;</span>
+<span class="x">    &lt;meta charset=&quot;UTF-8&quot; /&gt;</span>
+<span class="x">    &lt;title&gt;POSTのサンプル&lt;/title&gt;</span>
+<span class="x">  &lt;/head&gt;</span>
+<span class="x">  &lt;body&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span>
+      <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">])){</span>
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]);</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;あなたのコメントは「&quot;</span> <span class="o">.</span> <span class="nv">$comment</span> <span class="o">.</span> <span class="s2">&quot;」です。&quot;</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">        &lt;p&gt;コメントしてください。&lt;/p&gt;</span>
+<span class="x">        &lt;form method=&quot;POST&quot; action=&quot;post.php&quot;&gt;</span>
+<span class="x">          &lt;input name=&quot;comment&quot; /&gt;</span>
+<span class="x">          &lt;input type=&quot;submit&quot; value=&quot;送信&quot; /&gt;</span>
+<span class="x">        &lt;/form&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span>
+      <span class="p">}</span>
+    <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;/body&gt;</span>
+<span class="x">&lt;/html&gt;</span>
+</code></pre></div>
+<p>GET,POSTで送信されたデータはそれぞれ$<em>GET,$</em>POSTという連想配列に格納されています。issetで中身を確認し、存在するなら表示しています。表示の際にはhtmlspecialchars関数で必ずエスケープしましょう。  </p>
+
+<p>一方、送信部はformタグを用いてHTMLで書かれています。methodでメソッドを、actionで送信先URLを指定します。formタグ内のinput,select,textareaタグの内容が送信されます。送信する際の識別名はnameで指定します。</p>
+
+<hr>
+
+<p><strong>[課題]送信する内容を変更してみよう</strong><br>
+掲示板に必要な情報としては少なくとも名前と本文が必要です。名前も送信し、受け取るように変更してみましょう。余力のある人はタイトル・文字色・メールアドレスなども追加してみましょう。</p>
+</section>
+      <footer></footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
