@@ -32,12 +32,12 @@
         
         <h3>STEP2 Twitterもどきを作ろう</h3>
         <ul>
-         <li><a href="../2/1.html">1.IDEを使ってみる</a>
-         <li><a href="../2/2.html">2.JavaScriptを書いてみる</a>
-         <li><a href="../2/3.html">3.ログイン機能を作ってみる</a>
-         <li><a href="../2/4.html">4.入力チェックを作ってみる</a>
-         <li><a href="../2/5.html">5.フレームワークとは</a>
-         <li><a href="../2/6.html">6.CakePHPの基本</a>
+         <li><a href="../2/1.html">1.JavaScriptを書いてみる</a>
+         <li><a href="../2/2.html">2.ログイン機能を作ってみる</a>
+         <li><a href="../2/3.html">3.入力チェックを作ってみる</a>
+         <li><a href="../2/4.html">4.フレームワークとは</a>
+         <li><a href="../2/5.html">5.CakePHPの基本</a>
+         <li><a href="../2/6.html">6.IDEを使ってみる</a>
          <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
          <li><a href="../2/8.html">8.画面仕様書とは</a>
          <li><a href="../2/9.html">9.データベースを設計してみる</a>
@@ -56,23 +56,29 @@
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP2-3.ログイン機能を作ってみる</h1>
+      <section><h1>STEP2-3.入力チェックを作ってみる</h1>
 
-<p>今回はまたPHPに戻ってログイン機能を作ってみます。とりあえずユーザーの情報を保存するためのテーブルを作成します。名前はusersテーブルでusernameカラム, passwordカラムのどちらもCHAR型で長さは32でいいでしょう。CHAR型は固定長文字列です。テーブル作成後、構造タブからusernameカラムをユニークに設定しておきます。これで重複が許されなくなります。それでは新規登録画面(register.php)を作ります。</p>
+<p>前回の例ではIDやパスワードにあらゆる文字が使えていたので、それを半角英数字に制限し、さらに文字数も制限してみようと思います。チェックはJavaScriptとPHPで2回行います。JavaScriptで行うのはページ遷移無しでチェックしたほうがユーザーにとって親切であるからです。しかし、POSTメソッドの送り方を知っている人にとってはJavaScriptのチェックは簡単に抜けられるため、PHPでもチェックする必要があるのです。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 
-<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;適当に文字列を変えてください。&quot;</span><span class="p">;</span>
+<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;前回と同じ文字列にしてください。&quot;</span><span class="p">;</span>
 
 <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
 
 <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">;</span>
 <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])){</span>
-  <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]);</span>
-  <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$salt</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;INSERT INTO users VALUES (&#39;</span><span class="si">$username</span><span class="s2"> &#39;, &#39;</span><span class="si">$password</span><span class="s2">&#39;)&quot;</span><span class="p">))</span>
-    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
-  <span class="k">else</span>
-    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/^[0-9a-zA-Z]{2,32}$/&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]))</span>
+    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;error_username&quot;</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/^[0-9a-zA-Z]{8,32}$/&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]))</span>
+    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;error_password&quot;</span><span class="p">;</span>
+  <span class="k">else</span><span class="p">{</span>
+    <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]);</span>
+    <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$salt</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;INSERT INTO user VALUES (&#39;</span><span class="si">$username</span><span class="s2">&#39;, &#39;</span><span class="si">$password</span><span class="s2">&#39;)&quot;</span><span class="p">))</span>
+      <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
+    <span class="k">else</span>
+      <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="cp">?&gt;</span><span class="x"></span>
@@ -82,6 +88,17 @@
 <span class="x">  &lt;head&gt;</span>
 <span class="x">    &lt;meta charset=&quot;UTF-8&quot; /&gt;</span>
 <span class="x">    &lt;title&gt;新規登録&lt;/title&gt;</span>
+<span class="x">    &lt;script src=&quot;http://code.jquery.com/jquery-2.0.0.min.js&quot;&gt;&lt;/script&gt;</span>
+<span class="x">    &lt;script&gt;</span>
+<span class="x">      function check(){</span>
+<span class="x">        if(!$(&quot;input[name=username]&quot;).val().match(/^[0-9a-zA-Z]{2,32}$/)</span>
+<span class="x">        || !$(&quot;input[name=password]&quot;).val().match(/^[0-9a-zA-Z]{8,32}$/)){</span>
+<span class="x">          alert(&quot;入力エラー&quot;);</span>
+<span class="x">          return false;</span>
+<span class="x">        }</span>
+<span class="x">        return true;</span>
+<span class="x">      }</span>
+<span class="x">    &lt;/script&gt;</span>
 <span class="x">  &lt;/head&gt;</span>
 <span class="x">  &lt;body&gt;</span>
 <span class="x">    &lt;h1&gt;新規登録&lt;/h1&gt;</span>
@@ -89,95 +106,30 @@
 <span class="x">      &lt;p&gt;登録完了&lt;/p&gt;</span>
 <span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$status</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
 <span class="x">      &lt;p&gt;エラー：既に存在するユーザ名です。&lt;/p&gt;</span>
-<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">else</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">      &lt;form method=&quot;POST&quot; action=&quot;register.php&quot;&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$status</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;form method=&quot;POST&quot; action=&quot;register.php&quot; onSubmit=&quot;return check()&quot;&gt;</span>
 <span class="x">        ユーザ名：&lt;input type=&quot;text&quot; name=&quot;username&quot; /&gt;</span>
 <span class="x">        パスワード：&lt;input type=&quot;password&quot; name=&quot;password&quot; /&gt;</span>
 <span class="x">        &lt;input type=&quot;submit&quot; value=&quot;登録&quot; /&gt;</span>
 <span class="x">      &lt;/form&gt;</span>
-<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">  &lt;/body&gt;</span>
-<span class="x">&lt;/html&gt;</span>
-</code></pre></div>
-<p>if文をコロンとendifで挟む新しい書き方が出てきました。これはHTMLの中に記述するときに使うと見やすくなるためお勧めです。さて、パスワードですがデータベースに入れる前に$saltと結合してmd5という関数に通しています。これは、パスワードをそのままデータベースに保存しておくと危険であるためハッシュ化して保存する必要があるからです。</p>
-
-<p>ではログイン画面(login.php)を作成しましょう。パスワードはハッシュ化して保存したため、入力されたパスワードもハッシュ化して同じ値になれば正しいパスワードであるという処理にします。また、一度ログインしたらログイン中であるということを保存する機能が必要になります。これはセッションという機能を用いて実現します。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-
-<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;先ほどと同じ文字列にしてください。&quot;</span><span class="p">;</span>
-
-<span class="nb">session_start</span><span class="p">();</span>
-<span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
-
-<span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]))</span>
-  <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;logged_in&quot;</span><span class="p">;</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])){</span>
-  <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]);</span>
-  <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$salt</span><span class="p">);</span>
-  <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT password FROM users WHERE username = &#39;</span><span class="si">$username</span><span class="s2">&#39;&quot;</span><span class="p">);</span>
-  <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">)</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">fetch_object</span><span class="p">())</span>
-      <span class="k">if</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">password</span> <span class="o">==</span> <span class="nv">$password</span><span class="p">){</span>
-        <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
-        <span class="nv">$_SESSION</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">];</span>
-      <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cp">?&gt;</span><span class="x"></span>
-
-<span class="x">&lt;!DOCTYPE html&gt;</span>
-<span class="x">&lt;html&gt;</span>
-<span class="x">  &lt;head&gt;</span>
-<span class="x">    &lt;meta charset=&quot;UTF-8&quot; /&gt;</span>
-<span class="x">    &lt;title&gt;ログイン&lt;/title&gt;</span>
-<span class="x">  &lt;/head&gt;</span>
-<span class="x">  &lt;body&gt;</span>
-<span class="x">    &lt;h1&gt;ログイン&lt;/h1&gt;</span>
-<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span><span class="nv">$status</span> <span class="o">==</span> <span class="s2">&quot;logged_in&quot;</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">      &lt;p&gt;ログイン済み&lt;/p&gt;</span>
-<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$status</span> <span class="o">==</span> <span class="s2">&quot;ok&quot;</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">      &lt;p&gt;ログイン成功&lt;/p&gt;</span>
-<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$status</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">      &lt;p&gt;ログイン失敗&lt;/p&gt;</span>
 <span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">else</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">      &lt;form method=&quot;POST&quot; action=&quot;login.php&quot;&gt;</span>
-<span class="x">        ユーザ名：&lt;input name=&quot;username&quot; /&gt;</span>
-<span class="x">        パスワード：&lt;input name=&quot;password&quot; /&gt;</span>
-<span class="x">        &lt;input type=&quot;submit&quot; value=&quot;ログイン&quot; /&gt;</span>
-<span class="x">      &lt;/form&gt;</span>
+<span class="x">      &lt;p&gt;</span>
+<span class="x">        JavaScriptのチェックを抜けてPHPのチェックに引っかかった場合に</span>
+<span class="x">        表示されるメッセージ（普通はありえない）</span>
+<span class="x">      &lt;/p&gt;</span>
 <span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
 <span class="x">  &lt;/body&gt;</span>
 <span class="x">&lt;/html&gt;</span>
 </code></pre></div>
-<p>セッションは過去のアクセス時のデータを保存できる連想配列です。更に別のページでも同じデータが使用できます。</p>
-
-<p>ログアウトはセッションを削除するだけなので以下のようになります。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-
-<span class="nb">session_start</span><span class="p">();</span>
-<span class="nv">$_SESSION</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span> 
-<span class="nb">session_destroy</span><span class="p">();</span>
-
-<span class="cp">?&gt;</span><span class="x"></span>
-
-<span class="x">&lt;!DOCTYPE html&gt;</span>
-<span class="x">&lt;html&gt;</span>
-<span class="x">  &lt;head&gt;</span>
-<span class="x">    &lt;meta charset=&quot;UTF-8&quot; /&gt;</span>
-<span class="x">    &lt;title&gt;ログアウト&lt;/title&gt;</span>
-<span class="x">  &lt;/head&gt;</span>
-<span class="x">  &lt;body&gt;</span>
-<span class="x">    &lt;h1&gt;ログアウト&lt;/h1&gt;</span>
-<span class="x">    &lt;p&gt;完了&lt;/p&gt;</span>
-<span class="x">  &lt;/body&gt;</span>
-<span class="x">&lt;/html&gt;</span>
+<p>一応、正規表現の解説です。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">/^[0-9a-zA-Z]{8,32}$/
 </code></pre></div>
+<p>まず^と$で囲んでいるのは先頭から末尾まで全て一致させるためです。[]で囲まれたものはそのうちのどれか1文字が一致すればよいという意味で、ここで半角英数字のみに制限しています。{8,32}は直前の文字が8文字以上32文字以下続いているという意味で、ここで長さを制限しています。</p>
+
 <hr>
 
-<p><strong>[課題]セッションについて調べよう</strong><br>
-セッションとは何か、なぜ必要なのか、どのような目的で使用されているのかについて調べてみましょう。また、クッキーとの違いをしっかり認識しておきましょう。</p>
+<p><strong>[課題]JavaScriptのチェックを抜けてみよう</strong><br>
+実際に「JavaScriptのチェックを抜けてPHPのチェックに引っかかった場合に表示されるメッセージ（普通はありえない）」を表示させて、PHPのチェックの必要性を確認しましょう。方法はいくつかありますが、一番簡単なのはJavaScriptをオフにすることです。それ以外の方法を使ってみましょう。（ヒント：攻撃用の別ページを作成）</p>
 </section>
       <footer></footer>
     </div>
