@@ -123,6 +123,13 @@ ServerTokens ProductOnly
 <p>データベースの接続情報などの絶対に見えてはいけない情報は、外部からアクセスできないディレクトリに設置します。CakePHPの場合は自動でそのような設定になっていますが、自分で設定する場合は、アクセス制限をかけたいディレクトリに以下の内容を.htaccessという名前で保存します。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">deny from all
 </code></pre></div>
+<h3>エラー</h3>
+
+<p>エラーが表示されると、phpのファイル名や行番号、関数名などの情報が表示されてしまいます。特にCakePHPはデバッグのためにかなり詳細に情報を表示することができるためセキュリティ的に良くありません。/app/Config/core.php内に以下のような箇所があります。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">Configure::write(&#39;debug&#39;, 2);
+</code></pre></div>
+<p>これはデバッグレベルを指定しており、公開する際はデバッグレベルを0にしておくことで最小限のエラーしか表示されなくなります。また、HTTPステータスコードで言うと400や500の場合のエラー画面は/app/View/Errors内のファイルを変更することで変更できます。</p>
+
 <h3>XSS対策</h3>
 
 <p>XSSとはクロスサイトスクリプティングの略で、送信されたデータを表示するようなWebサイトにおいて、HTMLタグやJavaScriptなどのデータを送信すことによる攻撃です。例えば任意のJavaScriptを実行されるなどの被害があります。対策として、phpで$_GETや$_POSTの値、またはデータベースから取り出した値などを表示する際に必ずhtmlspecialchars関数でエスケープしてから表示するようにします。</p>
