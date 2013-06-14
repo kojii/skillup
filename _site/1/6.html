@@ -85,7 +85,7 @@
 <span class="x">  &lt;/body&gt;</span>
 <span class="x">&lt;/html&gt;</span>
 </code></pre></div>
-<p>GET,POSTで送信されたデータはそれぞれ$<em>GET,$</em>POSTという連想配列に格納されています。issetで中身を確認し、存在するなら表示しています。表示の際にはhtmlspecialchars関数で必ずエスケープしましょう。  </p>
+<p>GET,POSTで送信されたデータはそれぞれ$_GET,$_POSTという連想配列に格納されています。issetで中身を確認し、存在するなら表示しています。表示の際にはhtmlspecialchars関数で必ずエスケープしましょう。  </p>
 
 <p>一方、送信部はformタグを用いてHTMLで書かれています。methodでメソッドを、actionで送信先URLを指定します。formタグ内のinput,select,textareaタグの内容が送信されます。送信する際の識別名はnameで指定します。</p>
 

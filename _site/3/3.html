@@ -75,7 +75,7 @@
 <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<p>new mysqliでmysqliクラスのインスタンスを作成します。インスタンスとはクラスを元に作られた実際のオブジェクトのことです。mysqliクラスは接続情報を受け取って内部に保存し、接続を試みます。$mysqli-&gt;connect<em>errorは実際に作られたオブジェクト$mysqliのプロパティconnect</em>errorにアクセスしています。また、$mysqli-&gt;queryは$mysqliの内部に保存した接続情報を利用してデータベースにクエリを発行するメソッドqueryを呼び出しています。このようにmysqliクラスはMySQLサーバとの通信という役割を担うクラスであり、そのための情報を内部に保持していたりメソッドを有していたります。</p>
+<p>new mysqliでmysqliクラスのインスタンスを作成します。インスタンスとはクラスを元に作られた実際のオブジェクトのことです。mysqliクラスは接続情報を受け取って内部に保存し、接続を試みます。$mysqli-&gt;connect_errorは実際に作られたオブジェクト$mysqliのプロパティconnect_errorにアクセスしています。また、$mysqli-&gt;queryは$mysqliの内部に保存した接続情報を利用してデータベースにクエリを発行するメソッドqueryを呼び出しています。このようにmysqliクラスはMySQLサーバとの通信という役割を担うクラスであり、そのための情報を内部に保持していたりメソッドを有していたります。</p>
 
 <p>では例として、ログイン機能を担当するAuthクラスを作成してみましょう。（ただ、以前の講座で使用したとおり、CakePHPに同じようなクラスが既に存在するためCakePHPを使用する限り以下のクラスを使用する機会はないでしょう。）以下の内容をAuth.phpという名前で保存します。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>

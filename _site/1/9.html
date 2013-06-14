@@ -101,7 +101,7 @@
 </code></pre></div>
 <p>このような場合mysqli::query関数は結果オブジェクトを返します。fetch_object関数で1行ずつ取り出して表示します。</p>
 
-<p>今回はユーザーの入力を受け取っていないので使用しませんでしたが、ユーザーの入力をSQL文の一部に使用する場合は必ずmysqli::real<em>escape</em>string関数でエスケープするようにします。</p>
+<p>今回はユーザーの入力を受け取っていないので使用しませんでしたが、ユーザーの入力をSQL文の一部に使用する場合は必ずmysqli::real_escape_string関数でエスケープするようにします。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="nv">$name</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]);</span>
 <span class="nv">$text</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]);</span>

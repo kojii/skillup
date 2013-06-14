@@ -137,7 +137,13 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>$componentsは使用するコンポーネントの読み込みです。Authコンポーネントを利用すると、ログインのチェックが$this-&gt;Auth-&gt;login()だけで良くなるため非常に便利です。beforeFilter関数はどのアクションが呼ばれてもはじめに実行される関数です。ここで$this-&gt;Auth-&gt;allowを用いて、未ログインで見ることができるページを指定します。indexはログイン後にリダイレクトされるページです。registerでは$this-&gt;User-&gt;saveが呼び出されています。これはSQLで言うINSERTにあたります。ユーザ追加後ログインしてリダイレクトします。以下はビューです。それぞれlogin.ctp, register.ctp, index.ctpです。</p>
+<p>$componentsは使用するコンポーネントの読み込みです。コンポーネントとは、コントローラでよく使われる共通処理をまとめたライブラリのようなもので、Authコンポーネントはログインなどの認証処理を扱っています。</p>
+
+<p>beforeFilter関数はどのアクションが呼ばれてもはじめに実行される関数です。ここで$this-&gt;Auth-&gt;allowを用いて、未ログインで見ることができるページを指定します。</p>
+
+<p>indexはログイン後にリダイレクトされるページです。registerでは$this-&gt;User-&gt;saveが呼び出されています。これはSQLで言うINSERTにあたります。ユーザ追加後ログインしてリダイレクトします。</p>
+
+<p>以下はビューです。それぞれlogin.ctp, register.ctp, index.ctpです。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="x">&lt;h1&gt;ログイン&lt;/h1&gt;</span>
 <span class="cp">&lt;?php</span> <span class="k">print</span><span class="p">(</span>
   <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="s1">&#39;User&#39;</span><span class="p">)</span> <span class="o">.</span>
