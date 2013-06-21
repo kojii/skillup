@@ -58,40 +58,126 @@
       </header>
       <section><h1>STEP2-1.JavaScriptを書いてみる</h1>
 
-<p>JavaScriptという言語を利用すると動的なWebサイトを作成することができます。特に最近ではAjaxと呼ばれる、ページ遷移なしでページを書き換える技術が有名になっています。Ajaxを自前で書くのは非常に面倒ですが、jQueryというライブラリを使用することで簡潔に記述することができます。</p>
+<p>JavaScriptはブラウザ上で実行されるスクリプト言語で、ページの書き換えやアニメーションなどを含む動的なWebサイトを作成することができます。PHPとの最も大きな違いは実行される場所です。PHPはサーバ上で実行されるため、サーバ上のデータ（データベースなど）の操作などを行うのに適しています。一方JavaScriptはブラウザ上で実行されるため、リアルタイムにダイナミックな動きを実現できます。</p>
 
-<h3>jQuery</h3>
+<h2>基本構文</h2>
 
-<p>JavaScriptはHTML内にも記述できますがファイルを分割することをお勧めします。その場合はHTMLのhead内に以下のように記述します。1行目はjQuery本体の読み込みです。</p>
-<div class="highlight"><pre><code class="html language-html" data-lang="html"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://code.jquery.com/jquery-2.0.0.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;JavaScriptを記述したファイルを指定&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre></div>
-<p>jQueryの構文について簡単に説明します。jQueryの基本は「HTMLのある要素に対してある操作を行う」ということです。そこで、セレクタという機能で「HTMLのある要素」を指定します。$(function(){と});の間に記述します。</p>
-<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">);</span> <span class="c1">//&lt;td&gt;タグの要素全て</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#main&quot;</span><span class="p">);</span> <span class="c1">//idがmainである要素</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.hoge&quot;</span><span class="p">);</span> <span class="c1">//classがhogeである要素</span>
-<span class="p">});</span>
-</code></pre></div>
-<p>要素を指定したら操作を行います。</p>
-<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#main&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s2">&quot;&lt;h1&gt;消えました&lt;/h1&gt;&quot;</span><span class="p">);</span> <span class="c1">//#mainの内部のHTMLを書き換え</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.fade&quot;</span><span class="p">).</span><span class="nx">fadeOut</span><span class="p">();</span> <span class="c1">//fadeクラスをフェードアウト</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="nx">show_alert</span><span class="p">);</span> <span class="c1">//&lt;button&gt;タグを押したときの動作を指定</span>
-<span class="p">});</span>
-<span class="kd">function</span> <span class="nx">show_alert</span><span class="p">(){</span>
-  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;おしました&quot;</span><span class="p">);</span>
+<p>以下はJavaScriptの基本的な構文とコード例です。HTMLに組み込んで使用する前に、コンソールから使用してみましょう。GoogleChromeで右クリック→「要素を検証」→「Console」タブを選択します。ここにJavaScriptのコードを記述していきます。</p>
+
+<h3>if文</h3>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="nx">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">a</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="s2">&quot; is 3&quot;</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="s2">&quot; is not 3&quot;</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>また、JavaScriptでは無名関数という機能が利用でき、buttonの部分は以下のように書くことができます。</p>
-<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;おしました&quot;</span><span class="p">);</span>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">5 is not 3
+</code></pre></div>
+<ul>
+<li>console.logはコンソールに出力する関数です。</li>
+</ul>
+
+<h3>for文</h3>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">//iが0から10未満の間、1ずつ加算しながら繰り返し</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>出力：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">0
+1
+2
+3
+4
+5
+6
+7
+8
+9 
+</code></pre></div>
+<h3>関数</h3>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">//引数の文字列を2回表示する関数</span>
+<span class="kd">function</span> <span class="nx">double_alert</span><span class="p">(</span><span class="nx">text</span><span class="p">){</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="nx">text</span> <span class="o">+</span> <span class="nx">text</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">double_alert</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">);</span>
+</code></pre></div>
+<ul>
+<li>alertは画面にアラートを表示する関数です。</li>
+</ul>
+
+<p>また、JavaScriptにおいて関数はFunctionオブジェクトであり、以下のように書くこともできます。</p>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">//関数を作成してdouble_alertに代入</span>
+<span class="nx">double_alert</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">){</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="nx">text</span> <span class="o">+</span> <span class="nx">text</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">double_alert</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">);</span>
+</code></pre></div>
+<p>このとき元の関数は名前を付けずに定義しています。これを無名関数といいます。無名関数は、関数を引数にとる関数を使用するときに威力を発揮します。もう少し後で説明します。</p>
+
+<h3>DOM</h3>
+
+<p>DOMとはHTMLの要素へアクセスするしくみです。JavaScriptからもDOMを利用してHTMLを操作できます。例として以下にid=dom_testの要素を設置しました。この要素のテキストを書き換えてみましょう。</p>
+
+<div id="dom_test">ここがid=dom_testの要素です。</div>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">//IDがdom_testである要素を取得する</span>
+<span class="nx">dom_test</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;dom_test&quot;</span><span class="p">);</span>
+<span class="c1">//内部テキストを書き換える</span>
+<span class="nx">dom_test</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;書き換えました。&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>「ここがid=dom_testの要素です。」と書いてあった部分が「書き換えました。」に変わると思います。</p>
+
+<h2>jQuery</h2>
+
+<p>いよいよHTMLにJavaScriptを組み込むのですが、JavaScriptもブラウザによってかなり動作の違いがあります。そこでブラウザ間の違いを吸収してくれるライブラリを利用することにします。jQueryというライブラリが最も有名です。</p>
+
+<p>まずは以下のHTMLを適当な名前で保存します。scriptタグによってJavaScriptのファイルを読み込んでいます。</p>
+<div class="highlight"><pre><code class="html language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;UTF-8&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;title&gt;</span>JavaScriptのサンプル<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://code.jquery.com/jquery-2.0.0.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;test_script.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;message&quot;</span><span class="nt">&gt;</span>こんにちは<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;button&gt;</span>おす<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
+<p>次に以下の内容をtest_script.jsという名前で保存します。</p>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">//読み込み完了時に実行する関数を指定</span>
+<span class="nx">$</span><span class="p">(</span><span class="nx">loaded</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">loaded</span><span class="p">(){</span>
+  <span class="c1">//ボタンタグをクリックしたときの動作を指定</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="nx">change_text</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">change_text</span><span class="p">(){</span>
+  <span class="c1">//IDがmessageの要素のテキストを書き換え</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#message&quot;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="s2">&quot;こんばんは&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>実際にブラウザで見てみましょう。ボタンを押すと「こんにちは」が「こんばんは」に書き換わるはずです。</p>
+
+<p>jQueryでは$関数を頻繁に使用します。$関数に関数を渡すとページの読み込みが終わったときにその関数が実行されます。また、$関数に文字列を渡すと該当のDOM要素を返します。これをセレクタといいます。セレクタの詳しい使い方については<a href="http://semooh.jp/jquery/">jQuery日本語リファレンス</a>を参照してください。</p>
+
+<p>上記の例で作成した関数は引数として利用するためだけに作成されています。そこで、先ほど説明した無名関数の機能を使うと以下のように簡潔に書くことができます。</p>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#message&quot;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="s2">&quot;こんばんは&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
 <span class="p">});</span>
 </code></pre></div>
-<p>実は$(function(){と});の間に記述するのもこの機能で、ページの読み込みが終わったとき実行する内容を指定しています。
-その他にも様々なことができます。少し古いですが<a href="http://semooh.jp/jquery/">jQuery日本語リファレンス</a>を参照してみてください。</p>
+<p><font color="red">メモ：以下はSTEP3に移動</font></p>
 
-<h3>Ajax</h3>
+<h2>Ajax</h2>
 
 <p>まずはAjaxで取得するデータを用意しましょう。データベースからデータを取り出すのでPHPになります。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>

@@ -58,7 +58,9 @@
       </header>
       <section><h1>STEP1-5.PHPを書いてみる</h1>
 
-<p>HTMLやCSSはあらかじめ書かれた内容を表示しているだけのものでした。PHPは動的にHTMLを生成することで、動的なページを実現するためのプログラミング言語です。</p>
+<p>HTMLやCSSはあらかじめ書かれた内容を表示しているだけのものでした。PHPはサーバ側で実行されるプログラムで、送信されたデータ利用するなど、動的なページを実現することができます。</p>
+
+<p>また、サーバで実行できるプログラムには他にもRuby, Perl, Pythonなど様々なものがあります。</p>
 
 <p>試しに日付を表示してみましょう。以下のプログラムを前回同様htdocs内にhello.phpとして保存します。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="x">&lt;!DOCTYPE html&gt;</span>
@@ -77,7 +79,7 @@
 </code></pre></div>
 <p><a href="http://localhost/hello.php">http://localhost/hello.php</a>にアクセスしたら現在の日時が表示されたでしょうか。</p>
 
-<p>phpはHTMLの中に組み込んで書きます。&lt;?phpから?&gt;までがPHPのプログラム本体です。PHPでは変数は先頭に$を付ける決まりになっています。dateは日付を文字列で返す関数、printは内容を表示する関数です。</p>
+<p>PHPはHTMLの中に組み込んで書きます。&lt;?phpから?&gt;までがPHPのプログラム本体です。PHPでは変数は先頭に$を付ける決まりになっています。dateは日付を文字列で返す関数、printは内容を表示する関数です。</p>
 
 <h2>基本構文</h2>
 
