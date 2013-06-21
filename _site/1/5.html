@@ -60,7 +60,7 @@
 
 <p>HTMLやCSSはあらかじめ書かれた内容を表示しているだけのものでした。PHPは動的にHTMLを生成することで、動的なページを実現するためのプログラミング言語です。</p>
 
-<p>試しに日付を表示してみましょう。以下のプログラムをhello.phpとして保存します。</p>
+<p>試しに日付を表示してみましょう。以下のプログラムを前回同様htdocs内にhello.phpとして保存します。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="x">&lt;!DOCTYPE html&gt;</span>
 <span class="x">&lt;html&gt;</span>
 <span class="x">  &lt;head&gt;</span>
@@ -79,9 +79,9 @@
 
 <p>phpはHTMLの中に組み込んで書きます。&lt;?phpから?&gt;までがPHPのプログラム本体です。PHPでは変数は先頭に$を付ける決まりになっています。dateは日付を文字列で返す関数、printは内容を表示する関数です。</p>
 
-<hr>
+<h2>基本構文</h2>
 
-<p>以下はPHPの基本的な構文とコード例です。</p>
+<p>以下はPHPの基本的な構文とコード例です。もっと詳しく知りたい場合や、分からないことがある場合は<a href="http://php.net/manual/ja/index.php">PHPマニュアル</a>を見ると良いでしょう。</p>
 
 <h3>if文</h3>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
@@ -103,6 +103,7 @@
 
 <h3>for文</h3>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">//$iが0から10未満の間、1ずつ加算しながら繰り返し</span>
 <span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
   <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$i</span><span class="s2"> &quot;</span><span class="p">);</span>
 <span class="p">}</span>
@@ -113,6 +114,7 @@
 </code></pre></div>
 <h3>関数</h3>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">//引数の文字列を2回表示する関数</span>
 <span class="k">function</span> <span class="nf">double_print</span><span class="p">(</span><span class="nv">$text</span><span class="p">){</span>
   <span class="k">print</span><span class="p">(</span><span class="nv">$text</span> <span class="o">.</span> <span class="nv">$text</span><span class="p">);</span>
 <span class="p">}</span>
@@ -125,32 +127,18 @@
 <div class="highlight"><pre><code class="text language-text" data-lang="text">aabcbc
 </code></pre></div>
 <ul>
-<li>文字列の結合は.演算子で行います。</li>
-</ul>
-
-<h3>オブジェクト</h3>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="k">stdClass</span><span class="p">;</span>
-<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">data1</span> <span class="o">=</span> <span class="s1">&#39;hoge&#39;</span><span class="p">;</span>
-<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">data2</span> <span class="o">=</span> <span class="s1">&#39;huga&#39;</span><span class="p">;</span>
-<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">data3</span> <span class="o">=</span> <span class="k">new</span> <span class="k">stdClass</span><span class="p">;</span>
-<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">data3</span><span class="o">-&gt;</span><span class="na">data5</span> <span class="o">=</span> <span class="s1">&#39;piyo&#39;</span><span class="p">;</span>
-<span class="nb">print_r</span><span class="p">(</span><span class="nv">$obj</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div>
-<p>出力：</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">stdClass Object ( [data1] =&gt; hoge [data2] =&gt; huga [data3] =&gt; stdClass Object ( [data5] =&gt; piyo ) )
-</code></pre></div>
-<ul>
-<li>print_rは変数の構造と内容を全て書き出す関数です。</li>
-<li>オブジェクトは子要素として好きなようにデータを保持することができます。</li>
+<li>文字列の結合は.(ドット)演算子で行います。+ではありません。</li>
 </ul>
 
 <h3>配列</h3>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">//&quot;one&quot;, &quot;two&quot;, &quot;three&quot;を要素とする配列を作成</span>
 <span class="nv">$a1</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">);</span>
+<span class="c1">//配列$a1の末尾に&quot;four&quot;という要素を追加</span>
 <span class="nv">$a1</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&quot;four&quot;</span><span class="p">;</span>
+<span class="c1">////配列$a1の0番目の要素を変更</span>
 <span class="nv">$a1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;one?&quot;</span><span class="p">;</span>
+<span class="c1">//表示</span>
 <span class="nb">print_r</span><span class="p">(</span><span class="nv">$a1</span><span class="p">);</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
@@ -158,14 +146,16 @@
 <div class="highlight"><pre><code class="text language-text" data-lang="text">Array ( [0] =&gt; one? [1] =&gt; two [2] =&gt; three [3] =&gt; four )
 </code></pre></div>
 <ul>
-<li>$変数名[]は値の追加です。</li>
+<li>print_rは変数の構造と内容を全て書き出す関数です。</li>
 </ul>
 
 <h3>連想配列</h3>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">//$hash[&quot;one&quot;]が&quot;いち&quot;, $hash[&quot;two&quot;]が&quot;に&quot;, $hash[&quot;three&quot;]が&quot;さん&quot;となる連想配列を作成</span>
 <span class="nv">$hash</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">&quot;one&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;いち&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;に&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;さん&quot;</span><span class="p">);</span>
 <span class="nv">$hash</span><span class="p">[</span><span class="s2">&quot;four&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;し&quot;</span><span class="p">;</span>
 <span class="nb">print_r</span><span class="p">(</span><span class="nv">$hash</span><span class="p">);</span>
+<span class="c1">//$hashの各要素を取り出して処理</span>
 <span class="k">foreach</span><span class="p">(</span><span class="nv">$hash</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span>
   <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$key</span><span class="s2"> is </span><span class="si">$val</span><span class="s2">. &quot;</span><span class="p">);</span>
 <span class="cp">?&gt;</span><span class="x"></span>
@@ -175,7 +165,6 @@
 </code></pre></div>
 <ul>
 <li>PHPでは配列の引数に文字列を使うことができ、これを連想配列と呼びます。</li>
-<li>foreachは配列や連想配列の各要素を取り出して処理する構文です。</li>
 </ul>
 
 <h3>正規表現</h3>
@@ -203,6 +192,20 @@
 </ul></li>
 <li>issetは変数がセットされており、かつNULLではないかチェックする関数です。</li>
 </ul>
+
+<h2>よくあるエラーと対処法</h2>
+
+<h3>プログラムががそのまま表示される</h3>
+
+<p>&lt;?phpと?&gt;で囲んだ範囲のみがPHPのプログラムとして認識されます。その他の部分はHTML扱いですのでそのまま表示されます。</p>
+
+<h3>Parse error</h3>
+
+<p>構文エラーです。エラーが発生しているファイル名と行番号が表示されていますので見直しましょう。1つ前の行でセミコロンを忘れている場合や、変数名に$を付け忘れている場合などがよくあります。</p>
+
+<h3>文字列の結合結果がおかしい</h3>
+
+<p>+演算子で結合していませんか？文字列の結合は.(ドット)演算子で行うのが正しいです。</p>
 </section>
       <footer></footer>
     </div>

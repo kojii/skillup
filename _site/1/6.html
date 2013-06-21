@@ -58,7 +58,7 @@
       </header>
       <section><h1>STEP1-6.PHPでGET,POSTを受け取る</h1>
 
-<p><a href="2.html">2.HTTPのしくみ</a>において、GETはデータの取得と説明しましたが、POSTと同様の形式のデータをURLの最後に付加することにより送信することもできます。この場合データが丸見えになることや、長さ制限がある場合があるなどの問題が発生します。</p>
+<p><a href="2.html">2.HTTPのしくみ</a>において、GETはデータの取得と説明しましたが、POSTと同様の形式のデータをURLの最後に付加することにより送信することもできます。この場合、URLが伸びることになるのでURLの長さ制限に引っかかる場合があります。</p>
 
 <p>GET,POSTで送信されたデータをPHPから受け取ってみましょう。以下のプログラムをpost.phpという名前で保存してください。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="x">&lt;!DOCTYPE html&gt;</span>
@@ -69,9 +69,11 @@
 <span class="x">  &lt;/head&gt;</span>
 <span class="x">  &lt;body&gt;</span>
 <span class="x">    </span><span class="cp">&lt;?php</span>
+      <span class="c1">//commentがPOSTされているなら</span>
       <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">])){</span>
+        <span class="c1">//エスケープしてから表示</span>
         <span class="nv">$comment</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]);</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;あなたのコメントは「&quot;</span> <span class="o">.</span> <span class="nv">$comment</span> <span class="o">.</span> <span class="s2">&quot;」です。&quot;</span><span class="p">);</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;あなたのコメントは「</span><span class="si">$comment</span><span class="s2">」です。&quot;</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="cp">?&gt;</span><span class="x"></span>
 <span class="x">        &lt;p&gt;コメントしてください。&lt;/p&gt;</span>
@@ -85,7 +87,7 @@
 <span class="x">  &lt;/body&gt;</span>
 <span class="x">&lt;/html&gt;</span>
 </code></pre></div>
-<p>GET,POSTで送信されたデータはそれぞれ$_GET,$_POSTという連想配列に格納されています。issetで中身を確認し、存在するなら表示しています。表示の際にはhtmlspecialchars関数で必ずエスケープしましょう。  </p>
+<p>GET,POSTで送信されたデータはそれぞれ$_GET,$_POSTという連想配列に格納されています。issetで中身を確認し、存在するなら表示しています。表示の際にはhtmlspecialchars関数で必ずエスケープしましょう。エスケープとは、特殊な意味があり表示できない文字を他の文字列に変換することです。HTMLの場合、&lt;&gt;などの文字はタグに使用されるため、それらを表示するには&amp;lt; &amp;gt;と書く必要があります。</p>
 
 <p>一方、送信部はformタグを用いてHTMLで書かれています。methodでメソッドを、actionで送信先URLを指定します。formタグ内のinput,select,textareaタグの内容が送信されます。送信する際の識別名はnameで指定します。</p>
 

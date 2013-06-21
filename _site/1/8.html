@@ -58,70 +58,73 @@
       </header>
       <section><h1>STEP1-8.SQLを書いてみる</h1>
 
-<p>データベースの操作はブラウザ上で簡単に行うこともできますが、Webサイトで利用するにはプログラムで操作する必要があります。データベースの操作にはSQLという言語を使用します。画面上部のSQLというタブに移動してください。今回は試しにここにSQLを書いてみます。</p>
+<p>データベースの操作はクエリ(処理要求をSQLという言語によって文字列で表したもの)を用いて行います。phpmyadminを利用すると様々な操作をブラウザ上で簡単に行うことができますが、自分のWebサイトでデータベースを利用するにはプログラムからSQLによるクエリを発行する必要があります。画面上部のSQLというタブに移動してください。今回は試しにここにSQLを書いてみます。</p>
 
 <h2>INSERT文</h2>
 
 <p>データの追加にはINSERT文を使用します。</p>
-<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">datas</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">text</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="ss">&quot;hoge&quot;</span><span class="p">,</span> <span class="ss">&quot;hugahuga&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">datas</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="ss">&quot;A_san&quot;</span><span class="p">,</span> <span class="ss">&quot;hello&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>これはdatasテーブルにnameカラムの値がhogeでありtextカラムの値がhugahugaであるデータを追加するコマンドです。dateカラムは省略することができます。これはテーブルの作成時（<a href="7.html">7.データベースを作成してみる</a>）にデフォルト値を設定してあるためで、省略することでデフォルト値が設定されます。デフォルト値を設定していないカラムは省略できません。</p>
+<p>これはdatasテーブルにnameカラムの値がA_sanでありmessageカラムの値がhelloであるデータを追加するクエリです。createdカラムは省略することができます。これはテーブルの作成時（<a href="7.html">7.データベースを作成してみる</a>）にデフォルト値を設定してあるためで、省略することでデフォルト値が設定されます。デフォルト値を設定していないカラムは省略できません。</p>
 
 <p>ちなみに値はカンマで区切ることで複数同時に追加することもできます。いくつか値を追加してみましょう。</p>
-
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">datas</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="ss">&quot;A_san&quot;</span><span class="p">,</span> <span class="ss">&quot;bye&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;B_san&quot;</span><span class="p">,</span> <span class="ss">&quot;Nice to meet you&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;B_san&quot;</span><span class="p">,</span> <span class="ss">&quot;bye&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;C_san&quot;</span><span class="p">,</span> <span class="ss">&quot;I am C&quot;</span><span class="p">),</span>
+</code></pre></div>
 <h2>SELECT文</h2>
 
 <p>データを取り出すときはSELECT文を使用します。</p>
 <div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">datas</span>
 </code></pre></div>
-<p>これはdatasテーブルの中身を全て取り出すコマンドです。SELECTの後には取り出すカラムを指定します。「*」は「全てのカラム」を意味します。SELECT文は後ろに句というものを付けて使用することが殆どです。句は複数組み合わせて使用することもできます。以下は基本的な句と使用例です。</p>
+<p>これはdatasテーブルの中身を全て取り出すクエリです。SELECTの後には取り出すカラムを指定します。「*」は「全てのカラム」を意味します。SELECT文は後ろに句というものを付けて使用することが殆どです。句は複数組み合わせて使用することもできます。以下は基本的な句と使用例です。</p>
 
 <h3>WHERE句</h3>
 
 <p>データを取り出す条件を指定します。</p>
-<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">data</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="o">=</span> <span class="ss">&quot;hoge&quot;</span>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">data</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="o">=</span> <span class="ss">&quot;A_san&quot;</span>
 </code></pre></div>
-<p>これはnameカラムの値がhogeである行のみを取り出すコマンドです。</p>
+<p>これはnameカラムの値がA_sanである行のみを取り出すクエリです。</p>
 
 <h3>ORDER BY句</h3>
 
 <p>データの並び順を指定します。</p>
-<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">datas</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="nb">date</span> <span class="k">DESC</span>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">datas</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">created</span> <span class="k">DESC</span>
 </code></pre></div>
-<p>これは日付の若い順（降順）に取り出すコマンドです。</p>
+<p>これは日付の若い順（降順）に取り出すクエリです。</p>
 
 <h3>LIMIT句</h3>
 
 <p>データを取り出す件数を指定します。</p>
 <div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">datas</span> <span class="k">LIMIT</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
 </code></pre></div>
-<p>これは2番目（最初の行は0番目）のデータから最大3件まで取り出すコマンドです。</p>
+<p>これは2番目（最初の行は0番目）のデータから最大3件まで取り出すクエリです。</p>
 
 <h3>GROUP BY句、COUNT関数</h3>
 
 <p>データをグループ化し、集計します。</p>
 <div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">datas</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">name</span>
 </code></pre></div>
-<p>これはnameカラムが同じ行をグループ化し、その個数を取り出すコマンドです。</p>
+<p>これはnameカラムが同じ行をグループ化し、その個数を取り出すクエリです。</p>
 
 <h2>DELETE文</h2>
 
 <p>データの削除にはDELETE文を使用します。</p>
 <div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">datas</span>
 </code></pre></div>
-<p>これはdatasテーブルの中身を全て削除するコマンドです。実際に使用する際は上記のWHERE句、LIMIT句などを利用して削除する行を指定します。</p>
+<p>これはdatasテーブルの中身を全て削除するクエリです。実際に使用する際は上記のWHERE句、LIMIT句などを利用して削除する行を指定します。</p>
 
 <h2>UPDATE文</h2>
 
 <p>データの更新にはUPDATE文を使用します。</p>
-<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">UPDATE</span> <span class="n">datas</span> <span class="k">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="ss">&quot;piyo&quot;</span>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">UPDATE</span> <span class="n">datas</span> <span class="k">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="ss">&quot;D_san&quot;</span>
 </code></pre></div>
-<p>これはdatasテーブルの全ての行のnameカラムの値をpiyoに変更するコマンドです。実際に使用する際は上記のWHERE句を利用して更新する行を指定します。</p>
+<p>これはdatasテーブルの全ての行のnameカラムの値をpiyoに変更するクエリです。実際に使用する際は上記のWHERE句を利用して更新する行を指定します。</p>
+
+<p>その他、様々な機能や構文があります。<a href="http://www.dbonline.jp/mysql/">MySQLの使い方</a>が分かりやすく、おすすめです。</p>
 
 <hr>
 
 <p><strong>[課題]SQLを使ってみよう</strong><br>
-まずはINSERT文で10個くらいデータを用意して、SELECT文を使ってみましょう。掲示板として表示する際はORDER BY句はどのように指定すればよいかも考えてみましょう。</p>
+まずはINSERT文でさらに10個くらいデータを追加してみましょう。次にSELECT文やUPDATE文などを色々試してみましょう。掲示板として表示する際はどのようなクエリが必要になるかも考えてみましょう。</p>
 </section>
       <footer></footer>
     </div>

@@ -70,7 +70,7 @@
 <div class="highlight"><pre><code class="text language-text" data-lang="text">GET /index.html HTTP/1.1
 Host: www.team-lab.com
 </code></pre></div>
-<p>これは、www.team-lab.comというホスト名のサーバに対し、GETメソッドで/index.htmlというURIを要求していることを表します。これを受けてサーバは以下のようなレスポンスを返します。</p>
+<p>これは、www.team-lab.comという<a href="http://e-words.jp/w/E3839BE382B9E38388E5908D.html">ホスト名</a>のサーバに対し、GETメソッドで/index.htmlという<a href="http://e-words.jp/w/URI.html">URI</a>を要求していることを表します。これを受けてサーバは以下のようなレスポンスを返します。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">HTTP/1.1 200 OK
 Content-Type: text/html
 Content-Length: 25069
@@ -96,7 +96,7 @@ Content-Length: 93
 
 name=teamlab&amp;text=%82%B1%82%F1%82%C9%82%BF%82%CD
 </code></pre></div>
-<p>POSTの場合はレスポンスと同じように最後に1行の空白を挟みデータを送信します。データは&amp;で区切られ、各データごとに データの識別名=データ本体 という構造になっています。また、日本語など送信できない文字はURLエンコードされて送信されます。
+<p>POSTの場合はレスポンスと同じように最後に1行の空白を挟みデータを送信します。データは&amp;で区切られ、各データごとに データの識別名=データ本体 という構造になっています。また、日本語などの送信できない文字は「%xx」(xは16進数)という形式に変換が行われてから送信されます。この変換をURLエンコードといいます。
 サーバではデータを処理するプログラムが起動し、掲示板の更新処理などを行った後にGETの場合と同様にレスポンスを返します。</p>
 
 <hr>

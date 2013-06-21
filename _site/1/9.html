@@ -62,52 +62,50 @@
 
 <p>まずはPHPからデータベースに接続します。昔はmysql_connect関数を使っていましたが、最近はmysqliクラスを利用する方法が一般的です。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">//mysqliクラスのオブジェクトを作成</span>
 <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;ホスト名&#39;</span><span class="p">,</span> <span class="s1">&#39;ユーザ名&#39;</span><span class="p">,</span> <span class="s1">&#39;パスワード&#39;</span><span class="p">,</span> <span class="s1">&#39;データベース名&#39;</span><span class="p">);</span>
+<span class="c1">//エラーが発生したら</span>
 <span class="k">if</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">){</span>
   <span class="k">print</span><span class="p">(</span><span class="s2">&quot;接続失敗：&quot;</span> <span class="o">.</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">);</span>
   <span class="k">exit</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<p>ホスト名はPHPを動かすサーバとデータベースを動かすサーバを分けない限りlocalhostです。初期設定ではユーザ名はroot、パスワードは無しになっています。</p>
+<p>ホスト名はPHPを動かすサーバとデータベースを動かすサーバを分けない限りlocalhostです。初期設定ではユーザ名はroot、パスワードは無しになっています。エラーが発生したら、各種パラメータが合っているかどうか、MySQLが起動しているかどうかなどを確認してみましょう。</p>
 
 <h3>実行</h3>
 
-<p>コマンド（クエリ）を実行するにはmysqli::query関数を使用します。</p>
+<p>クエリを実行するにはmysqli::query関数を使用します。ただし、ユーザからの入力をSQL文の一部に使用する場合はプリペアドステートメントという機能を使って実行します。これはエスケープを確実に行うためです。</p>
 
 <p>INSERTの例</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;INSERT INTO datas (name, text) VALUES (&#39;piyo&#39;, &#39;hogepiyo&#39;)&quot;</span><span class="p">);</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">)</span>
-  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;INSERT成功&quot;</span><span class="p">);</span>
-<span class="k">else</span>
-  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;INSERT失敗&quot;</span><span class="p">);</span>
+<span class="c1">//プリペアドステートメントを作成　ユーザ入力を使用する箇所は?にしておく</span>
+<span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="s2">&quot;INSERT INTO datas (name, message) VALUES (?, ?)&quot;</span><span class="p">);</span>
+<span class="c1">//$_POST[&quot;name&quot;]に名前が、$_POST[&quot;message&quot;]に本文が格納されているとする。</span>
+<span class="c1">//?の位置に値を割り当てる</span>
+<span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_param</span><span class="p">(</span><span class="s1">&#39;ss&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]);</span>
+<span class="c1">//実行</span>
+<span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<p>このような場合mysqli::query関数は成功したかどうかを返します。</p>
-
 <p>SELECTの例</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM datas ORDER BY date DESC&quot;</span><span class="p">);</span>
+<span class="c1">//datasテーブルから日付の降順でデータを取得</span>
+<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM datas ORDER BY created DESC&quot;</span><span class="p">);</span>
 <span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">){</span>
+  <span class="c1">//1行ずつ取り出し</span>
   <span class="k">while</span><span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">fetch_object</span><span class="p">()){</span>
+    <span class="c1">//エスケープして表示</span>
     <span class="nv">$name</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">);</span>
-    <span class="nv">$text</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">);</span>
-    <span class="nv">$date</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">date</span><span class="p">);</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$name</span><span class="s2"> : </span><span class="si">$text</span><span class="s2"> (</span><span class="si">$date</span><span class="s2">)&lt;br&gt;&quot;</span><span class="p">);</span>
+    <span class="nv">$message</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">message</span><span class="p">);</span>
+    <span class="nv">$created</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">created</span><span class="p">);</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$name</span><span class="s2"> : </span><span class="si">$message</span><span class="s2"> (</span><span class="si">$created</span><span class="s2">)&lt;br&gt;&quot;</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<p>このような場合mysqli::query関数は結果オブジェクトを返します。fetch_object関数で1行ずつ取り出して表示します。</p>
+<p>SELECT文の場合、mysqli::query関数は結果オブジェクトを返します。</p>
 
-<p>今回はユーザーの入力を受け取っていないので使用しませんでしたが、ユーザーの入力をSQL文の一部に使用する場合は必ずmysqli::real_escape_string関数でエスケープするようにします。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nv">$name</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]);</span>
-<span class="nv">$text</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]);</span>
-<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;INSERT INTO datas (name, text) VALUES (&#39;</span><span class="si">$name</span><span class="s2">&#39;, &#39;</span><span class="si">$text</span><span class="s2">&#39;)&quot;</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div>
 <h3>切断</h3>
 
 <p>データベースの操作が終わったら接続を切ります。</p>
@@ -115,6 +113,14 @@
 <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
+<p>何か困ったことがあれば<a href="http://jp2.php.net/manual/ja/book.mysqli.php">Mysqliマニュアル</a>を見てみてください。</p>
+
+<h3>オブジェクトとは</h3>
+
+<p>今回、クラスやオブジェクトといった言葉が登場しました。これらはオブジェクト指向で使われる用語です。オブジェクト指向プログラミングでは、プログラムは複数のオブジェクトの集まりとして構成します。各オブジェクトはデータを保持するための変数（プロパティ）とデータを処理するための関数（メソッド）を備え、1つの役割を担います。オブジェクトはクラスという設計図をもとに作成します。</p>
+
+<p>上記の例ではnew mysqliでmysqliクラスのインスタンスを作成します。インスタンスとはクラスを元に作られた実際のオブジェクトのことです。mysqliクラスは接続情報を受け取って内部に保存し、接続を試みます。$mysqli-&gt;connect_errorは実際に作られたオブジェクト$mysqliのプロパティconnect_errorにアクセスしています。また、$mysqli-&gt;queryは$mysqliの内部に保存した接続情報を利用してデータベースにクエリを発行するメソッドqueryを呼び出しています。このようにmysqliクラスはMySQLサーバとの通信という役割を担うクラスであり、そのための情報を内部に保持していたりメソッドを有していたります。</p>
+
 <hr>
 
 <p><strong>[課題]掲示板を作ってみよう</strong><br>
