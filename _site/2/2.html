@@ -35,9 +35,9 @@
          <li><a href="../2/1.html">1.JavaScriptを書いてみる</a>
          <li><a href="../2/2.html">2.ログイン機能を作ってみる</a>
          <li><a href="../2/3.html">3.入力チェックを作ってみる</a>
-         <li><a href="../2/4.html">4.フレームワークとは</a>
-         <li><a href="../2/5.html">5.CakePHPの基本</a>
-         <li><a href="../2/6.html">6.IDEを使ってみる</a>
+         <li><a href="../2/4.html">4.ログイン機能をクラス化してみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
          <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
          <li><a href="../2/8.html">8.画面仕様書とは</a>
          <li><a href="../2/9.html">9.データベースを設計してみる</a>
@@ -47,7 +47,7 @@
         <ul>
          <li><a href="../3/1.html">1.CentOSとは</a>
          <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/3.html">3.IDEを使ってみる</a>
          <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
          <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/6.html">6.テストとは</a>
@@ -58,20 +58,28 @@
       </header>
       <section><h1>STEP2-2.ログイン機能を作ってみる</h1>
 
-<p>今回はまたPHPに戻ってログイン機能を作ってみます。とりあえずユーザーの情報を保存するためのテーブルを作成します。名前はusersテーブルでusernameカラム, passwordカラムのどちらもCHAR型で長さは32でいいでしょう。CHAR型は固定長文字列です。テーブル作成後、構造タブからusernameカラムをユニークに設定しておきます。これで重複が許されなくなります。それでは新規登録画面(register.php)を作ります。</p>
+<p>今回はまたPHPに戻ってログイン機能を作ってみます。とりあえずユーザーの情報を保存するためのテーブルを作成します。名前はusersテーブルでusernameカラム, passwordカラムのどちらもCHAR型（固定長文字列）で長さは41にします。CHAR型は固定長文字列です。テーブル作成後、構造タブからusernameカラムをユニークに設定しておきます。これでusernameが同じ行が登録されなくなります。それでは新規登録画面(register.php)を作ります。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 
-<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;適当に文字列を変えてください。&quot;</span><span class="p">;</span>
+<span class="c1">//ハッシュ化に使用する定数</span>
+<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;mwefCMEP28DjwdW3lwdS239vVS&quot;</span><span class="p">;</span>
 
 <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
 
 <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">;</span>
+
 <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])){</span>
-  <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]);</span>
+  <span class="c1">//パスワードはハッシュ化する</span>
   <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$salt</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;INSERT INTO users VALUES (&#39;</span><span class="si">$username</span><span class="s2"> &#39;, &#39;</span><span class="si">$password</span><span class="s2">&#39;)&quot;</span><span class="p">))</span>
+
+  <span class="c1">//ユーザ入力を使用するのでプリペアドステートメントを使用</span>
+  <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="s2">&quot;INSERT INTO users VALUES (?, ?)&quot;</span><span class="p">);</span>
+  <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_param</span><span class="p">(</span><span class="s1">&#39;ss&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span> <span class="nv">$password</span><span class="p">);</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">())</span>
     <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
   <span class="k">else</span>
+    <span class="c1">//既に存在するユーザ名だった場合INSERTに失敗する</span>
     <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -99,30 +107,44 @@
 <span class="x">  &lt;/body&gt;</span>
 <span class="x">&lt;/html&gt;</span>
 </code></pre></div>
-<p>if文をコロンとendifで挟む新しい書き方が出てきました。これはHTMLの中に記述するときに使うと見やすくなるためお勧めです。さて、パスワードですがデータベースに入れる前に$saltと結合してmd5という関数に通しています。これは、パスワードをそのままデータベースに保存しておくと危険であるためハッシュ化して保存する必要があるからです。</p>
+<p>if文をコロンとendifで挟む新しい書き方が出てきました。これはHTMLの中に記述するときに使うと見やすくなるためお勧めです。</p>
 
-<p>ではログイン画面(login.php)を作成しましょう。パスワードはハッシュ化して保存したため、入力されたパスワードもハッシュ化して同じ値になれば正しいパスワードであるという処理にします。また、一度ログインしたらログイン中であるということを保存する機能が必要になります。これはセッションという機能を用いて実現します。</p>
+<p>さて、パスワードですが<a href="http://e-words.jp/w/E3838FE38383E382B7E383A5E58C96.html">ハッシュ化</a>して保存しています。これは、もしデータベースが第三者に盗まれてもユーザのパスワードを流出させないためです。ハッシュ化にはmd5という関数とsaltと呼ばれる固定文字列を使用します。saltは適当に変更しておきましょう。</p>
+
+<p>動作を確認してみましょう。<a href="http://localhost/register.php">http://localhost/register.php</a>から適当に何人かユーザ登録をします。この際、同じユーザ名で登録したときエラーが表示されるかどうかも確認しておきます。次に<a href="http://localhost/phpmyadmin">http://localhost/phpmyadmin</a>からusersテーブルの中身を見てみましょう。</p>
+
+<p>ではログイン画面(login.php)を作成しましょう。一度ログインしたらログイン中であるということを保存する機能が必要になります。アクセスしたユーザを識別し、ユーザごとにサーバ側に値を保存するセッションという機能があります。<a href="http://php.xenophy.com/session/">セッション管理 - PHP入門サイト</a>にセッションでできること、実装方法、PHPでの使用方法などが書かれていますので読んでみましょう。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 
-<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;先ほどと同じ文字列にしてください。&quot;</span><span class="p">;</span>
+<span class="c1">//さっき変更した場合はこちらも変更する</span>
+<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;mwefCMEP28DjwdW3lwdS239vVS&quot;</span><span class="p">;</span>
 
+<span class="c1">//セッション開始</span>
 <span class="nb">session_start</span><span class="p">();</span>
+
 <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
 
 <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">;</span>
+
+<span class="c1">//セッションにセットされていたらログイン済み</span>
 <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]))</span>
   <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;logged_in&quot;</span><span class="p">;</span>
 <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])){</span>
-  <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]);</span>
+  <span class="c1">//ユーザ名、パスワードが一致する行を探す</span>
   <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$salt</span><span class="p">);</span>
-  <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT password FROM users WHERE username = &#39;</span><span class="si">$username</span><span class="s2">&#39;&quot;</span><span class="p">);</span>
-  <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">)</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">fetch_object</span><span class="p">())</span>
-      <span class="k">if</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">password</span> <span class="o">==</span> <span class="nv">$password</span><span class="p">){</span>
-        <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
-        <span class="nv">$_SESSION</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">];</span>
-      <span class="p">}</span>
+  <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM users WHERE username = ? AND password = ?&quot;</span><span class="p">);</span>
+  <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_param</span><span class="p">(</span><span class="s1">&#39;ss&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span> <span class="nv">$password</span><span class="p">);</span>
+  <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+
+  <span class="c1">//結果を保存</span>
+  <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">store_result</span><span class="p">();</span>
+  <span class="c1">//結果の行数が1だったら成功</span>
+  <span class="k">if</span><span class="p">(</span><span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">num_rows</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
+    <span class="c1">//セッションにユーザ名を保存</span>
+    <span class="nv">$_SESSION</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">];</span>
+  <span class="p">}</span><span class="k">else</span>
+    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="cp">?&gt;</span><span class="x"></span>
@@ -143,17 +165,15 @@
 <span class="x">      &lt;p&gt;ログイン失敗&lt;/p&gt;</span>
 <span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">else</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
 <span class="x">      &lt;form method=&quot;POST&quot; action=&quot;login.php&quot;&gt;</span>
-<span class="x">        ユーザ名：&lt;input name=&quot;username&quot; /&gt;</span>
-<span class="x">        パスワード：&lt;input name=&quot;password&quot; /&gt;</span>
+<span class="x">        ユーザ名：&lt;input type=&quot;text&quot; name=&quot;username&quot; /&gt;</span>
+<span class="x">        パスワード：&lt;input type=&quot;password&quot; name=&quot;password&quot; /&gt;</span>
 <span class="x">        &lt;input type=&quot;submit&quot; value=&quot;ログイン&quot; /&gt;</span>
 <span class="x">      &lt;/form&gt;</span>
 <span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
 <span class="x">  &lt;/body&gt;</span>
 <span class="x">&lt;/html&gt;</span>
 </code></pre></div>
-<p>セッションは過去のアクセス時のデータを保存できる連想配列です。更に別のページでも同じデータが使用できます。</p>
-
-<p>ログアウトはセッションを削除するだけなので以下のようになります。</p>
+<p>ログアウト(logout.php)はセッションを削除するだけなので以下のようになります。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 
 <span class="nb">session_start</span><span class="p">();</span>
@@ -174,10 +194,12 @@
 <span class="x">  &lt;/body&gt;</span>
 <span class="x">&lt;/html&gt;</span>
 </code></pre></div>
+<p><a href="http://localhost/login.php">http://localhost/login.php</a>や<a href="http://localhost/logout.php">http://localhost/logout.php</a>にアクセスして、正しい動作をしているか確認してみましょう。</p>
+
 <hr>
 
-<p><strong>[課題]セッションについて調べよう</strong><br>
-セッションとは何か、なぜ必要なのか、どのような目的で使用されているのかについて調べてみましょう。また、クッキーとの違いをしっかり認識しておきましょう。</p>
+<p><strong>[課題]共通部分を別ファイルにまとめよう</strong><br>
+今回、saltやデータベースの接続情報など、必ず同じでなければならない値をregister.phpとlogin.phpの2箇所に記述しました。このような書き方をすると、間違えて片方だけ編集してしまうなどバグの原因となります。共通部分をまとめたphpファイルを新たに作り、それをregister.phpとlogin.phpから読み込むように変更してみましょう。別のPHPファイルの読み込みにはrequire_once関数を使う方法などがあります。</p>
 </section>
       <footer></footer>
     </div>

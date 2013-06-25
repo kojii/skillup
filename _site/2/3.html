@@ -35,9 +35,9 @@
          <li><a href="../2/1.html">1.JavaScriptを書いてみる</a>
          <li><a href="../2/2.html">2.ログイン機能を作ってみる</a>
          <li><a href="../2/3.html">3.入力チェックを作ってみる</a>
-         <li><a href="../2/4.html">4.フレームワークとは</a>
-         <li><a href="../2/5.html">5.CakePHPの基本</a>
-         <li><a href="../2/6.html">6.IDEを使ってみる</a>
+         <li><a href="../2/4.html">4.ログイン機能をクラス化してみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
          <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
          <li><a href="../2/8.html">8.画面仕様書とは</a>
          <li><a href="../2/9.html">9.データベースを設計してみる</a>
@@ -47,7 +47,7 @@
         <ul>
          <li><a href="../3/1.html">1.CentOSとは</a>
          <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/3.html">3.IDEを使ってみる</a>
          <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
          <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/6.html">6.テストとは</a>
@@ -59,22 +59,47 @@
       <section><h1>STEP2-3.入力チェックを作ってみる</h1>
 
 <p>前回の例ではIDやパスワードにあらゆる文字が使えていたので、それを半角英数字に制限し、さらに文字数も制限してみようと思います。チェックはJavaScriptとPHPで2回行います。JavaScriptで行うのはページ遷移無しでチェックしたほうがユーザーにとって親切であるからです。しかし、POSTメソッドの送り方を知っている人にとってはJavaScriptのチェックは簡単に抜けられるため、PHPでもチェックする必要があるのです。</p>
+
+<p>また、前回の課題であったファイル分割についても一例として示しておきます。</p>
+
+<h1>auth.php</h1>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 
-<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;前回と同じ文字列にしてください。&quot;</span><span class="p">;</span>
+<span class="c1">//認証に必要な機能をまとめたファイル</span>
 
-<span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
+<span class="nv">$salt</span> <span class="o">=</span> <span class="s2">&quot;mwefCMEP28DjwdW3lwdS239vVS&quot;</span><span class="p">;</span>
+
+<span class="k">function</span> <span class="nf">connect_mysql</span><span class="p">(){</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">hash_password</span><span class="p">(</span><span class="nv">$password</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$password</span> <span class="o">.</span> <span class="nv">$salt</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<h1>register.php</h1>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="c1">//auth.phpの読み込み</span>
+<span class="k">require_once</span><span class="p">(</span><span class="s2">&quot;auth.php&quot;</span><span class="p">);</span>
+<span class="nv">$mysqli</span> <span class="o">=</span> <span class="nx">connect_mysql</span><span class="p">();</span>
 
 <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">;</span>
+
 <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])){</span>
+  <span class="c1">//正規表現でユーザ名のチェック</span>
   <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/^[0-9a-zA-Z]{2,32}$/&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]))</span>
     <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;error_username&quot;</span><span class="p">;</span>
+  <span class="c1">//パスワードのチェック</span>
   <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/^[0-9a-zA-Z]{8,32}$/&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]))</span>
     <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;error_password&quot;</span><span class="p">;</span>
   <span class="k">else</span><span class="p">{</span>
-    <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]);</span>
-    <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$salt</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;INSERT INTO user VALUES (&#39;</span><span class="si">$username</span><span class="s2">&#39;, &#39;</span><span class="si">$password</span><span class="s2">&#39;)&quot;</span><span class="p">))</span>
+    <span class="nv">$password</span> <span class="o">=</span> <span class="nx">hash_password</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]);</span>
+    <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="s2">&quot;INSERT INTO users VALUES (?, ?)&quot;</span><span class="p">);</span>
+    <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_param</span><span class="p">(</span><span class="s1">&#39;ss&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span> <span class="nv">$password</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">())</span>
       <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
     <span class="k">else</span>
       <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
@@ -89,16 +114,7 @@
 <span class="x">    &lt;meta charset=&quot;UTF-8&quot; /&gt;</span>
 <span class="x">    &lt;title&gt;新規登録&lt;/title&gt;</span>
 <span class="x">    &lt;script src=&quot;http://code.jquery.com/jquery-2.0.0.min.js&quot;&gt;&lt;/script&gt;</span>
-<span class="x">    &lt;script&gt;</span>
-<span class="x">      function check(){</span>
-<span class="x">        if(!$(&quot;input[name=username]&quot;).val().match(/^[0-9a-zA-Z]{2,32}$/)</span>
-<span class="x">        || !$(&quot;input[name=password]&quot;).val().match(/^[0-9a-zA-Z]{8,32}$/)){</span>
-<span class="x">          alert(&quot;入力エラー&quot;);</span>
-<span class="x">          return false;</span>
-<span class="x">        }</span>
-<span class="x">        return true;</span>
-<span class="x">      }</span>
-<span class="x">    &lt;/script&gt;</span>
+<span class="x">    &lt;script src=&quot;register_check.js&quot;&gt;&lt;/script&gt;</span>
 <span class="x">  &lt;/head&gt;</span>
 <span class="x">  &lt;body&gt;</span>
 <span class="x">    &lt;h1&gt;新規登録&lt;/h1&gt;</span>
@@ -107,7 +123,7 @@
 <span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$status</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
 <span class="x">      &lt;p&gt;エラー：既に存在するユーザ名です。&lt;/p&gt;</span>
 <span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$status</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">      &lt;form method=&quot;POST&quot; action=&quot;register.php&quot; onSubmit=&quot;return check()&quot;&gt;</span>
+<span class="x">      &lt;form method=&quot;POST&quot; action=&quot;register.php&quot;&gt;</span>
 <span class="x">        ユーザ名：&lt;input type=&quot;text&quot; name=&quot;username&quot; /&gt;</span>
 <span class="x">        パスワード：&lt;input type=&quot;password&quot; name=&quot;password&quot; /&gt;</span>
 <span class="x">        &lt;input type=&quot;submit&quot; value=&quot;登録&quot; /&gt;</span>
@@ -121,7 +137,23 @@
 <span class="x">  &lt;/body&gt;</span>
 <span class="x">&lt;/html&gt;</span>
 </code></pre></div>
-<p>一応、正規表現の解説です。</p>
+<h1>register_check.js</h1>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="c1">//submitしたときに呼び出される関数を設定</span>
+  <span class="c1">//falseを返すとキャンセルされる</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">).</span><span class="nx">submit</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;input[name=username]&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">().</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^[0-9a-zA-Z]{2,32}$/</span><span class="p">)</span>
+    <span class="o">||</span> <span class="o">!</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;input[name=password]&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">().</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^[0-9a-zA-Z]{8,32}$/</span><span class="p">)){</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;入力エラー&quot;</span><span class="p">);</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>jQueryのval関数はそのDOM要素のvalue属性の値を返します。</p>
+
+<p>一応、正規表現の解説です。分からなくても問題ありません。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">/^[0-9a-zA-Z]{8,32}$/
 </code></pre></div>
 <p>まず^と$で囲んでいるのは先頭から末尾まで全て一致させるためです。[]で囲まれたものはそのうちのどれか1文字が一致すればよいという意味で、ここで半角英数字のみに制限しています。{8,32}は直前の文字が8文字以上32文字以下続いているという意味で、ここで長さを制限しています。</p>

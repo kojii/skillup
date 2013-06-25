@@ -35,9 +35,9 @@
          <li><a href="../2/1.html">1.JavaScriptを書いてみる</a>
          <li><a href="../2/2.html">2.ログイン機能を作ってみる</a>
          <li><a href="../2/3.html">3.入力チェックを作ってみる</a>
-         <li><a href="../2/4.html">4.フレームワークとは</a>
-         <li><a href="../2/5.html">5.CakePHPの基本</a>
-         <li><a href="../2/6.html">6.IDEを使ってみる</a>
+         <li><a href="../2/4.html">4.ログイン機能をクラス化してみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
          <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
          <li><a href="../2/8.html">8.画面仕様書とは</a>
          <li><a href="../2/9.html">9.データベースを設計してみる</a>
@@ -47,7 +47,7 @@
         <ul>
          <li><a href="../3/1.html">1.CentOSとは</a>
          <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/3.html">3.IDEを使ってみる</a>
          <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
          <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/6.html">6.テストとは</a>
@@ -56,63 +56,15 @@
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP2-5.CakePHPの基本</h1>
+      <section><h1>STEP2-4.フレームワークとは</h1>
 
-<p>CakePHPでは以下のようなURL構造になります。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">http://ドメイン名/CakePHPを設置したファイル名/コントローラ名/アクション名/データ/...
-</code></pre></div>
-<p>では試しにdataコントローラを作成してみましょう。以下の内容を/app/Controller/内にDatasController.phpという名前で保存します。大文字小文字は正しく設定します。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AppController&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller&#39;</span><span class="p">);</span>
+<p>フレームワーク（アプリケーションフレームワーク）とは、プログラム開発で共通して使用されるであろう標準的な機能を再利用可能な形でまとめたものです。特にWeb開発で用いられるフレームワークではデータベースアクセス、セッション管理、入力チェックなど、今までの講座で扱ったようなものが簡単に記述できるような機能が提供されることが多く、フレームワークをうまく使うことで開発スピードと信頼性が上がります。</p>
 
-<span class="k">class</span> <span class="nc">DatasController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+<p>今回はCakePHPというフレームワークを使用します。CakePHPはMVCアーキテクチャを採用しています。MVCアーキテクチャとは、プログラムをModel（モデル）、View（ビュー）、Controller（コントローラ）の3つに分割して設計・記述することで、プログラムを分かりやすく、拡張性が高いものにするという構造です。モデルはデータの管理・処理を、ビューはHTMLの出力を、コントローラはユーザ入力の処理やモデル・ビューの制御を担当します。</p>
 
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="s1">&#39;Hello&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>これはindexというアクションを定義しています。$this-&gt;setはビューにデータを渡すための機構です。対応するビューを用意しましょう。/app/View/内にDatasフォルダを作成し、その中に以下の内容をindex.ctpという名前で保存します。ビューは普通のPHPファイルとして書くことができますが、HTMLの中にPHPを埋め込むということを意識して書くとよいでしょう。</p>
-<div class="highlight"><pre><code class="html language-html" data-lang="html"><span class="nt">&lt;h1&gt;</span><span class="cp">&lt;?php print($message); ?&gt;</span><span class="nt">&lt;/h1&gt;</span>
-</code></pre></div>
-<p>それではアクセスしてみます。URL構造に従うとhttp://localhost/cakephp/datas/indexですが、アクション名がindexの場合は省略可能ですので<a href="http://localhost/cakephp/datas">http://localhost/cakephp/datas</a>となります。デフォルトのレイアウトの中にHelloと表示されるはずです。レイアウトを使用したくない場合はコントローラのアクション内で$this-&gt;autoLayout = false;と指定しましょう。</p>
+<p><img src="../images/2_4_1.png" alt=""></p>
 
-<hr>
-
-<p>次にモデルを作成し、データベースにアクセスしてみます。まずは設定を作成します。/app/Config/にあるdatabase.php.defaultをdatabase.phpという名前でコピーして開きます。DATABASE_CONFIGクラスにデータベースの設定が書かれていますのでこれを書き換えます。正しく設定できたら初期ページに「Cake is able to connect to the database.」と表示されるはずです。</p>
-
-<p>モデルを作成してみましょう。1つのテーブルに対して1つのモデルを作成します。/app/Model/内に以下の内容をData.phpという名前で保存します。datasテーブルに対するモデル名がDataであるように、複数形のテーブル名に対して単数形のモデル名になります。単数形のテーブルは困ったことになりますのでテーブル名は複数形にしましょう。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AppModel&#39;</span><span class="p">,</span> <span class="s1">&#39;Model&#39;</span><span class="p">);</span>
-
-<span class="k">class</span> <span class="nc">Data</span> <span class="k">extends</span> <span class="nx">AppModel</span> <span class="p">{</span>
-
-<span class="p">}</span>
-</code></pre></div>
-<p>ではこのモデルをコントローラから使用します。DatasControllerに以下のアクションを追加します。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">get</span><span class="p">(</span><span class="nv">$name</span><span class="p">){</span>
-    <span class="nv">$options</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;conditions&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nv">$name</span><span class="p">));</span>
-    <span class="nv">$datas</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Data</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="nv">$options</span><span class="p">);</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;datas&#39;</span><span class="p">,</span> <span class="nv">$datas</span><span class="p">);</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="nv">$name</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div>
-<p>getビューも以下のように作成しましょう。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="x">&lt;h1&gt;</span><span class="cp">&lt;?php</span> <span class="k">print</span><span class="p">(</span><span class="nx">h</span><span class="p">(</span><span class="nv">$name</span><span class="p">));</span> <span class="cp">?&gt;</span><span class="x">さんの投稿一覧&lt;/h1&gt;</span>
-<span class="cp">&lt;?php</span> <span class="k">foreach</span><span class="p">(</span><span class="nv">$datas</span> <span class="k">as</span> <span class="nv">$data</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">  </span><span class="cp">&lt;?php</span> <span class="k">print</span><span class="p">(</span><span class="nx">h</span><span class="p">(</span><span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;Data&quot;</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">])</span> <span class="o">.</span> <span class="s1">&#39; (&#39;</span> <span class="o">.</span> <span class="nx">h</span><span class="p">(</span><span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;Data&quot;</span><span class="p">][</span><span class="s2">&quot;date&quot;</span><span class="p">])</span> <span class="o">.</span> <span class="s1">&#39;)&#39;</span><span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
-<span class="cp">&lt;?php</span> <span class="k">endforeach</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div>
-<p><a href="http://localhost/cakephp/datas/get/hoge">http://localhost/cakephp/datas/get/hoge</a>にアクセスしてみるとhogeさんの投稿一覧が表示されるはずです。このようにアクションの引数はURLでデータとして与えることができるのです。また、$this-&gt;Dataは先ほど作成したモデルへのアクセスです。findメソッドを使用してデータベースからデータを取得します。第2引数にオプションを与えることができ、&#39;conditions&#39;はWHERE句の役割を果たします。また、データは自動でエスケープされます。DatasコントローラからはDataモデルしか呼び出せません。他のモデル、例えばUserモデルを使いたい場合は$this-&gt;loadModel(&#39;User&#39;);のように明示的に読み込む必要があります。</p>
-
-<p>ビューのほうを見てみましょう。hという関数を使用していますね。これはhtmlspecialcharsと同じ、つまりHTMLエスケープを行います。</p>
-
-<hr>
-
-<p><strong>[課題]アクションを追加してみよう</strong><br>
-何かアクションを追加してみましょう。例えば、5件ずつ表示するpageアクションなどが考えられます。</p>
+<p>それではCakePHPをインストールしてみましょう。<a href="http://cakephp.jp/">CakePHP</a>から安定版をダウンロードします。zipファイルを解凍し、フォルダごとhtdocsに置き、適当にフォルダ名を変更します。（cakephpに変更したものとして話を進めます。）Webブラウザから<a href="http://localhost/cakephp/">http://localhost/cakephp/</a>にアクセスしてみるとCakePHPの初期ページが表示されるはずです。いくつかエラーが出ていますね。/app/Config/core.phpを開いてSecurity.saltとSecurity.cipherSeedを適当な値に変更しておきましょう。</p>
 </section>
       <footer></footer>
     </div>

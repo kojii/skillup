@@ -35,9 +35,9 @@
          <li><a href="../2/1.html">1.JavaScriptを書いてみる</a>
          <li><a href="../2/2.html">2.ログイン機能を作ってみる</a>
          <li><a href="../2/3.html">3.入力チェックを作ってみる</a>
-         <li><a href="../2/4.html">4.フレームワークとは</a>
-         <li><a href="../2/5.html">5.CakePHPの基本</a>
-         <li><a href="../2/6.html">6.IDEを使ってみる</a>
+         <li><a href="../2/4.html">4.ログイン機能をクラス化してみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
          <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
          <li><a href="../2/8.html">8.画面仕様書とは</a>
          <li><a href="../2/9.html">9.データベースを設計してみる</a>
@@ -47,7 +47,7 @@
         <ul>
          <li><a href="../3/1.html">1.CentOSとは</a>
          <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/3.html">3.IDEを使ってみる</a>
          <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
          <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/6.html">6.テストとは</a>
@@ -56,127 +56,58 @@
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP3-3.オブジェクト指向とは</h1>
+      <section><h1>STEP2-6.IDEを使ってみる</h1>
 
-<p>プログラムが大規模になってくるとコードが複雑化し、プログラムの作成が非常に困難になります。そこで登場したのがオブジェクト指向という概念です。オブジェクト指向プログラミングでは、プログラムは複数のオブジェクトの集まりとして構成します。各オブジェクトはデータを保持するための変数（プロパティ）とデータを処理するための関数（メソッド）を備え、1つの役割を担います。オブジェクトはクラスという設計図をもとに作成します。</p>
+<p>IDEとは統合開発環境の略で、ファイルツリー表示やコード補完をはじめとした、開発が便利になる機能がまとまったものです。特にNetBeansというIDEは軽量でCakePHPとの相性がよいため、NetBeansの使い方を紹介します。Javaの実行環境をインストールしていない人は<a href="http://java.com/ja/download/">無料Javaのダウンロード</a>からインストールしておきましょう。</p>
 
-<p><a href="../1/9.html">STEP1-9.PHPからデータベースを操作してみる</a>で使用したmysqliクラスを例に挙げ、オブジェクト指向の考え方を整理しましょう。</p>
+<p>まずは<a href="https://netbeans.org/downloads/">NetBeans IDE ダウンロード</a>から5種類あるうちのPHP用のNetBeans IDEをダウンロード・インストールします。インストールが終わったら起動してみましょう。</p>
+
+<p>ファイル→新規プロジェクトからプロジェクトを作成します。以下のように[既存のソースを使用するPHPアプリケーション]を選択します。</p>
+
+<p><img src="../images/2_6_1.png" alt=""></p>
+
+<p>以上でプロジェクトの作成が完了しました。あとは通常のエディタのように使用できます。ただし、PHPの文法上のエラーがあるとエラー箇所と内容をリアルタイムで表示してくれるといった便利な機能があります。</p>
+
+<h2>コード補完</h2>
+
+<p>NetBeansにはコード補完機能があり、何か1文字打つと定義した変数や関数の一覧が表示されたり、その際に変数や関数の説明が表示されたりします。これはphpDocumentor形式でコメントを書くことにより変数や関数の説明が表示されるという仕組みです。CakePHPはphpDocumentor形式でコメントが書かれているため、CakePHPの変数や関数も説明が表示されます。</p>
+
+<p>自分で書いたコードにも説明が表示されるようにしてみましょう。以下は前回のDatasController.phpにphpDocumentor形式のコメントを追加したものです。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;ホスト名&#39;</span><span class="p">,</span> <span class="s1">&#39;ユーザ名&#39;</span><span class="p">,</span> <span class="s1">&#39;パスワード&#39;</span><span class="p">,</span> <span class="s1">&#39;データベース名&#39;</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">){</span>
-  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;接続失敗：&quot;</span> <span class="o">.</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">);</span>
-  <span class="k">exit</span><span class="p">();</span>
+<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AppController&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller&#39;</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">DatasController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+
+  <span class="sd">/**</span>
+<span class="sd">   * Helloを表示する</span>
+<span class="sd">   */</span>
+  <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="s1">&#39;Hello&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="sd">/**</span>
+<span class="sd">   * 指定したユーザのデータを取得する</span>
+<span class="sd">   * @param string $name ユーザ名</span>
+<span class="sd">   */</span>
+  <span class="k">public</span> <span class="k">function</span> <span class="nf">get</span><span class="p">(</span><span class="nv">$name</span><span class="p">){</span>
+    <span class="nv">$options</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;conditions&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nv">$name</span><span class="p">));</span>
+    <span class="nv">$datas</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Data</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="nv">$options</span><span class="p">);</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;datas&#39;</span><span class="p">,</span> <span class="nv">$datas</span><span class="p">);</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="nv">$name</span><span class="p">);</span>
+  <span class="p">}</span>
 <span class="p">}</span>
-<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;INSERT INTO datas (name, text) VALUES (&#39;piyo&#39;, &#39;hogepiyo&#39;)&quot;</span><span class="p">);</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">)</span>
-  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;INSERT成功&quot;</span><span class="p">);</span>
-<span class="k">else</span>
-  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;INSERT失敗&quot;</span><span class="p">);</span>
-<span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
-<span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<p>new mysqliでmysqliクラスのインスタンスを作成します。インスタンスとはクラスを元に作られた実際のオブジェクトのことです。mysqliクラスは接続情報を受け取って内部に保存し、接続を試みます。$mysqli-&gt;connect_errorは実際に作られたオブジェクト$mysqliのプロパティconnect_errorにアクセスしています。また、$mysqli-&gt;queryは$mysqliの内部に保存した接続情報を利用してデータベースにクエリを発行するメソッドqueryを呼び出しています。このようにmysqliクラスはMySQLサーバとの通信という役割を担うクラスであり、そのための情報を内部に保持していたりメソッドを有していたります。</p>
+<p>これによって以下のように関数の説明が表示されるようになりました。</p>
 
-<p>では例として、ログイン機能を担当するAuthクラスを作成してみましょう。（ただ、以前の講座で使用したとおり、CakePHPに同じようなクラスが既に存在するためCakePHPを使用する限り以下のクラスを使用する機会はないでしょう。）以下の内容をAuth.phpという名前で保存します。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<p><img src="../images/2_6_2.png" alt=""></p>
 
-<span class="k">class</span> <span class="nc">Auth</span><span class="p">{</span>
-  <span class="k">const</span> <span class="no">SALT</span> <span class="o">=</span> <span class="s2">&quot;適当に文字列を変えてください。&quot;</span><span class="p">;</span>
+<h2>プラグイン</h2>
 
-  <span class="k">private</span> <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+<p>NetBeansでは更にプラグインによって様々な機能を追加することができます。メニューのツール→プラグイン→使用可能なプラグインから新たなプラグインを追加できます。今回はPHP CakePHP Frameworkというプラグインを追加してみましょう。</p>
 
-  <span class="k">public</span> <span class="nv">$tableName</span> <span class="o">=</span> <span class="s1">&#39;users&#39;</span><span class="p">;</span>
-  <span class="k">public</span> <span class="nv">$usernameColumn</span> <span class="o">=</span> <span class="s1">&#39;username&#39;</span><span class="p">;</span>
-  <span class="k">public</span> <span class="nv">$passwordColumn</span> <span class="o">=</span> <span class="s1">&#39;password&#39;</span><span class="p">;</span>
+<p>それでは適当なコントローラの適当なアクション上で右クリックしてみましょう。ナビゲート→ビューへ移動では該当のビューが開きます。CakePHP→Format for CakePHPではコードがCakePHPの規約に従った形に整形されます。CakePHP→Run ActionではそのアクションのURLがブラウザで開きます。</p>
 
-  <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nv">$host</span><span class="p">,</span> <span class="nv">$user</span><span class="p">,</span> <span class="nv">$pass</span><span class="p">,</span> <span class="nv">$dbname</span><span class="p">){</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="nv">$host</span><span class="p">,</span> <span class="nv">$user</span><span class="p">,</span> <span class="nv">$pass</span><span class="p">,</span> <span class="nv">$dbname</span><span class="p">);</span>
-    <span class="nb">session_start</span><span class="p">();</span>
-  <span class="p">}</span>
-
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">register</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$pass</span><span class="p">){</span>
-    <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
-    <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$pass</span> <span class="o">.</span> <span class="nx">self</span><span class="o">::</span><span class="na">SALT</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;INSERT INTO </span><span class="si">$this-&gt;tableName</span><span class="s2"> (</span><span class="si">$this-&gt;usernameColumn</span><span class="s2">, </span><span class="si">$this-&gt;passwordColumn</span><span class="s2">) &quot;</span>
-      <span class="o">.</span> <span class="s2">&quot;VALUES (&#39;</span><span class="si">$username</span><span class="s2"> &#39;, &#39;</span><span class="si">$password</span><span class="s2">&#39;)&quot;</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">login</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$pass</span><span class="p">){</span>
-    <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mysqli</span><span class="o">-&gt;</span><span class="na">real_escape_string</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
-    <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$pass</span> <span class="o">.</span> <span class="nx">self</span><span class="o">::</span><span class="na">SALT</span><span class="p">);</span>
-    <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT </span><span class="si">$this-&gt;passwordColumn</span><span class="s2"> FROM </span><span class="si">$this-&gt;tableName</span><span class="s2"> &quot;</span>
-      <span class="o">.</span> <span class="s2">&quot;WHERE </span><span class="si">$this-&gt;usernameColumn</span><span class="s2"> = &#39;</span><span class="si">$username</span><span class="s2">&#39;&quot;</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">)</span>
-      <span class="k">if</span><span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">fetch_object</span><span class="p">())</span>
-        <span class="k">if</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">password</span> <span class="o">==</span> <span class="nv">$password</span><span class="p">){</span>
-          <span class="nv">$_SESSION</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$username</span><span class="p">;</span>
-          <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">getUser</span><span class="p">(){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]))</span>
-      <span class="k">return</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">];</span>
-    <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">logout</span><span class="p">(){</span>
-    <span class="nv">$_SESSION</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span> 
-    <span class="nb">session_destroy</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div>
-<p>constは定数の宣言です。その後プロパティを4つ宣言していますが、そのうち$mysqliはprivateとなっています。MySQLへの接続情報は外部からアクセスする必要がないためprivateを付けることで外部からアクセスできないようにしています。__constructメソッドはインスタンスの作成時に呼び出される関数（コンストラクタ）です。ここでMySQLの接続情報を受け取り、接続およびセッションの開始を行います。プロパティにアクセスする際は$this-&gt;を付けます。</p>
-
-<p>以下は<a href="../2/3.html">STEP2-3.ログイン機能を作ってみる</a>で作成したregister.php, login.php, logout.phpの3つの上部をAuthクラスを利用して書き換えたものです。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-
-<span class="k">require_once</span><span class="p">(</span><span class="s1">&#39;Auth.php&#39;</span><span class="p">);</span>
-<span class="nv">$auth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Auth</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
-
-<span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])){</span>
-  <span class="k">if</span><span class="p">(</span><span class="nv">$auth</span><span class="o">-&gt;</span><span class="na">register</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]))</span>
-    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
-  <span class="k">else</span>
-    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div><div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-
-<span class="k">require_once</span><span class="p">(</span><span class="s1">&#39;Auth.php&#39;</span><span class="p">);</span>
-<span class="nv">$auth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Auth</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
-
-<span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$auth</span><span class="o">-&gt;</span><span class="na">getUser</span><span class="p">())</span>
-  <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;logged_in&quot;</span><span class="p">;</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])){</span>
-  <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$auth</span><span class="o">-&gt;</span><span class="na">login</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]);</span>
-  <span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">)</span>
-    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span><span class="p">;</span>
-  <span class="k">else</span>
-    <span class="nv">$status</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div><div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-
-<span class="k">require_once</span><span class="p">(</span><span class="s1">&#39;Auth.php&#39;</span><span class="p">);</span>
-<span class="nv">$auth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Auth</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
-<span class="nv">$auth</span><span class="o">-&gt;</span><span class="na">logout</span><span class="p">();</span>
-
-<span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div>
-<p>require_onceはファイルの読み込みです。ただし、同一ファイルは1度しか読み込みません。</p>
-
-<hr>
-
-<p><strong>[課題]クラスを作ってみよう</strong><br>
-CakePHPにおいて、コントローラの共通部分はコンポーネント、ビューの共通部分はエレメントやヘルパーに分割するという方法が採られています。実際に自分のWebサイトで使用できそうなところを探してコンポーネントなどを作成してみましょう。</p>
+<p>その他にも様々な機能があります。詳しくは<a href="https://github.com/junichi11/cakephp-netbeans">公式ページ</a>を参照してください。</p>
 </section>
       <footer></footer>
     </div>

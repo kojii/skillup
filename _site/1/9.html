@@ -35,9 +35,9 @@
          <li><a href="../2/1.html">1.JavaScriptを書いてみる</a>
          <li><a href="../2/2.html">2.ログイン機能を作ってみる</a>
          <li><a href="../2/3.html">3.入力チェックを作ってみる</a>
-         <li><a href="../2/4.html">4.フレームワークとは</a>
-         <li><a href="../2/5.html">5.CakePHPの基本</a>
-         <li><a href="../2/6.html">6.IDEを使ってみる</a>
+         <li><a href="../2/4.html">4.ログイン機能をクラス化してみる</a>
+         <li><a href="../2/5.html">5.フレームワークとは</a>
+         <li><a href="../2/6.html">6.CakePHPの基本</a>
          <li><a href="../2/7.html">7.CakePHPでログイン機能を書いてみる</a>
          <li><a href="../2/8.html">8.画面仕様書とは</a>
          <li><a href="../2/9.html">9.データベースを設計してみる</a>
@@ -47,7 +47,7 @@
         <ul>
          <li><a href="../3/1.html">1.CentOSとは</a>
          <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.オブジェクト指向とは</a>
+         <li><a href="../3/3.html">3.IDEを使ってみる</a>
          <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
          <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/6.html">6.テストとは</a>
@@ -88,6 +88,8 @@
 <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
+<p>bind_paramの第1引数は割り当てる変数の型を表しています。iは整数,dは実数,sは文字列,bはバイナリです。&#39;ss&#39;と指定することで、文字列型を2つ渡すことを表します。</p>
+
 <p>SELECTの例</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="c1">//datasテーブルから日付の降順でデータを取得</span>
