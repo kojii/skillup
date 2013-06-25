@@ -1,0 +1,56 @@
+---
+layout: default
+---
+# STEP2-6.IDEを使ってみる
+
+IDEとは統合開発環境の略で、ファイルツリー表示やコード補完をはじめとした、開発が便利になる機能がまとまったものです。特にNetBeansというIDEは軽量でCakePHPとの相性がよいため、NetBeansの使い方を紹介します。Javaの実行環境をインストールしていない人は[無料Javaのダウンロード](http://java.com/ja/download/)からインストールしておきましょう。
+
+まずは[NetBeans IDE ダウンロード](https://netbeans.org/downloads/)から5種類あるうちのPHP用のNetBeans IDEをダウンロード・インストールします。インストールが終わったら起動してみましょう。
+
+ファイル→新規プロジェクトからプロジェクトを作成します。以下のように[既存のソースを使用するPHPアプリケーション]を選択します。
+
+![](../images/2_6_1.png)
+
+以上でプロジェクトの作成が完了しました。あとは通常のエディタのように使用できます。ただし、PHPの文法上のエラーがあるとエラー箇所と内容をリアルタイムで表示してくれるといった便利な機能があります。
+
+## コード補完
+NetBeansにはコード補完機能があり、何か1文字打つと定義した変数や関数の一覧が表示されたり、その際に変数や関数の説明が表示されたりします。これはphpDocumentor形式でコメントを書くことにより変数や関数の説明が表示されるという仕組みです。CakePHPはphpDocumentor形式でコメントが書かれているため、CakePHPの変数や関数も説明が表示されます。
+
+自分で書いたコードにも説明が表示されるようにしてみましょう。以下は前回のDatasController.phpにphpDocumentor形式のコメントを追加したものです。
+
+```php
+<?php
+App::uses('AppController', 'Controller');
+
+class DatasController extends AppController {
+
+  /**
+   * Helloを表示する
+   */
+  public function index() {
+    $this->set('message','Hello');
+  }
+  
+  /**
+   * 指定したユーザのデータを取得する
+   * @param string $name ユーザ名
+   */
+  public function get($name){
+    $options = array('conditions' => array('name' => $name));
+    $datas = $this->Data->find('all', $options);
+    $this->set('datas', $datas);
+    $this->set('name', $name);
+  }
+}
+```
+
+これによって以下のように関数の説明が表示されるようになりました。
+
+![](../images/2_6_2.png)
+
+## プラグイン
+NetBeansでは更にプラグインによって様々な機能を追加することができます。メニューのツール→プラグイン→使用可能なプラグインから新たなプラグインを追加できます。今回はPHP CakePHP Frameworkというプラグインを追加してみましょう。
+
+それでは適当なコントローラの適当なアクション上で右クリックしてみましょう。ナビゲート→ビューへ移動では該当のビューが開きます。CakePHP→Format for CakePHPではコードがCakePHPの規約に従った形に整形されます。CakePHP→Run ActionではそのアクションのURLがブラウザで開きます。
+
+その他にも様々な機能があります。詳しくは[公式ページ](https://github.com/junichi11/cakephp-netbeans)を参照してください。
