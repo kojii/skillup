@@ -45,84 +45,60 @@
         
         <h3>STEP3 オリジナルサイトを作ろう</h3>
         <ul>
-         <li><a href="../3/1.html">1.CentOSとは</a>
-         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.IDEを使ってみる</a>
-         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
-         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
-         <li><a href="../3/6.html">6.テストとは</a>
-         <li><a href="../3/7.html">7.テストを書いてみる</a>
-         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
+         <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/3.html">3.テストとは</a>
+         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/5.html">5.IDEを使ってみる</a>
+         <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
+         <li><a href="../3/7.html">7.CentOSとは</a>
+         <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP3-6.テストとは</h1>
+      <section><h1>STEP3-6.バージョン管理をしてみる</h1>
 
-<p>ソフトウェアテストとは、プログラムに適当な値を入力し、動作が正しいかどうかを確認する作業のことです。</p>
+<p>バージョン管理システムを利用すると簡単にバージョン管理をすることができます。バージョン管理システムには、変更履歴の保存・閲覧・復元や、複数人での開発のサポートなどの機能が含まれています。今回はSubversionというバージョン管理システムおよびNetBeansからの使用方法を説明します。</p>
 
-<h2>テスト方法</h2>
+<h2>サーバ側</h2>
 
-<h3>ホワイトボックステスト</h3>
-
-<p>プログラムコードの命令や分岐などの構造を実際に見て行うテストです。テストが実行された構造の割合を網羅率といいます。網羅基準は3種類あり、例えば以下のようなコードのテストケースは次のようになります。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$a</span> <span class="o">&amp;&amp;</span> <span class="nv">$b</span><span class="p">){</span>
-  <span class="nx">do1</span><span class="p">();</span>
-<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nv">$c</span><span class="p">){</span>
-  <span class="nx">do2</span><span class="p">();</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="x"></span>
+<p>まずはサーバ上にSubversionを導入します。mod_dav_svnというSubversionをHTTP経由で使えるようにするためのApacheのモジュールも一緒にインストールします。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">yum -y install subversion mod_dav_svn
 </code></pre></div>
-<ul>
-<li>C0:命令網羅　全ての命令を少なくとも1回実行するようにテストケースを作成する。</li>
-</ul>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[1]$a = true,  $b = true,  $c = true;  //do1()を実行するケース
-[2]$a = true,  $b = false, $c = true;  //do2()を実行するケース
+<p>次にSubversion用のディレクトリを作成します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">mkdir /var/www/svn
 </code></pre></div>
-<ul>
-<li>C1:分岐網羅　全ての分岐を少なくとも1回実行するようにテストケースを作成する。</li>
-</ul>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[1]$a = true,  $b = true,  $c = true;  //do1()を実行するケース
-[2]$a = true,  $b = false, $c = true;  //do2()を実行するケース
-[3]$a = true,  $b = false, $c = false; //何も実行しないケース
+<p>次にURLを設定します。/etc/httpd/conf.d/subversion.conf内に以下の内容を追加します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;Location /repos&gt;
+  DAV svn
+  SVNParentPath /var/www/svn
+  AuthType Basic
+  AuthName &quot;Authorization Realm&quot;
+  AuthUserFile /var/www/.htpasswd
+  Require valid-user
+&lt;/Location&gt;
 </code></pre></div>
-<ul>
-<li>C2:条件網羅　全ての条件の組み合わせでテストケースを作成する。</li>
-</ul>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[1]$a = true,  $b = true,  $c = true;
-[2]$a = true,  $b = true,  $c = false;
-[3]$a = true,  $b = false, $c = true;
-[4]$a = true,  $b = false, $c = false;
-[5]$a = false, $b = true,  $c = true;
-[6]$a = false, $b = true,  $c = false;
-[7]$a = false, $b = false, $c = true;
-[8]$a = false, $b = false, $c = false;
+<p>上記の設定は、Basic認証によるアクセス制限をかける設定になっています。/var/www/.htpasswdファイルに認証するユーザを設定します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">htpasswd -c /var/www/.htpasswd ユーザ名
 </code></pre></div>
-<h3>ブラックボックステスト</h3>
+<p>-cオプションはファイルの新規作成を意味しています。ユーザを追加する場合は-cを付けないようにします。</p>
 
-<p>プログラムの内部構造を見ずに、仕様通りの入出力が得られるかどうかをチェックするテストです。入力が単一の場合、以下の2種類の入力決定方法があります。</p>
+<p>リポジトリを作成します。リポジトリとは各プロジェクトごとのファイル置き場です。今回は試しにtestリポジトリを作成します。作成したらApacheが読み書きできるよう、所有者と権限を変更しておきます。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">cd /var/www/svn
+svnadmin create test
+chown -R apache:apache test
+chmod -R u+rw test
+</code></pre></div>
+<p>最後にApacheを再起動して設定を反映させます。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">service httpd restart
+</code></pre></div>
+<p>http://IPアドレス/repos/test/にアクセスしてみましょう。認証画面が出た後、test - Revision 0: が表示されれば成功です。</p>
 
-<ul>
-<li>同値分割：入力が同じ動作を示す範囲に分け、それぞれの範囲から代表的な値をテストする。</li>
-<li>境界値分析：入力が同じ動作を示す範囲に分け、それぞれの範囲の境界値をテストする。</li>
-</ul>
+<h2>クライアント側</h2>
 
-<h2>テスト範囲</h2>
+<p>NetBeansを起動したらメニューからチーム→Subversion→チェック・アウトを選択します。チェックアウトとは、リポジトリをローカルにコピーすることです。先ほどのリポジトリをチェックアウトしてみましょう。プロジェクトを作成するかどうか聞かれるので作成します。</p>
 
-<p>全てのプログラムが完成してからテストを行いバグが発生した場合、原因の特定が困難になります。</p>
-
-<h3>単体テスト</h3>
-
-<p>メソッドなどの小さな単位で行うテストです。基本的に開発プロセス中にプログラマが行います。また、テスト駆動開発(TDD)という、先にテストを書いてから実装を行う手法もあります。</p>
-
-<h3>結合テスト</h3>
-
-<p>単体テストが終わったモジュールを組み合わせて行うテストです。以下の2種類の方法があります。</p>
-
-<ul>
-<li>トップダウンテスト：上位モジュールから順に結合する手法。致命的な不具合の早期発見が期待できる。</li>
-<li>ボトムアップテスト：下位モジュールから順に結合する手法。開発と並行して行うことができる。</li>
-</ul>
+<p>このようにして作成したプロジェクト上で普通に作業を行います。ファイルが完成したらチーム→Subversion→リポジトリにインポートを選択します。これによって作成したファイルがリポジトリに反映されます。この際チームメニューの内容が変更されます。更新はリポジトリ上の最新ファイルをローカルにコピーするコマンド、コミットは更新をリポジトリに反映させるコマンドです。</p>
 </section>
       <footer></footer>
     </div>

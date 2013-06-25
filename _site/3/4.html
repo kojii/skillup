@@ -45,103 +45,115 @@
         
         <h3>STEP3 オリジナルサイトを作ろう</h3>
         <ul>
-         <li><a href="../3/1.html">1.CentOSとは</a>
-         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.IDEを使ってみる</a>
-         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
-         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
-         <li><a href="../3/6.html">6.テストとは</a>
-         <li><a href="../3/7.html">7.テストを書いてみる</a>
-         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
+         <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/3.html">3.テストとは</a>
+         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/5.html">5.IDEを使ってみる</a>
+         <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
+         <li><a href="../3/7.html">7.CentOSとは</a>
+         <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP3-4.効率的な書き方、デバッグの仕方</h1>
+      <section><h1>STEP3-4.テストを書いてみる</h1>
 
-<p>プログラムが大規模になってくるとコードが複雑化し、プログラムの作成が非常に困難になります。前回から引き続き、プログラムを分かりやすく・読みやすく書く方法について考えます。</p>
+<p>実際にテストコードを書いてみましょう。CakePHPではPHPUnitというテストツールを使用して単体テストを行うことができます。まずはPHPUnitをインストールします。phpをインストールしたディレクトリ（WindowsならC:\xampp\php）に移動し、以下のコマンドを管理者権限で実行します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">pear upgrade PEAR
+pear config-set auto_discover 1
+pear install pear.phpunit.de/PHPUnit
+</code></pre></div>
+<p>さらに、コード網羅率を調べるためにXDebugというデバッグツールをインストールします。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">pecl install xdebug
+</code></pre></div>
+<p>XDebugを有効にするため、php.iniを編集します。下部に以下のような行があるので先頭のセミコロンを削除してコメントアウトを外し、Apacheを再起動します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">;zend_extension = &quot;C:\xampp\php\ext\php_xdebug.dll&quot;
+</code></pre></div>
+<p>次にテスト用のデータベースを作成します。phpmyadminを利用して、構造のみをエクスポート・インポートすると簡単です。テスト用データベースの接続情報を/app/Config/database.php内のDATABASE_CONFIGクラスにある$testに記述します。これでテストを実行する準備が整いました。<a href="http://localhost/cakephp/test.php">http://localhost/cakephp/test.php</a>にアクセスするとCakePHP Test Suiteというページが表示されるはずです。</p>
 
-<h2>コーディング規約</h2>
+<p>テストケースを作成してみましょう。今回は<a href="../2/7.html">STEP2-7.CakePHPでログイン機能を書いてみる</a>で作成したUserモデルのバリデーションのテストを作成します。以下の内容を/app/Test/Case/Model/UserTest.phpという名前で保存します。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">//Authコンポーネントを読み込んでおく</span>
+<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AuthComponent&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller/Component&#39;</span><span class="p">);</span>
 
-<p>プログラムを書く際は一定の規則に従って書くことにより可読性が向上します。その規則のことをコーディング規約といいます。</p>
+<span class="k">class</span> <span class="nc">UserTest</span> <span class="k">extends</span> <span class="nx">CakeTestCase</span> <span class="p">{</span>
+  <span class="c1">//全てのテストの前に実行される</span>
+  <span class="k">public</span> <span class="k">function</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">parent</span><span class="o">::</span><span class="na">setUp</span><span class="p">();</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span> <span class="o">=</span> <span class="nx">ClassRegistry</span><span class="o">::</span><span class="na">init</span><span class="p">(</span><span class="s1">&#39;User&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
 
-<h3>見た目</h3>
+  <span class="c1">//バリデーションのテスト用メソッド</span>
+  <span class="k">public</span> <span class="k">function</span> <span class="nf">testValidation</span><span class="p">(){</span>
+    <span class="c1">//isUniqueルールチェックのためにダミーユーザー追加</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testUser&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testPassword&#39;</span><span class="p">));</span>
 
-<p>以下のようなことを決めておくといいでしょう。また、IDEを使用すればある程度自動で統一されます。</p>
+    <span class="c1">//テストケースを用意</span>
+    <span class="nv">$cases</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+      <span class="k">array</span><span class="p">(</span>
+        <span class="c1">//与えるデータ</span>
+        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">),</span>
+        <span class="c1">//期待される結果</span>
+        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//required</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//required</span>
+        <span class="p">)</span>
+      <span class="p">),</span>
+      <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;teamLab&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;short&#39;</span>
+        <span class="p">),</span>
+        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span> <span class="c1">//between</span>
+        <span class="p">)</span>
+      <span class="p">),</span>
+      <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;VerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrryLongName&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;nicePassword123&#39;</span>
+        <span class="p">),</span>
+        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//between</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span>
+        <span class="p">)</span>
+      <span class="p">),</span>
+      <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testUser&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;パスワード&#39;</span>
+        <span class="p">),</span>
+        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//isUnique</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//alphaNumeric</span>
+        <span class="p">)</span>
+      <span class="p">)</span>
+    <span class="p">);</span>
 
-<ul>
-<li>{}の間は適切にインデントする。</li>
-<li>{の位置を新しい行にするかしないか統一する。</li>
-<li>演算子や識別子の間はスペースを空ける。</li>
-</ul>
+    <span class="c1">//各ケースを実行</span>
+    <span class="k">foreach</span><span class="p">(</span><span class="nv">$cases</span> <span class="k">as</span> <span class="nv">$case</span><span class="p">){</span>
+      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]);</span>
+      <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">invalidFields</span><span class="p">();</span>
+      <span class="k">foreach</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;expect&#39;</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span>
+        <span class="c1">//引数が同値かどうかをテストする</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="o">!</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$result</span><span class="p">),</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>もう一度<a href="http://localhost/cakephp/app/webroot/test.php">http://localhost/cakephp/app/webroot/test.php</a>にアクセスしてみます。テストケースに「Model / User」という項目ができていると思います。クリックしてみましょう。クリックするとUserTestが実行されます。成功したケースは緑色、失敗したケースは赤色で示されます。「Analyze Code Coverage」をクリックするとコード網羅率を調べることもできます。</p>
 
-<h3>命名規則</h3>
+<p>モデルのほかにも様々なもののテストを作成できますが、もっとも重要なのはモデルです。今回のUserモデルは自作のメソッドが存在しませんでしたが、自作のメソッドを追加した場合はテストを作成することをお勧めします。</p>
 
-<p>変数やクラス名の付け方も決めておくといいでしょう。以下はよく使われる複数の単語からなる語の表し方です。</p>
+<hr>
 
-<ul>
-<li>キャメル記法：単語ごとに、1文字目を大文字にする記法
-
-<ul>
-<li>アッパーキャメルケース(UCC)の例：GetDatas</li>
-<li>ローワーキャメルケース(LCC)の例：getDatas</li>
-</ul></li>
-<li>スネーク記法：単語の区切りをアンダースコア(_)で表す記法
-
-<ul>
-<li>例：get_datas</li>
-</ul></li>
-</ul>
-
-<p>CakePHPでは使用箇所に応じて上記3つの記法が混在して使用されています。</p>
-
-<ul>
-<li>クラス名はUCC、変数名・関数名はLCC、定数は全て大文字のスネーク記法とする。</li>
-<li>privateやprotectedなメソッドはアンダースコア(_)ではじめる。</li>
-<li>ファイル名はクラス名と同じにする。</li>
-<li>コントローラ名は複数形でUCCで最後にControllerを付ける。
-
-<ul>
-<li>例：UserCommentsController</li>
-</ul></li>
-<li>モデル名は単数形でUCCに、データベース名は複数形でスネーク記法にする。
-
-<ul>
-<li>例：モデル名 UserComment データベース名 user_comments</li>
-</ul></li>
-<li>ビューファイル名はスネーク記法にする。</li>
-</ul>
-
-<h2>構造</h2>
-
-<p>構造を考えてプログラムを書くことにより、どこでどの動作を行っているかが明確になる、変更が容易になる、バグが出たときの発見や修正が容易になるといったメリットがあります。具体的にはどうすればよいのでしょうか。</p>
-
-<h3>全体像を考えてからコーディングする</h3>
-
-<p>まずは仕様書を書くことが大切だということです。プログラム全体がどのようなものになるのかを考え、それぞれの機能を適切に部品に分割し、どのように連携するかを決めます。このように大まかに分割した後、それぞれの部品ごとに同じように適切な分割や設計を行っていきます。こうすることで同じ処理を何度も書く、途中で大きく書き直すなどの無駄な時間がなくなり、スムーズにコーディングすることができます。</p>
-
-<h3>各機能の独立性を高める</h3>
-
-<p>各機能の独立性を高めることによって、ある機能を変更したときやバグが発生したときに、他の機能への影響が最小限に抑えられます。これはオブジェクト指向と非常に親和性が高いです。</p>
-
-<h3>シンプルに書く</h3>
-
-<p>機能を実装する際も、むやみに書き始めるのではなく効率的な方法を考えてから書き始めます。むやみに書くとデバッグ時間が長くなるため、結果的に時間がかかってしまいます。</p>
-
-<h2>デバッグ</h2>
-
-<p>ここではCakePHPによるデバッグの仕方について説明します。</p>
-
-<h3>スタックトレース</h3>
-
-<p>エラーが発生した際、下部に表示されているものです。これはエラーが発生した関数がどこから呼ばれたものかを段階的に全て表示しているもので、エラーの原因を特定するのに役に立ちます。エラーが発生していない箇所でもDebugger::trace()を呼び出すとスタックトレースを取得できます。</p>
-
-<h3>ログ</h3>
-
-<p>エラーが発生した際、画面に表示するだけではなく/app/tmp/logs/error.logにも保存されています。エラー以外にもDebugger::log()にログ出力したい変数を渡すと/app/tmp/logs/debug.logに保存されます。もしくは$this-&gt;log(&#39;出力される内容&#39;, &#39;debug&#39;);とすることでもdebug.logを保存できます。</p>
-
-<h3>debug関数</h3>
-
-<p>エラーが発生したら変数やオブジェクトの中身を見たくなるものです。debug関数に変数やオブジェクトを渡すと、debug関数が実行された場所とともに、渡された変数やオブジェクトの内容が表示されます。</p>
+<p><strong>[課題]テスト計画書の作成</strong><br>
+画面仕様書やデータベースを元に、作成するモデル・モデルに必要なメソッド・各メソッドのテスト内容を記述した、テスト計画書を作成しましょう。</p>
 </section>
       <footer></footer>
     </div>

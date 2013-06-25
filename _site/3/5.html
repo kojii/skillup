@@ -45,36 +45,69 @@
         
         <h3>STEP3 オリジナルサイトを作ろう</h3>
         <ul>
-         <li><a href="../3/1.html">1.CentOSとは</a>
-         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.IDEを使ってみる</a>
-         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
-         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
-         <li><a href="../3/6.html">6.テストとは</a>
-         <li><a href="../3/7.html">7.テストを書いてみる</a>
-         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
+         <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/3.html">3.テストとは</a>
+         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/5.html">5.IDEを使ってみる</a>
+         <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
+         <li><a href="../3/7.html">7.CentOSとは</a>
+         <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP3-5.画面仕様書,スケジュールを作ってみる</h1>
+      <section><h1>STEP2-5.IDEを使ってみる</h1>
 
-<p>いよいよオリジナルWebサイトの作成に入っていただきます。一般的なソフトウェア開発工程に従って以下のように進めていきましょう。</p>
+<p>IDEとは統合開発環境の略で、ファイルツリー表示やコード補完をはじめとした、開発が便利になる機能がまとまったものです。特にNetBeansというIDEは軽量でCakePHPとの相性がよいため、NetBeansの使い方を紹介します。Javaの実行環境をインストールしていない人は<a href="http://java.com/ja/download/">無料Javaのダウンロード</a>からインストールしておきましょう。</p>
 
-<ol>
-<li>仕様書の作成</li>
-<li>スケジュールの作成</li>
-<li>開発</li>
-<li>テスト</li>
-<li>リリース</li>
-</ol>
+<p>まずは<a href="https://netbeans.org/downloads/">NetBeans IDE ダウンロード</a>から5種類あるうちのPHP用のNetBeans IDEをダウンロード・インストールします。インストールが終わったら起動してみましょう。</p>
 
-<hr>
+<p>ファイル→新規プロジェクトからプロジェクトを作成します。以下のように[既存のソースを使用するPHPアプリケーション]を選択します。</p>
 
-<p><strong>[課題1]画面仕様書の作成</strong><br>
-STEP2で使用した画面仕様書を参考に、作成するサイトの画面仕様書を作成しましょう。<a href="../2/8.html">STEP2-8.画面仕様書とは</a>にあるように、「機能概要」「画面遷移」「チェック」を中心に記述します。後で仕様変更が必要になるとスケジュールに大幅に影響するため、この段階でしっかりと決めておく必要があります。</p>
+<p><img src="../images/2_6_1.png" alt=""></p>
 
-<p><strong>[課題2]スケジュールの作成</strong><br>
-作成した画面仕様書をもとに、各画面を作成するのにかかる時間を見積もり、全体のスケジュールを作成しましょう。もちろんスケジュールにはデータベース設計やテストの期間も含める必要があります。</p>
+<p>以上でプロジェクトの作成が完了しました。あとは通常のエディタのように使用できます。ただし、PHPの文法上のエラーがあるとエラー箇所と内容をリアルタイムで表示してくれるといった便利な機能があります。</p>
+
+<h2>コード補完</h2>
+
+<p>NetBeansにはコード補完機能があり、何か1文字打つと定義した変数や関数の一覧が表示されたり、その際に変数や関数の説明が表示されたりします。これはphpDocumentor形式でコメントを書くことにより変数や関数の説明が表示されるという仕組みです。CakePHPはphpDocumentor形式でコメントが書かれているため、CakePHPの変数や関数も説明が表示されます。</p>
+
+<p>自分で書いたコードにも説明が表示されるようにしてみましょう。以下は前回のDatasController.phpにphpDocumentor形式のコメントを追加したものです。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AppController&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller&#39;</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">DatasController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+
+  <span class="sd">/**</span>
+<span class="sd">   * Helloを表示する</span>
+<span class="sd">   */</span>
+  <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="s1">&#39;Hello&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="sd">/**</span>
+<span class="sd">   * 指定したユーザのデータを取得する</span>
+<span class="sd">   * @param string $name ユーザ名</span>
+<span class="sd">   */</span>
+  <span class="k">public</span> <span class="k">function</span> <span class="nf">get</span><span class="p">(</span><span class="nv">$name</span><span class="p">){</span>
+    <span class="nv">$options</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;conditions&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nv">$name</span><span class="p">));</span>
+    <span class="nv">$datas</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Data</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="nv">$options</span><span class="p">);</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;datas&#39;</span><span class="p">,</span> <span class="nv">$datas</span><span class="p">);</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="nv">$name</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>これによって以下のように関数の説明が表示されるようになりました。</p>
+
+<p><img src="../images/2_6_2.png" alt=""></p>
+
+<h2>プラグイン</h2>
+
+<p>NetBeansでは更にプラグインによって様々な機能を追加することができます。メニューのツール→プラグイン→使用可能なプラグインから新たなプラグインを追加できます。今回はPHP CakePHP Frameworkというプラグインを追加してみましょう。</p>
+
+<p>それでは適当なコントローラの適当なアクション上で右クリックしてみましょう。ナビゲート→ビューへ移動では該当のビューが開きます。CakePHP→Format for CakePHPではコードがCakePHPの規約に従った形に整形されます。CakePHP→Run ActionではそのアクションのURLがブラウザで開きます。</p>
+
+<p>その他にも様々な機能があります。詳しくは<a href="https://github.com/junichi11/cakephp-netbeans">公式ページ</a>を参照してください。</p>
 </section>
       <footer></footer>
     </div>

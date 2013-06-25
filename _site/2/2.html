@@ -45,14 +45,14 @@
         
         <h3>STEP3 オリジナルサイトを作ろう</h3>
         <ul>
-         <li><a href="../3/1.html">1.CentOSとは</a>
-         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.IDEを使ってみる</a>
-         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
-         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
-         <li><a href="../3/6.html">6.テストとは</a>
-         <li><a href="../3/7.html">7.テストを書いてみる</a>
-         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
+         <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/3.html">3.テストとは</a>
+         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/5.html">5.IDEを使ってみる</a>
+         <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
+         <li><a href="../3/7.html">7.CentOSとは</a>
+         <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
@@ -109,7 +109,7 @@
 </code></pre></div>
 <p>if文をコロンとendifで挟む新しい書き方が出てきました。これはHTMLの中に記述するときに使うと見やすくなるためお勧めです。</p>
 
-<p>さて、パスワードですが<a href="http://e-words.jp/w/E3838FE38383E382B7E383A5E58C96.html">ハッシュ化</a>して保存しています。これは、もしデータベースが第三者に盗まれてもユーザのパスワードを流出させないためです。ハッシュ化にはmd5という関数とsaltと呼ばれる固定文字列を使用します。saltは適当に変更しておきましょう。</p>
+<p>さて、パスワードですが<a href="http://e-words.jp/w/E3838FE38383E382B7E383A5E58C96.html">ハッシュ化</a>して保存しています。これは、もしデータベースが第三者に盗まれてもユーザのパスワードを流出させないためです。ハッシュ化にはmd5という関数とsaltと呼ばれる固定文字列を使用します。saltは解析されにくくするための値ですので適当に変更しておきましょう。</p>
 
 <p>動作を確認してみましょう。<a href="http://localhost/register.php">http://localhost/register.php</a>から適当に何人かユーザ登録をします。この際、同じユーザ名で登録したときエラーが表示されるかどうかも確認しておきます。次に<a href="http://localhost/phpmyadmin">http://localhost/phpmyadmin</a>からusersテーブルの中身を見てみましょう。</p>
 

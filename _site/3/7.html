@@ -45,115 +45,66 @@
         
         <h3>STEP3 オリジナルサイトを作ろう</h3>
         <ul>
-         <li><a href="../3/1.html">1.CentOSとは</a>
-         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.IDEを使ってみる</a>
-         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
-         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
-         <li><a href="../3/6.html">6.テストとは</a>
-         <li><a href="../3/7.html">7.テストを書いてみる</a>
-         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
+         <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/3.html">3.テストとは</a>
+         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/5.html">5.IDEを使ってみる</a>
+         <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
+         <li><a href="../3/7.html">7.CentOSとは</a>
+         <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP3-7.テストを書いてみる</h1>
+      <section><h1>STEP3-7.CentOSとは</h1>
 
-<p>実際にテストコードを書いてみましょう。CakePHPではPHPUnitというテストツールを使用して単体テストを行うことができます。まずはPHPUnitをインストールします。phpをインストールしたディレクトリ（WindowsならC:\xampp\php）に移動し、以下のコマンドを管理者権限で実行します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">pear upgrade PEAR
-pear config-set auto_discover 1
-pear install pear.phpunit.de/PHPUnit
+<p>CentOSとは、Linuxを導入や利用がしやすくなるようにまとめられたパッケージ（Linuxディストリビューション）のうちの1つで、Webサーバとしてよく用いられています。Linuxの操作方法を覚えてサービスを公開できるようになりましょう。</p>
+
+<p>今回はこちらで用意したCentOSサーバを使用していただきます。サーバとの接続にはSSHというプロトコルを使用します。<a href="http://sourceforge.jp/projects/sfnet_poderosa/releases/">ダウンロード - Poderosa</a>よりPoderosaというSSHクライアントをダウンロード・インストールします。起動したら新規Telnet/SSH接続にサーバ情報を入力して接続します。</p>
+
+<p>一般的にはサーバは外部から接続してUNIXコマンドで操作します。基本的なコマンドについての解説は割愛します。</p>
+
+<h3>chown, chmod</h3>
+
+<p>Linuxは複数のユーザが使うものとして設計されているため、各ファイル・ディレクトリに所有者や権限が割り当てられています。chownは所有者の変更、chmodは権限の変更を行うコマンドです。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">[tlab@localhost test]$ ls -l
+total 12
+-rw-rw-r--. 1 tlab tlab   21 May 23 23:48 a.txt
+-rw-rw-r--. 1 tlab tlab   21 May 23 23:48 c.txt
+drwxrwxr-x. 2 tlab tlab 4096 May 23 23:52 test2
+[tlab@localhost test]$ sudo chown root a.txt
+[tlab@localhost test]$ sudo chmod o+w a.txt
+[tlab@localhost test]$ ls -l
+total 12
+-rw-rw-rw-. 1 root tlab   21 May 23 23:48 a.txt
+-rw-rw-r--. 1 tlab tlab   21 May 23 23:48 c.txt
+drwxrwxr-x. 2 tlab tlab 4096 May 23 23:52 test2
 </code></pre></div>
-<p>さらに、コード網羅率を調べるためにXDebugというデバッグツールをインストールします。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">pecl install xdebug
+<ul>
+<li>-rw-rw-r--の読み方ですが、まず- rw- rw- r--と分解します。
+
+<ul>
+<li>1文字目はファイルなら-、ディレクトリならdとなります。</li>
+<li>2～4文字目は所有者の権限、5～7文字目はグループの権限、8～10文字目はその他のユーザの権限を表します。</li>
+<li>それぞれrは読み込み権限、wは書き込み権限、xは実行権限を表します。</li>
+</ul></li>
+<li>chmodのo+wはその他のユーザに書き込み権限を追加するという意味になります。</li>
+</ul>
+
+<h3>Vim</h3>
+
+<p>Linuxにおいて標準的に使用されているテキストエディタは2つあり、そのうちの1つがVimです。sample.txtを編集するには以下のように使用します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">vim sample.txt
 </code></pre></div>
-<p>XDebugを有効にするため、php.iniを編集します。下部に以下のような行があるので先頭のセミコロンを削除してコメントアウトを外し、Apacheを再起動します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">;zend_extension = &quot;C:\xampp\php\ext\php_xdebug.dll&quot;
-</code></pre></div>
-<p>次にテスト用のデータベースを作成します。phpmyadminを利用して、構造のみをエクスポート・インポートすると簡単です。テスト用データベースの接続情報を/app/Config/database.php内のDATABASE_CONFIGクラスにある$testに記述します。これでテストを実行する準備が整いました。<a href="http://localhost/cakephp/test.php">http://localhost/cakephp/test.php</a>にアクセスするとCakePHP Test Suiteというページが表示されるはずです。</p>
-
-<p>テストケースを作成してみましょう。今回は<a href="../2/7.html">STEP2-7.CakePHPでログイン機能を書いてみる</a>で作成したUserモデルのバリデーションのテストを作成します。以下の内容を/app/Test/Case/Model/UserTest.phpという名前で保存します。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="c1">//Authコンポーネントを読み込んでおく</span>
-<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AuthComponent&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller/Component&#39;</span><span class="p">);</span>
-
-<span class="k">class</span> <span class="nc">UserTest</span> <span class="k">extends</span> <span class="nx">CakeTestCase</span> <span class="p">{</span>
-  <span class="c1">//全てのテストの前に実行される</span>
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">parent</span><span class="o">::</span><span class="na">setUp</span><span class="p">();</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span> <span class="o">=</span> <span class="nx">ClassRegistry</span><span class="o">::</span><span class="na">init</span><span class="p">(</span><span class="s1">&#39;User&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="c1">//バリデーションのテスト用メソッド</span>
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">testValidation</span><span class="p">(){</span>
-    <span class="c1">//isUniqueルールチェックのためにダミーユーザー追加</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testUser&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testPassword&#39;</span><span class="p">));</span>
-
-    <span class="c1">//テストケースを用意</span>
-    <span class="nv">$cases</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-      <span class="k">array</span><span class="p">(</span>
-        <span class="c1">//与えるデータ</span>
-        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span>
-        <span class="p">),</span>
-        <span class="c1">//期待される結果</span>
-        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//required</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//required</span>
-        <span class="p">)</span>
-      <span class="p">),</span>
-      <span class="k">array</span><span class="p">(</span>
-        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;teamLab&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;short&#39;</span>
-        <span class="p">),</span>
-        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span> <span class="c1">//between</span>
-        <span class="p">)</span>
-      <span class="p">),</span>
-      <span class="k">array</span><span class="p">(</span>
-        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;VerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrryLongName&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;nicePassword123&#39;</span>
-        <span class="p">),</span>
-        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//between</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span>
-        <span class="p">)</span>
-      <span class="p">),</span>
-      <span class="k">array</span><span class="p">(</span>
-        <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;testUser&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;パスワード&#39;</span>
-        <span class="p">),</span>
-        <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//isUnique</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//alphaNumeric</span>
-        <span class="p">)</span>
-      <span class="p">)</span>
-    <span class="p">);</span>
-
-    <span class="c1">//各ケースを実行</span>
-    <span class="k">foreach</span><span class="p">(</span><span class="nv">$cases</span> <span class="k">as</span> <span class="nv">$case</span><span class="p">){</span>
-      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]);</span>
-      <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">invalidFields</span><span class="p">();</span>
-      <span class="k">foreach</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;expect&#39;</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span>
-        <span class="c1">//引数が同値かどうかをテストする</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="o">!</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$result</span><span class="p">),</span> <span class="nv">$value</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="x"></span>
-</code></pre></div>
-<p>もう一度<a href="http://localhost/cakephp/app/webroot/test.php">http://localhost/cakephp/app/webroot/test.php</a>にアクセスしてみます。テストケースに「Model / User」という項目ができていると思います。クリックしてみましょう。クリックするとUserTestが実行されます。成功したケースは緑色、失敗したケースは赤色で示されます。「Analyze Code Coverage」をクリックするとコード網羅率を調べることもできます。</p>
-
-<p>モデルのほかにも様々なもののテストを作成できますが、もっとも重要なのはモデルです。今回のUserモデルは自作のメソッドが存在しませんでしたが、自作のメソッドを追加した場合はテストを作成することをお勧めします。</p>
+<p>Vimはマウスやメニューを使うことなくテキスト編集を行うために複数のモードが搭載されています。起動直後はノーマルモードになっており、終了する際はこのモードで<code>:q</code>と打ちます。保存して終了は<code>:wq</code>です。ノーマルモードで<code>i</code>と打つと挿入モードになります。通常、ファイルの編集を行う際はこのモードです。Escキーで挿入モードから抜けることができます。</p>
 
 <hr>
 
-<p><strong>[課題]テスト計画書の作成</strong><br>
-画面仕様書やデータベースを元に、作成するモデル・モデルに必要なメソッド・各メソッドのテスト内容を記述した、テスト計画書を作成しましょう。</p>
+<p><strong>[課題]基本的なコマンドを理解しよう</strong><br>
+UNIXコマンドについて知識がない場合は少なくとも以下のコマンドについて使い方を覚えておきましょう。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">ls, cd, cat, cp, mv, rm, mkdir, sudo
+</code></pre></div>
+<p>また「リダイレクト」と「パイプ」の使い方も理解しておきましょう。  </p>
 </section>
       <footer></footer>
     </div>

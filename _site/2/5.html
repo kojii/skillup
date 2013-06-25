@@ -45,26 +45,69 @@
         
         <h3>STEP3 オリジナルサイトを作ろう</h3>
         <ul>
-         <li><a href="../3/1.html">1.CentOSとは</a>
-         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.IDEを使ってみる</a>
-         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
-         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
-         <li><a href="../3/6.html">6.テストとは</a>
-         <li><a href="../3/7.html">7.テストを書いてみる</a>
-         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
+         <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/3.html">3.テストとは</a>
+         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/5.html">5.IDEを使ってみる</a>
+         <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
+         <li><a href="../3/7.html">7.CentOSとは</a>
+         <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP2-4.フレームワークとは</h1>
+      <section><h1>STEP2-5.フレームワークとは</h1>
 
-<p>フレームワーク（アプリケーションフレームワーク）とは、プログラム開発で共通して使用されるであろう標準的な機能を再利用可能な形でまとめたものです。特にWeb開発で用いられるフレームワークではデータベースアクセス、セッション管理、入力チェックなど、今までの講座で扱ったようなものが簡単に記述できるような機能が提供されることが多く、フレームワークをうまく使うことで開発スピードと信頼性が上がります。</p>
+<p>フレームワーク（アプリケーションフレームワーク）とは、プログラム開発で共通して使用されるであろう標準的な機能を再利用可能な形でまとめたものです。特にWeb開発で用いられるフレームワークではデータベースアクセス、セッション管理、入力チェックなど、今までの講座で扱ったようなものが簡単に記述できるような機能が提供されることが多く、フレームワークをうまく使うことで開発スピードが上がったり、セキュリティが向上したりします。</p>
 
 <p>今回はCakePHPというフレームワークを使用します。CakePHPはMVCアーキテクチャを採用しています。MVCアーキテクチャとは、プログラムをModel（モデル）、View（ビュー）、Controller（コントローラ）の3つに分割して設計・記述することで、プログラムを分かりやすく、拡張性が高いものにするという構造です。モデルはデータの管理・処理を、ビューはHTMLの出力を、コントローラはユーザ入力の処理やモデル・ビューの制御を担当します。</p>
 
 <p><img src="../images/2_4_1.png" alt=""></p>
 
-<p>それではCakePHPをインストールしてみましょう。<a href="http://cakephp.jp/">CakePHP</a>から安定版をダウンロードします。zipファイルを解凍し、フォルダごとhtdocsに置き、適当にフォルダ名を変更します。（cakephpに変更したものとして話を進めます。）Webブラウザから<a href="http://localhost/cakephp/">http://localhost/cakephp/</a>にアクセスしてみるとCakePHPの初期ページが表示されるはずです。いくつかエラーが出ていますね。/app/Config/core.phpを開いてSecurity.saltとSecurity.cipherSeedを適当な値に変更しておきましょう。</p>
+<p>CakePHPの他に有名なフレームワークとしてはZend FrameworkやSymfonyなどがありますが、いずれもMVCアーキテクチャを採用しています。CakePHPを選んだ理由は、日本で最も使用されているからです。</p>
+
+<p>それではCakePHPをインストールしてみましょう。<a href="http://cakephp.jp/">CakePHP</a>から安定版をダウンロードします。zipファイルを解凍し、フォルダごとhtdocsに置き、適当にフォルダ名を変更します。（cakephpに変更したものとして話を進めます。）Webブラウザから<a href="http://localhost/cakephp/">http://localhost/cakephp/</a>にアクセスしてみるとCakePHPの初期ページが表示されるはずです。いくつかエラーが表示されていると思います。/app/Config/core.phpを開いてSecurity.saltとSecurity.cipherSeedを適当な値に変更しておきましょう。これらは今まで説明したようにハッシュ化や暗号化をより解析されにくくするための値ですが、初期値のままにしておくとsaltの意味を成さないので変更する必要があります。</p>
+
+<h1>規約</h1>
+
+<p>CakePHPでは細かく命名規則などの規約が定められています。これは、規約を統一することによって多人数での開発の際にコードを統一し、大規模開発をしやすくするためです。</p>
+
+<p>以下は複数の単語からなる語の表し方です。</p>
+
+<ul>
+<li>キャメル記法：単語ごとに、1文字目を大文字にする記法
+
+<ul>
+<li>アッパーキャメルケース(UCC)の例：GetDatas</li>
+<li>ローワーキャメルケース(LCC)の例：getDatas</li>
+</ul></li>
+<li>スネーク記法：単語の区切りをアンダースコア(_)で表す記法
+
+<ul>
+<li>例：get_datas</li>
+</ul></li>
+</ul>
+
+<p>CakePHPでは使用箇所に応じて上記3つの記法が混在して使用されています。</p>
+
+<ul>
+<li>クラス名はUCC、変数名・関数名はLCC、定数は全て大文字のスネーク記法とする。</li>
+<li>privateやprotectedなメソッドはアンダースコア(_)ではじめる。</li>
+<li>ファイル名はクラス名と同じにする。</li>
+<li>コントローラ名は複数形でUCCで最後にControllerを付ける。
+
+<ul>
+<li>例：UserCommentsController</li>
+</ul></li>
+<li>モデル名は単数形でUCCに、データベース名は複数形でスネーク記法にする。
+
+<ul>
+<li>例：モデル名 UserComment データベース名 user_comments</li>
+</ul></li>
+<li>ビューファイル名はスネーク記法にする。</li>
+</ul>
+
+<p>詳しくは<a href="http://book.cakephp.org/2.0/ja/getting-started/cakephp-conventions.html">CakePHPの規約</a>に載っています。また、<a href="http://book.cakephp.org/2.0/ja/contributing/cakephp-coding-conventions.html">コーディング規約</a>も統一されています。</p>
 </section>
       <footer></footer>
     </div>

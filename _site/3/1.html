@@ -45,66 +45,75 @@
         
         <h3>STEP3 オリジナルサイトを作ろう</h3>
         <ul>
-         <li><a href="../3/1.html">1.CentOSとは</a>
-         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.IDEを使ってみる</a>
-         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
-         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
-         <li><a href="../3/6.html">6.テストとは</a>
-         <li><a href="../3/7.html">7.テストを書いてみる</a>
-         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
+         <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/3.html">3.テストとは</a>
+         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/5.html">5.IDEを使ってみる</a>
+         <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
+         <li><a href="../3/7.html">7.CentOSとは</a>
+         <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP3-1.CentOSとは</h1>
+      <section><h1>STEP3-1.Ajaxを使ってみる</h1>
 
-<p>CentOSとは、Linuxを導入や利用がしやすくなるようにまとめられたパッケージ（Linuxディストリビューション）のうちの1つで、Webサーバとしてよく用いられています。Linuxの操作方法を覚えてサービスを公開できるようになりましょう。</p>
-
-<p>今回はこちらで用意したCentOSサーバを使用していただきます。サーバとの接続にはSSHというプロトコルを使用します。<a href="http://sourceforge.jp/projects/sfnet_poderosa/releases/">ダウンロード - Poderosa</a>よりPoderosaというSSHクライアントをダウンロード・インストールします。起動したら新規Telnet/SSH接続にサーバ情報を入力して接続します。</p>
-
-<p>一般的にはサーバは外部から接続してUNIXコマンドで操作します。基本的なコマンドについての解説は割愛します。</p>
-
-<h3>chown, chmod</h3>
-
-<p>Linuxは複数のユーザが使うものとして設計されているため、各ファイル・ディレクトリに所有者や権限が割り当てられています。chownは所有者の変更、chmodは権限の変更を行うコマンドです。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[tlab@localhost test]$ ls -l
-total 12
--rw-rw-r--. 1 tlab tlab   21 May 23 23:48 a.txt
--rw-rw-r--. 1 tlab tlab   21 May 23 23:48 c.txt
-drwxrwxr-x. 2 tlab tlab 4096 May 23 23:52 test2
-[tlab@localhost test]$ sudo chown root a.txt
-[tlab@localhost test]$ sudo chmod o+w a.txt
-[tlab@localhost test]$ ls -l
-total 12
--rw-rw-rw-. 1 root tlab   21 May 23 23:48 a.txt
--rw-rw-r--. 1 tlab tlab   21 May 23 23:48 c.txt
-drwxrwxr-x. 2 tlab tlab 4096 May 23 23:52 test2
+<p>まずはAjaxで取得するデータを用意しましょう。データベースからデータを取り出すのでPHPになります。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">){</span>
+  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;接続失敗：&quot;</span> <span class="o">.</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">);</span>
+  <span class="k">exit</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nv">$hash</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM datas ORDER BY date DESC&quot;</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">){</span>
+  <span class="k">while</span><span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">fetch_object</span><span class="p">()){</span>
+    <span class="nv">$hash</span><span class="p">[]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+      <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">),</span>
+      <span class="s2">&quot;text&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">),</span>
+      <span class="s2">&quot;date&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">date</span><span class="p">)</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">print</span> <span class="nb">json_encode</span><span class="p">(</span><span class="nv">$hash</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<ul>
-<li>-rw-rw-r--の読み方ですが、まず- rw- rw- r--と分解します。
+<p>これは1つの連想配列にdatasテーブルのデータを全て入れた後、JSONという形式に変換して出力しているコードです。これをajax_get_datas.phpという名前で保存します。</p>
 
-<ul>
-<li>1文字目はファイルなら-、ディレクトリならdとなります。</li>
-<li>2～4文字目は所有者の権限、5～7文字目はグループの権限、8～10文字目はその他のユーザの権限を表します。</li>
-<li>それぞれrは読み込み権限、wは書き込み権限、xは実行権限を表します。</li>
-</ul></li>
-<li>chmodのo+wはその他のユーザに書き込み権限を追加するという意味になります。</li>
-</ul>
-
-<h3>Vim</h3>
-
-<p>Linuxにおいて標準的に使用されているテキストエディタは2つあり、そのうちの1つがVimです。sample.txtを編集するには以下のように使用します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">vim sample.txt
+<p>ボタンを押したらdatasテーブルの中身を表示するようにしたいと思います。まずはHTMLを書きます。</p>
+<div class="highlight"><pre><code class="html language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;UTF-8&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Ajaxのサンプル<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://code.jquery.com/jquery-2.0.0.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ajax_test.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;start&quot;</span><span class="nt">&gt;</span>読み込み<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;main&quot;</span><span class="nt">&gt;</span>ここに表示されます<span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
 </code></pre></div>
-<p>Vimはマウスやメニューを使うことなくテキスト編集を行うために複数のモードが搭載されています。起動直後はノーマルモードになっており、終了する際はこのモードで<code>:q</code>と打ちます。保存して終了は<code>:wq</code>です。ノーマルモードで<code>i</code>と打つと挿入モードになります。通常、ファイルの編集を行う際はこのモードです。Escキーで挿入モードから抜けることができます。</p>
+<p>ajax_test.jsは以下のように記述します。</p>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#start&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s2">&quot;ajax_get_datas.php&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">datas</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">datas</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="nx">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;b&gt;&quot;</span> <span class="o">+</span> <span class="nx">datas</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt; &quot;</span> <span class="o">+</span> <span class="nx">datas</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="nx">datas</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;)&lt;hr /&gt;&quot;</span><span class="p">;</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#main&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>無名関数が3重になっていて見にくいですが、「ページの読み込みが終わったとき」に「idがstartである要素をクリックしたときの動作」を指定しています。その内容は$.getJSON関数で、この関数は第1引数に取得するURLを、第2引数に取得時に行う動作を指定します。無名関数も引数をとることができ、この場合はJSONオブジェクトになっています。JSONオブジェクトは連想配列のように利用することができ、ここでは適当なHTMLに変換して#mainに設定しています。</p>
 
 <hr>
 
-<p><strong>[課題]基本的なコマンドを理解しよう</strong><br>
-UNIXコマンドについて知識がない場合は少なくとも以下のコマンドについて使い方を覚えておきましょう。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">ls, cd, cat, cp, mv, rm, mkdir, sudo
-</code></pre></div>
-<p>また「リダイレクト」と「パイプ」の使い方も理解しておきましょう。  </p>
+<p><strong>[課題]JSONを知ろう</strong><br>
+Ajaxでのデータ受け渡しに一般的に使われているJSONという形式について調べてみましょう。更に、<a href="http://localhost/ajax_get_datas.php">http://localhost/ajax_get_datas.php</a>にアクセスして実際のJSONデータを見てみましょう。</p>
 </section>
       <footer></footer>
     </div>

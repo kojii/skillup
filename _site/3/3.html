@@ -45,69 +45,84 @@
         
         <h3>STEP3 オリジナルサイトを作ろう</h3>
         <ul>
-         <li><a href="../3/1.html">1.CentOSとは</a>
-         <li><a href="../3/2.html">2.CentOS上でサイトを公開してみる</a>
-         <li><a href="../3/3.html">3.IDEを使ってみる</a>
-         <li><a href="../3/4.html">4.効率的な書き方、デバッグの仕方</a>
-         <li><a href="../3/5.html">5.画面仕様書,スケジュールを作ってみる</a>
-         <li><a href="../3/6.html">6.テストとは</a>
-         <li><a href="../3/7.html">7.テストを書いてみる</a>
-         <li><a href="../3/8.html">8.バージョン管理をしてみる</a>
+         <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
+         <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
+         <li><a href="../3/3.html">3.テストとは</a>
+         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/5.html">5.IDEを使ってみる</a>
+         <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
+         <li><a href="../3/7.html">7.CentOSとは</a>
+         <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP2-6.IDEを使ってみる</h1>
+      <section><h1>STEP3-3.テストとは</h1>
 
-<p>IDEとは統合開発環境の略で、ファイルツリー表示やコード補完をはじめとした、開発が便利になる機能がまとまったものです。特にNetBeansというIDEは軽量でCakePHPとの相性がよいため、NetBeansの使い方を紹介します。Javaの実行環境をインストールしていない人は<a href="http://java.com/ja/download/">無料Javaのダウンロード</a>からインストールしておきましょう。</p>
+<p>ソフトウェアテストとは、プログラムに適当な値を入力し、動作が正しいかどうかを確認する作業のことです。</p>
 
-<p>まずは<a href="https://netbeans.org/downloads/">NetBeans IDE ダウンロード</a>から5種類あるうちのPHP用のNetBeans IDEをダウンロード・インストールします。インストールが終わったら起動してみましょう。</p>
+<h2>テスト方法</h2>
 
-<p>ファイル→新規プロジェクトからプロジェクトを作成します。以下のように[既存のソースを使用するPHPアプリケーション]を選択します。</p>
+<h3>ホワイトボックステスト</h3>
 
-<p><img src="../images/2_6_1.png" alt=""></p>
-
-<p>以上でプロジェクトの作成が完了しました。あとは通常のエディタのように使用できます。ただし、PHPの文法上のエラーがあるとエラー箇所と内容をリアルタイムで表示してくれるといった便利な機能があります。</p>
-
-<h2>コード補完</h2>
-
-<p>NetBeansにはコード補完機能があり、何か1文字打つと定義した変数や関数の一覧が表示されたり、その際に変数や関数の説明が表示されたりします。これはphpDocumentor形式でコメントを書くことにより変数や関数の説明が表示されるという仕組みです。CakePHPはphpDocumentor形式でコメントが書かれているため、CakePHPの変数や関数も説明が表示されます。</p>
-
-<p>自分で書いたコードにも説明が表示されるようにしてみましょう。以下は前回のDatasController.phpにphpDocumentor形式のコメントを追加したものです。</p>
-<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AppController&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller&#39;</span><span class="p">);</span>
-
-<span class="k">class</span> <span class="nc">DatasController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
-
-  <span class="sd">/**</span>
-<span class="sd">   * Helloを表示する</span>
-<span class="sd">   */</span>
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="s1">&#39;Hello&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="sd">/**</span>
-<span class="sd">   * 指定したユーザのデータを取得する</span>
-<span class="sd">   * @param string $name ユーザ名</span>
-<span class="sd">   */</span>
-  <span class="k">public</span> <span class="k">function</span> <span class="nf">get</span><span class="p">(</span><span class="nv">$name</span><span class="p">){</span>
-    <span class="nv">$options</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;conditions&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nv">$name</span><span class="p">));</span>
-    <span class="nv">$datas</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Data</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="nv">$options</span><span class="p">);</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;datas&#39;</span><span class="p">,</span> <span class="nv">$datas</span><span class="p">);</span>
-    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="nv">$name</span><span class="p">);</span>
-  <span class="p">}</span>
+<p>プログラムコードの命令や分岐などの構造を実際に見て行うテストです。テストが実行された構造の割合を網羅率といいます。網羅基準は3種類あり、例えば以下のようなコードのテストケースは次のようになります。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$a</span> <span class="o">&amp;&amp;</span> <span class="nv">$b</span><span class="p">){</span>
+  <span class="nx">do1</span><span class="p">();</span>
+<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nv">$c</span><span class="p">){</span>
+  <span class="nx">do2</span><span class="p">();</span>
 <span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<p>これによって以下のように関数の説明が表示されるようになりました。</p>
+<ul>
+<li>C0:命令網羅　全ての命令を少なくとも1回実行するようにテストケースを作成する。</li>
+</ul>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">[1]$a = true,  $b = true,  $c = true;  //do1()を実行するケース
+[2]$a = true,  $b = false, $c = true;  //do2()を実行するケース
+</code></pre></div>
+<ul>
+<li>C1:分岐網羅　全ての分岐を少なくとも1回実行するようにテストケースを作成する。</li>
+</ul>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">[1]$a = true,  $b = true,  $c = true;  //do1()を実行するケース
+[2]$a = true,  $b = false, $c = true;  //do2()を実行するケース
+[3]$a = true,  $b = false, $c = false; //何も実行しないケース
+</code></pre></div>
+<ul>
+<li>C2:条件網羅　全ての条件の組み合わせでテストケースを作成する。</li>
+</ul>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">[1]$a = true,  $b = true,  $c = true;
+[2]$a = true,  $b = true,  $c = false;
+[3]$a = true,  $b = false, $c = true;
+[4]$a = true,  $b = false, $c = false;
+[5]$a = false, $b = true,  $c = true;
+[6]$a = false, $b = true,  $c = false;
+[7]$a = false, $b = false, $c = true;
+[8]$a = false, $b = false, $c = false;
+</code></pre></div>
+<h3>ブラックボックステスト</h3>
 
-<p><img src="../images/2_6_2.png" alt=""></p>
+<p>プログラムの内部構造を見ずに、仕様通りの入出力が得られるかどうかをチェックするテストです。入力が単一の場合、以下の2種類の入力決定方法があります。</p>
 
-<h2>プラグイン</h2>
+<ul>
+<li>同値分割：入力が同じ動作を示す範囲に分け、それぞれの範囲から代表的な値をテストする。</li>
+<li>境界値分析：入力が同じ動作を示す範囲に分け、それぞれの範囲の境界値をテストする。</li>
+</ul>
 
-<p>NetBeansでは更にプラグインによって様々な機能を追加することができます。メニューのツール→プラグイン→使用可能なプラグインから新たなプラグインを追加できます。今回はPHP CakePHP Frameworkというプラグインを追加してみましょう。</p>
+<h2>テスト範囲</h2>
 
-<p>それでは適当なコントローラの適当なアクション上で右クリックしてみましょう。ナビゲート→ビューへ移動では該当のビューが開きます。CakePHP→Format for CakePHPではコードがCakePHPの規約に従った形に整形されます。CakePHP→Run ActionではそのアクションのURLがブラウザで開きます。</p>
+<p>全てのプログラムが完成してからテストを行いバグが発生した場合、原因の特定が困難になります。</p>
 
-<p>その他にも様々な機能があります。詳しくは<a href="https://github.com/junichi11/cakephp-netbeans">公式ページ</a>を参照してください。</p>
+<h3>単体テスト</h3>
+
+<p>メソッドなどの小さな単位で行うテストです。基本的に開発プロセス中にプログラマが行います。また、テスト駆動開発(TDD)という、先にテストを書いてから実装を行う手法もあります。</p>
+
+<h3>結合テスト</h3>
+
+<p>単体テストが終わったモジュールを組み合わせて行うテストです。以下の2種類の方法があります。</p>
+
+<ul>
+<li>トップダウンテスト：上位モジュールから順に結合する手法。致命的な不具合の早期発見が期待できる。</li>
+<li>ボトムアップテスト：下位モジュールから順に結合する手法。開発と並行して行うことができる。</li>
+</ul>
 </section>
       <footer></footer>
     </div>
