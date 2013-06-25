@@ -58,62 +58,100 @@
       </header>
       <section><h1>STEP3-1.Ajaxを使ってみる</h1>
 
-<p>まずはAjaxで取得するデータを用意しましょう。データベースからデータを取り出すのでPHPになります。</p>
+<p>Ajaxとは、JavaScriptなどからHTTP通信をすることによって、ページのリロードをせずにサーバとデータのやり取りをする技術です。ここでは簡単なチャットを作成してみます。</p>
+
+<p>まずはAjaxで取得するデータを用意しましょう。データはSTEP1で作成した掲示板のデータを流用することにします。以下の内容をajax_get_data.phpという名前で保存します。今回はCakePHPは使用しませんのでhtdocsに保存してください。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">){</span>
-  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;接続失敗：&quot;</span> <span class="o">.</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">);</span>
-  <span class="k">exit</span><span class="p">();</span>
-<span class="p">}</span>
-<span class="nv">$hash</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM datas ORDER BY date DESC&quot;</span><span class="p">);</span>
+<span class="nv">$json</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM datas ORDER BY created DESC&quot;</span><span class="p">);</span>
 <span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">){</span>
   <span class="k">while</span><span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">fetch_object</span><span class="p">()){</span>
-    <span class="nv">$hash</span><span class="p">[]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="nv">$json</span><span class="p">[]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
       <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">),</span>
-      <span class="s2">&quot;text&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">),</span>
-      <span class="s2">&quot;date&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">date</span><span class="p">)</span>
+      <span class="s2">&quot;message&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">message</span><span class="p">),</span>
+      <span class="s2">&quot;created&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">created</span><span class="p">)</span>
     <span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-<span class="k">print</span> <span class="nb">json_encode</span><span class="p">(</span><span class="nv">$hash</span><span class="p">);</span>
+<span class="k">print</span> <span class="nb">json_encode</span><span class="p">(</span><span class="nv">$json</span><span class="p">);</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<p>これは1つの連想配列にdatasテーブルのデータを全て入れた後、JSONという形式に変換して出力しているコードです。これをajax_get_datas.phpという名前で保存します。</p>
+<p>これは1つの連想配列にdatasテーブルのデータを全て入れた後、JSONという形式に変換して出力しているコードです。<a href="http://localhost/skillup/ajax_get_data.php">http://localhost/skillup/ajax_get_data.php</a>にアクセスして実際のJSONデータを見てみましょう。そのままでは非常に分かりにくいので<a href="https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc">JSONView</a>などを使用すると良いでしょう。JSON形式はとても簡単にJavaScriptのオブジェクトに変換できるためAjaxではよく使用されています。</p>
 
-<p>ボタンを押したらdatasテーブルの中身を表示するようにしたいと思います。まずはHTMLを書きます。</p>
+<p>次は発言を保存する処理を書きます。以下の内容をajax_submit.phpという名前で保存します。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])){</span>
+  <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;board&#39;</span><span class="p">);</span>
+  <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="s2">&quot;INSERT INTO datas (name, message) VALUES (?, ?)&quot;</span><span class="p">);</span>
+  <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_param</span><span class="p">(</span><span class="s1">&#39;ss&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]);</span>
+  <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>さて、いよいよクライアント側です。以下の内容をchat.htmlに保存します。</p>
 <div class="highlight"><pre><code class="html language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html&gt;</span>
   <span class="nt">&lt;head&gt;</span>
     <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;UTF-8&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;title&gt;</span>Ajaxのサンプル<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;title&gt;</span>簡易チャット<span class="nt">&lt;/title&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://code.jquery.com/jquery-2.0.0.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ajax_test.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;chat.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
   <span class="nt">&lt;/head&gt;</span>
   <span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;start&quot;</span><span class="nt">&gt;</span>読み込み<span class="nt">&lt;/button&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;main&quot;</span><span class="nt">&gt;</span>ここに表示されます<span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>簡易チャット<span class="nt">&lt;/h1&gt;</span>
+    名前：<span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;name&quot;</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="nt">/&gt;</span>
+    内容：<span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;message&quot;</span> <span class="na">name=</span><span class="s">&quot;message&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>発言<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;update&quot;</span><span class="nt">&gt;</span>更新<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;main&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
   <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
 </code></pre></div>
-<p>ajax_test.jsは以下のように記述します。</p>
-<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#start&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s2">&quot;ajax_get_datas.php&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">datas</span><span class="p">){</span>
-      <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">datas</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="nx">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;b&gt;&quot;</span> <span class="o">+</span> <span class="nx">datas</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt; &quot;</span> <span class="o">+</span> <span class="nx">datas</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="nx">datas</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;)&lt;hr /&gt;&quot;</span><span class="p">;</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#main&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
-    <span class="p">});</span>
+<p>chat.jsは以下のように記述します。</p>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">//ajax_get_data.phpからJSONデータを受け取ってHTMLを書き換える関数</span>
+<span class="kd">function</span> <span class="nx">update</span><span class="p">(){</span>
+  <span class="c1">//JSON形式のデータを読み込む</span>
+  <span class="c1">//成功時、dataにJSONデータが格納されている</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s2">&quot;ajax_get_data.php&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="c1">//htmlを組み立ててmainを書き換え</span>
+    <span class="nx">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="nx">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;b&gt;&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt; &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;message&quot;</span><span class="p">];</span>
+      <span class="nx">html</span> <span class="o">+=</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;created&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;)&lt;hr /&gt;&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#main&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="c1">//まず読み込み</span>
+  <span class="nx">update</span><span class="p">();</span>
+  <span class="c1">//更新ボタンを押したら読み込み</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#update&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="nx">update</span><span class="p">);</span>
+
+  <span class="c1">//発言ボタンを押したときの動作</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#submit&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">//送信するデータを準備</span>
+    <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#name&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">(),</span>
+      <span class="nx">message</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#message&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+    <span class="p">};</span>
+    <span class="c1">//POSTで送信</span>
+    <span class="c1">//引数はURL, 送信するデータ, 成功時に実行される関数</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">&quot;ajax_submit.php&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">update</span><span class="p">);</span>
   <span class="p">});</span>
 <span class="p">});</span>
 </code></pre></div>
-<p>無名関数が3重になっていて見にくいですが、「ページの読み込みが終わったとき」に「idがstartである要素をクリックしたときの動作」を指定しています。その内容は$.getJSON関数で、この関数は第1引数に取得するURLを、第2引数に取得時に行う動作を指定します。無名関数も引数をとることができ、この場合はJSONオブジェクトになっています。JSONオブジェクトは連想配列のように利用することができ、ここでは適当なHTMLに変換して#mainに設定しています。</p>
+<p>ここでは$.getJSON関数と$.post関数を使用しました。他にAjaxに使用できる関数は<a href="http://semooh.jp/jquery/api/ajax/">Ajax - jQuery 日本語リファレンス</a>を参照してください。</p>
+
+<p>では<a href="http://localhost/skillup/chat.html">http://localhost/skillup/chat.html</a>を見てみましょう。ページ読み込み後、しばらくしたら発言一覧が表示されるはずです。発言ボタンや更新ボタンもチェックしてみましょう。</p>
 
 <hr>
 
-<p><strong>[課題]JSONを知ろう</strong><br>
-Ajaxでのデータ受け渡しに一般的に使われているJSONという形式について調べてみましょう。更に、<a href="http://localhost/ajax_get_datas.php">http://localhost/ajax_get_datas.php</a>にアクセスして実際のJSONデータを見てみましょう。</p>
+<p><strong>[課題]CakePHPでのJSONの使用方法を調べよう</strong><br>
+CakePHPでもJSON形式での出力をサポートしています。JSON形式で出力する方法を調べて使ってみましょう。</p>
 </section>
       <footer></footer>
     </div>
