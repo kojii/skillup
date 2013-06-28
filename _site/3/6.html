@@ -48,7 +48,7 @@
          <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
          <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/3.html">3.テストとは</a>
-         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/4.html">4.単体テストを書いてみる</a>
          <li><a href="../3/5.html">5.IDEを使ってみる</a>
          <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
          <li><a href="../3/7.html">7.CentOSとは</a>
@@ -58,51 +58,34 @@
       </header>
       <section><h1>STEP3-6.バージョン管理をしてみる</h1>
 
-<p>バージョン管理システムを利用すると簡単にバージョン管理をすることができます。バージョン管理システムには、変更履歴の保存・閲覧・復元や、複数人での開発のサポートなどの機能が含まれています。今回はSubversionというバージョン管理システムおよびNetBeansからの使用方法を説明します。</p>
+<h2>バージョン管理システムとは</h2>
 
-<h2>サーバ側</h2>
+<p>バージョン管理システムとはファイルの変更履歴の保存・バックアップをするためのシステムです。複数人での大規模な開発では、最新ファイルがどれか分からなくなったり、同じファイルを複数人で編集してしまったりという問題が発生しますが、バージョン管理システムを導入することによってこれらの問題を軽減することができます。また、バージョン管理システムは個人での開発でも有用で、バグが発生した際などにすぐに元に戻すことができるなどの利点があります。</p>
 
-<p>まずはサーバ上にSubversionを導入します。mod_dav_svnというSubversionをHTTP経由で使えるようにするためのApacheのモジュールも一緒にインストールします。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">yum -y install subversion mod_dav_svn
-</code></pre></div>
-<p>次にSubversion用のディレクトリを作成します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">mkdir /var/www/svn
-</code></pre></div>
-<p>次にURLを設定します。/etc/httpd/conf.d/subversion.conf内に以下の内容を追加します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;Location /repos&gt;
-  DAV svn
-  SVNParentPath /var/www/svn
-  AuthType Basic
-  AuthName &quot;Authorization Realm&quot;
-  AuthUserFile /var/www/.htpasswd
-  Require valid-user
-&lt;/Location&gt;
-</code></pre></div>
-<p>上記の設定は、Basic認証によるアクセス制限をかける設定になっています。/var/www/.htpasswdファイルに認証するユーザを設定します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">htpasswd -c /var/www/.htpasswd ユーザ名
-</code></pre></div>
-<p>-cオプションはファイルの新規作成を意味しています。ユーザを追加する場合は-cを付けないようにします。</p>
+<p>バージョン管理システムには集中型と分散型の2種類があります。集中型ではプロジェクトの本体がサーバ上に1つだけ存在し、各ユーザはそこに対してファイルの変更を送信したり、そこからファイルの変更履歴を取得したりします。分散型では各ユーザがそれぞれプロジェクト全体を履歴も含めて保存しており、作業のほとんどをローカルで行うことができます。</p>
 
-<p>リポジトリを作成します。リポジトリとは各プロジェクトごとのファイル置き場です。今回は試しにtestリポジトリを作成します。作成したらApacheが読み書きできるよう、所有者と権限を変更しておきます。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">cd /var/www/svn
-svnadmin create test
-chown -R apache:apache test
-chmod -R u+rw test
-</code></pre></div>
-<p>最後にApacheを再起動して設定を反映させます。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">service httpd restart
-</code></pre></div>
-<p>http://IPアドレス/repos/test/にアクセスしてみましょう。認証画面が出た後、test - Revision 0: が表示されれば成功です。</p>
+<h2>使い方</h2>
 
-<h2>クライアント側</h2>
+<p>分散型で有名なものにGitがあります。Gitの詳しい使い方については<a href="http://www.backlog.jp/">Backlog</a>というGitリポジトリを作成できるサイトのコンテンツである<a href="http://www.backlog.jp/git-guide/">サルでもわかるGit入門</a>を読んでください。</p>
 
-<p>NetBeansを起動したらメニューからチーム→Subversion→チェック・アウトを選択します。チェックアウトとは、リポジトリをローカルにコピーすることです。先ほどのリポジトリをチェックアウトしてみましょう。プロジェクトを作成するかどうか聞かれるので作成します。</p>
+<h2>複数人での開発における注意点</h2>
 
-<p>このようにして作成したプロジェクト上で普通に作業を行います。ファイルが完成したらチーム→Subversion→リポジトリにインポートを選択します。これによって作成したファイルがリポジトリに反映されます。この際チームメニューの内容が変更されます。更新はリポジトリ上の最新ファイルをローカルにコピーするコマンド、コミットは更新をリポジトリに反映させるコマンドです。</p>
+<p>ここでは更に複数人での開発における注意点を紹介します。</p>
+
+<h3>コーディング規約を決めておく</h3>
+
+<p>コードの見た目を統一することによって読みやすくなるだけでなく、コードのフォーマットを直しただけのコミットなどの無駄操作が減るということにも繋がります。CakePHPでは<a href="../2/5.html">STEP2-5.フレームワークとは</a>で示したように細かく規約が定められています。</p>
+
+<h3>分かりやすいコミットメッセージを書く</h3>
+
+<p>コミットメッセージは、それを見ただけでどのような変更を施したかが分かるように書くことが大切です。必要であればなぜその変更を施したかという理由も書いておきましょう。また、1回のコミットで複数の変更を行うと変更が追いにくくなるため、1回のコミットは1つの内容に絞りましょう。例えば、機能追加と誤字修正は別々のコミットにします。</p>
+
+<hr>
+
+<p><strong>[課題]Gitを使ってみよう</strong><br>
+使い方に従ってGitを使ってみましょう。リモートリポジトリが作成できるサービスにはBacklogの他に<a href="https://github.com/">Github</a>や<a href="https://bitbucket.org/">Bitbucket</a>などがあります。次回以降に説明するサーバにGit環境を構築しても良いでしょう。</p>
 </section>
       <footer></footer>
     </div>
-    <script src="../javascripts/scale.fix.js"></script>
-    
   </body>
 </html>

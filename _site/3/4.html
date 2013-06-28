@@ -48,7 +48,7 @@
          <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
          <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/3.html">3.テストとは</a>
-         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/4.html">4.単体テストを書いてみる</a>
          <li><a href="../3/5.html">5.IDEを使ってみる</a>
          <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
          <li><a href="../3/7.html">7.CentOSとは</a>
@@ -56,22 +56,22 @@
          <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
         </ul>
       </header>
-      <section><h1>STEP3-4.テストを書いてみる</h1>
+      <section><h1>STEP3-4.単体テストを書いてみる</h1>
 
-<p>実際にテストコードを書いてみましょう。CakePHPではPHPUnitというテストツールを使用して単体テストを行うことができます。まずはPHPUnitをインストールします。phpをインストールしたディレクトリ（WindowsならC:\xampp\php）に移動し、以下のコマンドを管理者権限で実行します。</p>
+<p>実際に単体テストを書いてみましょう。CakePHPではPHPUnitというテストツールを使用して単体テストを自動化することができます。まずはPHPUnitをインストールします。phpをインストールしたディレクトリ（WindowsならC:\xampp\php）に移動し、以下のコマンドを管理者権限で実行します。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">pear upgrade PEAR
 pear config-set auto_discover 1
 pear install pear.phpunit.de/PHPUnit
 </code></pre></div>
-<p>さらに、コード網羅率を調べるためにXDebugというデバッグツールをインストールします。</p>
+<p>さらに、コード網羅率を調べるためにXdebugというデバッグツールをインストールします。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">pecl install xdebug
 </code></pre></div>
-<p>XDebugを有効にするため、php.iniを編集します。下部に以下のような行があるので先頭のセミコロンを削除してコメントアウトを外し、Apacheを再起動します。</p>
+<p>Xdebugを有効にするため、PHPの設定を変更します。phpをインストールしたディレクトリにあるphp.iniを編集します。下部に以下のような行があるので先頭のセミコロンを削除してコメントアウトを外し、Apacheを再起動します。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">;zend_extension = &quot;C:\xampp\php\ext\php_xdebug.dll&quot;
 </code></pre></div>
 <p>次にテスト用のデータベースを作成します。phpmyadminを利用して、構造のみをエクスポート・インポートすると簡単です。テスト用データベースの接続情報を/app/Config/database.php内のDATABASE_CONFIGクラスにある$testに記述します。これでテストを実行する準備が整いました。<a href="http://localhost/cakephp/test.php">http://localhost/cakephp/test.php</a>にアクセスするとCakePHP Test Suiteというページが表示されるはずです。</p>
 
-<p>テストケースを作成してみましょう。今回は<a href="../2/7.html">STEP2-7.CakePHPでログイン機能を書いてみる</a>で作成したUserモデルのバリデーションのテストを作成します。以下の内容を/app/Test/Case/Model/UserTest.phpという名前で保存します。</p>
+<p>テストケースを作成してみましょう。今回は<a href="../2/7.html">STEP2-7.CakePHPでログイン機能を書いてみる</a>で作成したUserモデルのバリデーションのテストを作成します。各バリデーションの仕様に対して、エラーになる代表的な値と、エラーにならない代表的な値についてテストを行うのでブラックボックステストの同値分割に該当します。以下の内容を/app/Test/Case/Model/UserTest.phpという名前で保存します。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="c1">//Authコンポーネントを読み込んでおく</span>
 <span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AuthComponent&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller/Component&#39;</span><span class="p">);</span>
@@ -80,6 +80,7 @@ pear install pear.phpunit.de/PHPUnit
   <span class="c1">//全てのテストの前に実行される</span>
   <span class="k">public</span> <span class="k">function</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">parent</span><span class="o">::</span><span class="na">setUp</span><span class="p">();</span>
+    <span class="c1">//Userモデルを読み込む</span>
     <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span> <span class="o">=</span> <span class="nx">ClassRegistry</span><span class="o">::</span><span class="na">init</span><span class="p">(</span><span class="s1">&#39;User&#39;</span><span class="p">);</span>
   <span class="p">}</span>
 
@@ -98,8 +99,8 @@ pear install pear.phpunit.de/PHPUnit
         <span class="p">),</span>
         <span class="c1">//期待される結果</span>
         <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//required</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//required</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//requiredエラー</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//requiredエラー</span>
         <span class="p">)</span>
       <span class="p">),</span>
       <span class="k">array</span><span class="p">(</span>
@@ -109,7 +110,7 @@ pear install pear.phpunit.de/PHPUnit
         <span class="p">),</span>
         <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
           <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span> <span class="c1">//between</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span> <span class="c1">//betweenエラー</span>
         <span class="p">)</span>
       <span class="p">),</span>
       <span class="k">array</span><span class="p">(</span>
@@ -118,7 +119,7 @@ pear install pear.phpunit.de/PHPUnit
           <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;nicePassword123&#39;</span>
         <span class="p">),</span>
         <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//between</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//betweenエラー</span>
           <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span>
         <span class="p">)</span>
       <span class="p">),</span>
@@ -128,36 +129,32 @@ pear install pear.phpunit.de/PHPUnit
           <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;パスワード&#39;</span>
         <span class="p">),</span>
         <span class="s1">&#39;expect&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//isUnique</span>
-          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//alphaNumeric</span>
+          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="c1">//isUniqueエラー</span>
+          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>  <span class="c1">//alphaNumericエラー</span>
         <span class="p">)</span>
       <span class="p">)</span>
     <span class="p">);</span>
 
-    <span class="c1">//各ケースを実行</span>
     <span class="k">foreach</span><span class="p">(</span><span class="nv">$cases</span> <span class="k">as</span> <span class="nv">$case</span><span class="p">){</span>
+      <span class="c1">//各ケースを実行</span>
       <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]);</span>
-      <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">invalidFields</span><span class="p">();</span>
-      <span class="k">foreach</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;expect&#39;</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span>
-        <span class="c1">//引数が同値かどうかをテストする</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="o">!</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$result</span><span class="p">),</span> <span class="nv">$value</span><span class="p">);</span>
+      <span class="c1">//バリデーションエラーになった列名を取得</span>
+      <span class="nv">$results</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="o">-&gt;</span><span class="na">invalidFields</span><span class="p">();</span>
+      <span class="k">foreach</span><span class="p">(</span><span class="nv">$case</span><span class="p">[</span><span class="s1">&#39;expect&#39;</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">){</span>
+        <span class="c1">//テストを実行する</span>
+        <span class="nv">$result</span> <span class="o">=</span> <span class="o">!</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$results</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$result</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+      <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </code></pre></div>
-<p>もう一度<a href="http://localhost/cakephp/app/webroot/test.php">http://localhost/cakephp/app/webroot/test.php</a>にアクセスしてみます。テストケースに「Model / User」という項目ができていると思います。クリックしてみましょう。クリックするとUserTestが実行されます。成功したケースは緑色、失敗したケースは赤色で示されます。「Analyze Code Coverage」をクリックするとコード網羅率を調べることもできます。</p>
+<p>$this-&gt;assertEquals関数がテストの本体で、第一引数に実行結果を、第二引数に期待している結果を書きます。</p>
 
-<p>モデルのほかにも様々なもののテストを作成できますが、もっとも重要なのはモデルです。今回のUserモデルは自作のメソッドが存在しませんでしたが、自作のメソッドを追加した場合はテストを作成することをお勧めします。</p>
-
-<hr>
-
-<p><strong>[課題]テスト計画書の作成</strong><br>
-画面仕様書やデータベースを元に、作成するモデル・モデルに必要なメソッド・各メソッドのテスト内容を記述した、テスト計画書を作成しましょう。</p>
+<p>もう一度<a href="http://localhost/cakephp/app/webroot/test.php">http://localhost/cakephp/app/webroot/test.php</a>にアクセスしてみます。テストケースに「Model / User」という項目ができていると思います。クリックしてみましょう。クリックするとUserTestが実行されます。成功したケースは緑色、失敗したケースは赤色で示されます。「Analyze Code Coverage」をクリックするとコード網羅率(C0)を調べることもできます。網羅率100%を目指してテストを作成しましょう。</p>
 </section>
       <footer></footer>
     </div>
-    <script src="../javascripts/scale.fix.js"></script>
-    
   </body>
 </html>

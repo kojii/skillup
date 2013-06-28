@@ -48,7 +48,7 @@
          <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
          <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/3.html">3.テストとは</a>
-         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/4.html">4.単体テストを書いてみる</a>
          <li><a href="../3/5.html">5.IDEを使ってみる</a>
          <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
          <li><a href="../3/7.html">7.CentOSとは</a>
@@ -58,11 +58,11 @@
       </header>
       <section><h1>STEP3-7.CentOSとは</h1>
 
-<p>CentOSとは、Linuxを導入や利用がしやすくなるようにまとめられたパッケージ（Linuxディストリビューション）のうちの1つで、Webサーバとしてよく用いられています。Linuxの操作方法を覚えてサービスを公開できるようになりましょう。</p>
+<p>CentOSとは、Linuxを導入や利用がしやすくなるようにまとめられたパッケージ（Linuxディストリビューション）のうちの1つです。LinuxとはフリーかつオープンソースなUnix系OSで、世界中のWebサーバの半分以上がLinuxを使用しています。LinuxディストリビューションにはCentOSの他にも使用方法や用途、価格、サポート状況などが異なる様々なものがあります。</p>
 
-<p>今回はこちらで用意したCentOSサーバを使用していただきます。サーバとの接続にはSSHというプロトコルを使用します。<a href="http://sourceforge.jp/projects/sfnet_poderosa/releases/">ダウンロード - Poderosa</a>よりPoderosaというSSHクライアントをダウンロード・インストールします。起動したら新規Telnet/SSH接続にサーバ情報を入力して接続します。</p>
+<p>今回はこちらで用意したCentOSサーバを使用していただきます。サーバとの接続にはSSHというプロトコルを使用します。SSHは暗号化された通信上で他のコンピュータにログインしてコマンドを実行するプロトコルです。<a href="http://sourceforge.jp/projects/sfnet_poderosa/releases/">ダウンロード - Poderosa</a>よりPoderosaというSSHクライアントをダウンロード・インストールします。起動したら新規Telnet/SSH接続にサーバ情報を入力して接続します。</p>
 
-<p>一般的にはサーバは外部から接続してUNIXコマンドで操作します。基本的なコマンドについての解説は割愛します。</p>
+<p>基本的なコマンドについての解説は割愛します。以下はWebサーバの設定で特に重要なコマンドです。</p>
 
 <h3>chown, chmod</h3>
 
@@ -91,12 +91,12 @@ drwxrwxr-x. 2 tlab tlab 4096 May 23 23:52 test2
 <li>chmodのo+wはその他のユーザに書き込み権限を追加するという意味になります。</li>
 </ul>
 
-<h3>Vim</h3>
+<h3>vi</h3>
 
-<p>Linuxにおいて標準的に使用されているテキストエディタは2つあり、そのうちの1つがVimです。sample.txtを編集するには以下のように使用します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">vim sample.txt
+<p>Linuxにおいて標準的に使用されているテキストエディタは2つあり、そのうちの1つがviです。sample.txtを編集するには以下のように使用します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">vi sample.txt
 </code></pre></div>
-<p>Vimはマウスやメニューを使うことなくテキスト編集を行うために複数のモードが搭載されています。起動直後はノーマルモードになっており、終了する際はこのモードで<code>:q</code>と打ちます。保存して終了は<code>:wq</code>です。ノーマルモードで<code>i</code>と打つと挿入モードになります。通常、ファイルの編集を行う際はこのモードです。Escキーで挿入モードから抜けることができます。</p>
+<p>viはマウスやメニューを使うことなくテキスト編集を行うために複数のモードが搭載されています。起動直後はノーマルモードになっており、終了する際はこのモードで<code>:q</code>と打ちます。保存して終了は<code>:wq</code>です。ノーマルモードで<code>i</code>と打つと挿入モードになります。通常、ファイルの編集を行う際はこのモードです。Escキーで挿入モードから抜けることができます。</p>
 
 <hr>
 
@@ -108,7 +108,5 @@ UNIXコマンドについて知識がない場合は少なくとも以下のコ�
 </section>
       <footer></footer>
     </div>
-    <script src="../javascripts/scale.fix.js"></script>
-    
   </body>
 </html>

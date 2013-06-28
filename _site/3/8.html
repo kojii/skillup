@@ -48,7 +48,7 @@
          <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
          <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/3.html">3.テストとは</a>
-         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/4.html">4.単体テストを書いてみる</a>
          <li><a href="../3/5.html">5.IDEを使ってみる</a>
          <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
          <li><a href="../3/7.html">7.CentOSとは</a>
@@ -63,40 +63,38 @@
 <h2>Apache</h2>
 
 <p>まずはApacheを導入します。以下のコマンドでインストールします。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">yum -y install httpd
+<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo yum -y install httpd
 </code></pre></div>
 <p>インストールが終わったら起動します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">service httpd start
+<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo service httpd start
 </code></pre></div>
 <p>起動後、http://IPアドレス/にアクセスしてテストページが表示されることを確認します。</p>
 
 <h2>MySQL</h2>
 
 <p>次にMySQLをインストールします。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">yum install mysql-server
+<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo yum install mysql-server
 </code></pre></div>
 <p>インストールが終わったら起動します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">service mysqld start
+<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo service mysqld start
 </code></pre></div>
 <p>ローカルで作成したデータベースをコピーします。まずは<a href="http://localhost/phpmyadmin/">http://localhost/phpmyadmin/</a>の該当のデータベースのエクスポートタブからデータをエクスポートします。フォーマットはSQLで大丈夫です。エクスポートしたデータをサーバ上にアップロード（後述）したあと、以下のコマンドを実行します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">mysql -u root
+<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo mysql -u root
 </code></pre></div>
 <p>rootユーザーでMySQLコマンドラインツールに入ることができました。<code>mysql&gt;</code>と表示されていると思います。ここでは今までどおりSQL文を実行できます。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">mysql&gt; create database データベース名;
 mysql&gt; quit;
 </code></pre></div>
 <p>データベースを作成して、MySQLコマンドラインツールから抜けました。最後にエクスポートしたデータを取り込みます。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">mysql -u root データベース名 &lt; エクスポートしたファイル
+<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo mysql -u root データベース名 &lt; エクスポートしたファイル
 </code></pre></div>
 <h2>ファイル転送</h2>
 
-<p>それではファイルをアップロードします。ファイルアップロードはSFTPというプロトコルを使用します。<a href="http://sourceforge.jp/projects/winscp/releases/">ダウンロード - WinSCP</a>からWinSCPをダウンロード・インストールします。起動してサーバ情報を入力して接続するとファイル一覧が表示されます。あとはドラッグ＆ドロップでファイルをアップロード・ダウンロードできます。なお、/var/www/htmlがWebページのルート部分にあたるのでここにアップロードしましょう。逆に他人から見えてはいけないファイル（先ほどエクスポートしたデータなど）は/var/www/htmlに置いてはいけません。</p>
+<p>それではファイルをアップロードします。ファイルアップロードはSFTPというプロトコルを使用します。SFTPはSSH上でFTP通信を行うプロトコルです。<a href="http://sourceforge.jp/projects/winscp/releases/">ダウンロード - WinSCP</a>からWinSCPをダウンロード・インストールします。起動してサーバ情報を入力して接続するとファイル一覧が表示されます。あとはドラッグ＆ドロップでファイルをアップロード・ダウンロードできます。なお、/var/www/htmlがWebページのルート部分にあたるのでここにアップロードしましょう。逆に他人から見えてはいけないファイル（先ほどエクスポートしたデータなど）は/var/www/htmlに置いてはいけません。</p>
 
 <p>これでサイトが公開できました。しかしセキュリティ対策を施していないためまだ広めないようにしましょう。</p>
 </section>
       <footer></footer>
     </div>
-    <script src="../javascripts/scale.fix.js"></script>
-    
   </body>
 </html>

@@ -48,7 +48,7 @@
          <li><a href="../3/1.html">1.Ajaxを使ってみる</a>
          <li><a href="../3/2.html">2.画面仕様書,スケジュールを作ってみる</a>
          <li><a href="../3/3.html">3.テストとは</a>
-         <li><a href="../3/4.html">4.テストを書いてみる</a>
+         <li><a href="../3/4.html">4.単体テストを書いてみる</a>
          <li><a href="../3/5.html">5.IDEを使ってみる</a>
          <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
          <li><a href="../3/7.html">7.CentOSとは</a>
@@ -58,15 +58,15 @@
       </header>
       <section><h1>STEP2-5.IDEを使ってみる</h1>
 
-<p>IDEとは統合開発環境の略で、ファイルツリー表示やコード補完をはじめとした、開発が便利になる機能がまとまったものです。特にNetBeansというIDEは軽量でCakePHPとの相性がよいため、NetBeansの使い方を紹介します。Javaの実行環境をインストールしていない人は<a href="http://java.com/ja/download/">無料Javaのダウンロード</a>からインストールしておきましょう。</p>
+<p>コードを書くには、エディタを使用するかIDEを使用するかという2つの方法があります。IDEとは統合開発環境の略で、コード補完やデバッガをはじめとした、開発が便利になる機能がまとまったものです。エディタはファイル単位での編集操作のみですが、IDEはプロジェクト全体にわたって管理してくれます。ここではNetBeansというCakePHPとの相性がよいIDEの使い方を紹介します。Javaの実行環境をインストールしていない人は<a href="http://java.com/ja/download/">無料Javaのダウンロード</a>からインストールしておきましょう。</p>
 
 <p>まずは<a href="https://netbeans.org/downloads/">NetBeans IDE ダウンロード</a>から5種類あるうちのPHP用のNetBeans IDEをダウンロード・インストールします。インストールが終わったら起動してみましょう。</p>
 
 <p>ファイル→新規プロジェクトからプロジェクトを作成します。以下のように[既存のソースを使用するPHPアプリケーション]を選択します。</p>
 
-<p><img src="../images/2_6_1.png" alt=""></p>
+<p><img src="../images/3_5_1.png" alt=""></p>
 
-<p>以上でプロジェクトの作成が完了しました。あとは通常のエディタのように使用できます。ただし、PHPの文法上のエラーがあるとエラー箇所と内容をリアルタイムで表示してくれるといった便利な機能があります。</p>
+<p>以上でプロジェクトの作成が完了しました。あとは通常のエディタのように使用できます。ただし、PHPの文法に従って色分け（シンタックスハイライト）してくれたり、PHPの文法上のエラーがあるとエラー箇所と内容をリアルタイムで表示してくれるといった便利な機能があります。</p>
 
 <h2>コード補完</h2>
 
@@ -99,19 +99,26 @@
 </code></pre></div>
 <p>これによって以下のように関数の説明が表示されるようになりました。</p>
 
-<p><img src="../images/2_6_2.png" alt=""></p>
+<p><img src="../images/3_5_2.png" alt=""></p>
 
-<h2>プラグイン</h2>
+<h2>デバッガ</h2>
 
-<p>NetBeansでは更にプラグインによって様々な機能を追加することができます。メニューのツール→プラグイン→使用可能なプラグインから新たなプラグインを追加できます。今回はPHP CakePHP Frameworkというプラグインを追加してみましょう。</p>
+<p>前回デバッグツールのXdebugをインストールしました。NetBeansではこれを利用してデバッグを行うことができます。php.iniの下部に以下のような行があるので先頭のセミコロンを削除してコメントアウトを外し、xdebug.remote_enableだけ0になっているので1に変更し、Apacheを再起動します。</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">xdebug.remote_enable = 1
+xdebug.remote_handler = &quot;dbgp&quot;
+xdebug.remote_host = &quot;127.0.0.1&quot;
+xdebug.trace_output_dir = &quot;C:\xampp\tmp&quot;
+xdebug.remote_port = 9000
+</code></pre></div>
+<p>次にNetBeansでメニューバーよりツール→オプション→PHP→デバッグを選択し、「最初の行で停止」のチェックを外します。更にファイル→プロジェクトプロパティ→実行構成の開始ファイルをapp/webroot/index.phpに設定します。これで準備が整いました。</p>
 
-<p>それでは適当なコントローラの適当なアクション上で右クリックしてみましょう。ナビゲート→ビューへ移動では該当のビューが開きます。CakePHP→Format for CakePHPではコードがCakePHPの規約に従った形に整形されます。CakePHP→Run ActionではそのアクションのURLがブラウザで開きます。</p>
+<p>行番号の部分をクリックすると以下のようにその行が赤くなります。これはブレークポイントといって、実行がこの行で一時停止するようになります。</p>
 
-<p>その他にも様々な機能があります。詳しくは<a href="https://github.com/junichi11/cakephp-netbeans">公式ページ</a>を参照してください。</p>
+<p><img src="../images/3_5_3.png" alt=""></p>
+
+<p>この状態でメニューバーよりデバッグ→プロジェクトをデバッグを選択するとブラウザが起動します。実行が先ほど設定したブレークポイントの部分になるとIDEの下部に変数の内容や呼出しスタックなどが表示されます。これらの情報を利用して効率的にデバッグしましょう。</p>
 </section>
       <footer></footer>
     </div>
-    <script src="../javascripts/scale.fix.js"></script>
-    
   </body>
 </html>
