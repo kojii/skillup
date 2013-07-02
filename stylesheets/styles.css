@@ -18,6 +18,7 @@ header {
 	margin-left: 330px;
 	padding-left: 20px;
 	width: 650px;
+	min-height: 1100px;
 	border-left: dashed 1px #bbb;
 }
 
