@@ -1,8 +1,8 @@
-# HTML化したものは[Luffy](file://luffy/teamlabshare/08_User/hondatatsuya/skillup/_site/index.html)にあります。
+# HTML化したものはLuffyにあります。
+file://luffy/teamlabshare/08_User/hondatatsuya/skillup/_site/index.html
 
-***
+# 以下はmarkdownへのクイックリンク
 
-以下はmarkdownへのクイックリンク
 * [はじめに](index.md)
 
 ## STEP1 掲示板を作ろう
