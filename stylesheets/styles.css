@@ -6,13 +6,19 @@
 }
 
 header {
-    float: left;
-    width: 350px;
+	border-bottom: dashed 1px #bbb;
 }
 
-section {
-	margin-left: 350px;
+#side_menu {
+    float: left;
+    width: 330px;
+}
+
+#contents {
+	margin-left: 330px;
+	padding-left: 20px;
 	width: 650px;
+	border-left: dashed 1px #bbb;
 }
 
 /* ëSëÃê›íË ***********************************/
@@ -23,6 +29,14 @@ section {
 
 img {
 	max-width:100%;
+}
+
+hr {
+	border: none;
+	border-top: dashed 1px #bbb;
+	height: 1px;
+	color: #fff;
+	margin: 0 6;
 }
 
 pre {
