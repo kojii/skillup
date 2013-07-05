@@ -89,7 +89,15 @@
 
 <h3>ユーザからの入力を信用しない</h3>
 
-<p>ユーザからの入力は悪意があるという前提で考えます。入力を受け取る際は適切にバリデーションを行う、SQL発行の際にはプリペアドステートメントを使用する、表示の際にはHTMLエスケープを行う、の点に注意します。また、エスケープは必ず表示する直前に行うようにします。これはエスケープ漏れや多重エスケープを避けるためです。</p>
+<p>ユーザからの入力は悪意があるという前提で考えます。入力を受け取る際は適切にバリデーションを行う、SQL発行の際にはプリペアドステートメントを使用する、表示の際にはHTMLエスケープを行う、の3点に注意します。また、エスケープは必ず表示する直前に行うようにします。これはエスケープ漏れや多重エスケープを避けるためです。</p>
+
+<p>ここで気をつけるべき点は、「入力」にはFormのinputタグなどから送信されたものだけでなく、様々なものがあるということです。ユーザが書き換え可能なデータは全てエスケープする必要があります。例えば以下のようなものがあります。</p>
+
+<ul>
+<li>&lt;input type=&quot;hidden&quot;&gt;のデータ</li>
+<li>URLパラメータ($_GET)</li>
+<li>ユーザーエージェント</li>
+</ul>
 
 <h3>OSやソフトウェアをバージョンアップする</h3>
 
@@ -122,11 +130,12 @@ ServerTokens ProductOnly
 </code></pre></div>
 <p>また、HTTPステータスコードで言うと400や500の場合のエラー画面は/app/View/Errors内のファイルを変更することで変更できます。</p>
 
-<h3>必要の無いところにアクセスさせない</h3>
+<h3>必要なものだけ許可する</h3>
 
-<p>ポートを制限します。iptablesというパケットフィルタリングツールを利用してSSHとHTTPしか接続できないファイアウォールを構築します。/etc/sysconfig/iptablesを以下のように編集します。</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="c1">#基本は全て許可</span>
-<span class="o">*</span><span class="n">filter</span>
+<p>まず全てを禁止して、そこから必要最小限の要素のみを許可します。フォームバリデーションやファイルアクセス権など、あらゆるものの基本となる考え方です。</p>
+
+<p>以下では例としてポートの制限を行います。iptablesというパケットフィルタリングツールを利用してSSHとHTTPの接続を許可し、それ以外の接続を禁止するファイアウォールを構築します。/etc/sysconfig/iptablesを以下のように編集します。</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="o">*</span><span class="n">filter</span>
 <span class="ss">:INPUT</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
 <span class="ss">:FORWARD</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
 <span class="ss">:OUTPUT</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
@@ -149,9 +158,11 @@ ServerTokens ProductOnly
 <p>iptablesを起動（再起動）します。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">service iptables restart
 </code></pre></div>
-<h3>脆弱性を突かれた時のための対策を行う</h3>
+<h3>進入された時のための対策を行う</h3>
 
 <p>万が一脆弱性を突かれ、サーバに進入されてしまった場合に備え、被害を最小限に抑えるための対策を行います。ユーザのパスワードをハッシュ化してデータベースに保存するのもその一環です。サーバやMySQLのユーザの権限を必要最小限に設定しておくのも大切です。</p>
+
+<p>ここで紹介したのは必要最低限の内容です。繰り返しになりますが<a href="http://www.ipa.go.jp/security/vuln/websecurity.html">安全なウェブサイトの作り方</a>をしっかり読んでおきましょう。</p>
 
         </div>
       </section>

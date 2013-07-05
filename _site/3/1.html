@@ -69,7 +69,7 @@
         <div id="contents">
           <h1>STEP3-1.Ajaxを使ってみる</h1>
 
-<p>Ajaxとは、JavaScriptなどからHTTP通信をすることによって、ページのリロードをせずにサーバとデータのやり取りをする技術です。ここでは簡単なチャットを作成してみます。</p>
+<p>Ajaxとは、JavaScriptなどからHTTP通信をすることによって、ページのリロードをせずにサーバとデータのやり取りをする技術です。ここでは1秒ごとに自動で再読み込みを行うような簡単なチャットを作成してみます。</p>
 
 <p>まずはAjaxで取得するデータを用意しましょう。データはSTEP1で作成した掲示板のデータを流用することにします。以下の内容をajax_get_data.phpという名前で保存します。今回はCakePHPは使用しませんのでhtdocsに保存してください。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
@@ -78,11 +78,7 @@
 <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM datas ORDER BY created DESC&quot;</span><span class="p">);</span>
 <span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">){</span>
   <span class="k">while</span><span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">fetch_object</span><span class="p">()){</span>
-    <span class="nv">$json</span><span class="p">[]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-      <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">),</span>
-      <span class="s2">&quot;message&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">message</span><span class="p">),</span>
-      <span class="s2">&quot;created&quot;</span> <span class="o">=&gt;</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$row</span><span class="o">-&gt;</span><span class="na">created</span><span class="p">)</span>
-    <span class="p">);</span>
+    <span class="nv">$json</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$row</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="k">print</span> <span class="nb">json_encode</span><span class="p">(</span><span class="nv">$json</span><span class="p">);</span>
@@ -115,7 +111,6 @@
     内容：<span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;message&quot;</span> <span class="na">name=</span><span class="s">&quot;message&quot;</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>発言<span class="nt">&lt;/button&gt;</span>
     <span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;update&quot;</span><span class="nt">&gt;</span>更新<span class="nt">&lt;/button&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;main&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
   <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
@@ -127,25 +122,28 @@
   <span class="c1">//成功時、dataにJSONデータが格納されている</span>
   <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s2">&quot;ajax_get_data.php&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
     <span class="c1">//htmlを組み立ててmainを書き換え</span>
-    <span class="nx">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
     <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-      <span class="nx">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;b&gt;&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt; &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;message&quot;</span><span class="p">];</span>
-      <span class="nx">html</span> <span class="o">+=</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;created&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;)&lt;hr /&gt;&quot;</span><span class="p">;</span>
+      <span class="nx">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;b&gt;&quot;</span> <span class="o">+</span> <span class="nx">h</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt; &quot;</span> <span class="o">+</span> <span class="nx">h</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;message&quot;</span><span class="p">]);</span>
+      <span class="nx">html</span> <span class="o">+=</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="nx">h</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="s2">&quot;created&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;)&lt;hr /&gt;&quot;</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#main&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
   <span class="p">});</span>
 <span class="p">}</span>
 
+<span class="c1">//HTMLエスケープをする関数</span>
+<span class="kd">function</span> <span class="nx">h</span><span class="p">(</span><span class="nx">text</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&amp;/g</span><span class="p">,</span><span class="s2">&quot;&amp;amp;&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&quot;/g</span><span class="p">,</span><span class="s2">&quot;&amp;quot;&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&#39;/g</span><span class="p">,</span><span class="s2">&quot;&amp;#039;&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;/g</span><span class="p">,</span><span class="s2">&quot;&amp;lt;&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;/g</span><span class="p">,</span><span class="s2">&quot;&amp;gt;&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
 <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="c1">//まず読み込み</span>
-  <span class="nx">update</span><span class="p">();</span>
-  <span class="c1">//更新ボタンを押したら読み込み</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#update&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="nx">update</span><span class="p">);</span>
+  <span class="c1">//1秒ごとに読み込み</span>
+  <span class="nx">setInterval</span><span class="p">(</span><span class="nx">update</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
 
   <span class="c1">//発言ボタンを押したときの動作</span>
   <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#submit&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
     <span class="c1">//送信するデータを準備</span>
-    <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
       <span class="nx">name</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#name&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">(),</span>
       <span class="nx">message</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#message&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
     <span class="p">};</span>
@@ -157,7 +155,7 @@
 </code></pre></div>
 <p>ここでは$.getJSON関数と$.post関数を使用しました。他にAjaxに使用できる関数は<a href="http://semooh.jp/jquery/api/ajax/">Ajax - jQuery 日本語リファレンス</a>を参照してください。</p>
 
-<p>では<a href="http://localhost/skillup/chat.html">http://localhost/skillup/chat.html</a>を見てみましょう。ページ読み込み後、しばらくしたら発言一覧が表示されるはずです。発言ボタンや更新ボタンもチェックしてみましょう。</p>
+<p>では<a href="http://localhost/skillup/chat.html">http://localhost/skillup/chat.html</a>を見てみましょう。ページ読み込み後、しばらくしたら発言一覧が表示されるはずです。ウインドウを2つ用意して、両方に<a href="http://localhost/skillup/chat.html">http://localhost/skillup/chat.html</a>を表示させた状態で、片方から発言してみましょう。しばらくするともう片方も更新されて発言した内容が表示されるはずです。</p>
 
 <hr>
 
