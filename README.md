@@ -1,5 +1,9 @@
 # HTML化したものはLuffyにあります。
+
 file://luffy/teamlabshare/08_User/hondatatsuya/skillup/_site/index.html
+
+* HTML化の方法
+jekyllとpygmentsをインストールしてjekyll build
 
 # 以下はmarkdownへのクイックリンク
 
