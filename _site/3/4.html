@@ -116,7 +116,7 @@ pear install pear.phpunit.de/PHPUnit
 
 <h2>実際のテスト</h2>
 
-<p>テストケースを作成してみましょう。今回は<a href="../2/7.html">STEP2-7.CakePHPでログイン機能を書いてみる</a>で作成したUserモデルのバリデーションのテストを作成します。各バリデーションの仕様に対して、エラーになる代表的な値と、エラーにならない代表的な値についてテストを行うのでブラックボックステストの同値分割に該当します。以下の内容を/app/Test/Case/Model/UserTest.phpという名前で保存します(規約：テストを含むPHPファイルは、 app/Test/Case/ 以下のディレクトリに置きます。ファイル名の最後は必ず Test.php とします)。</p>
+<p>テストケースを作成してみましょう。今回は<a href="../2/7.html">STEP2-7.CakePHPでログイン機能を書いてみる</a>で作成したUserモデルのバリデーションのテストを作成します。以下の内容を/app/Test/Case/Model/UserTest.phpという名前で保存します(規約：テストを含むPHPファイルは、 app/Test/Case/ 以下のディレクトリに置きます。ファイル名の最後は必ず Test.php とします)。</p>
 <div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="c1">//Authコンポーネントを読み込んでおく</span>
 <span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;AuthComponent&#39;</span><span class="p">,</span> <span class="s1">&#39;Controller/Component&#39;</span><span class="p">);</span>
