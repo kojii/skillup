@@ -1,8 +1,6 @@
-# HTML化したものはLuffyにあります。
+# HTML化したものは(Github Pages)[http://team-lab.github.io/skillup/]にあります。
 
-file://luffy/teamlabshare/08_User/hondatatsuya/skillup/_site/index.html
-
-* **HTML化の方法** jekyllとpygmentsをインストールしてjekyll build
+* 何故か内容が古いのですが原因を知っている方がいれば教えてください。
 
 # 以下はmarkdownへのクイックリンク
 
