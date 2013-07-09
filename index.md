@@ -17,4 +17,4 @@ layout: top
 * 仕様書・テストの書き方、大規模開発・チーム開発の方法、Webサイトの公開方法・セキュリティ対策について学ぶ
 * 最終課題：オリジナルのWebサイトの設計・作成
 
-また、想定OSはWindowsとなっています。その他のOSの方はダウンロードリンクやフォルダ構成などが一部異なります。ブラウザは[GoogleChrome](https://www.google.com/intl/ja/chrome/browser/)を推奨します。これはコンテンツの一部でGoogleChromeの機能を使用するためです。
+また、想定OSはWindowsとなっています。その他のOSの方はダウンロードリンクやフォルダ構成などが一部異なります。ブラウザは[GoogleChrome](https://www.google.com/intl/ja/chrome/browser/)を推奨します。これは説明の一部でGoogleChromeの機能を使用するためです。
