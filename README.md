@@ -1,4 +1,4 @@
-# HTML化したものは]Github Pages](http://team-lab.github.io/skillup/)にあります。
+# HTML化したものは[Github Pages](http://team-lab.github.io/skillup/)にあります。
 
 * 何故か内容が古いのですが原因を知っている方がいれば教えてください。
 
