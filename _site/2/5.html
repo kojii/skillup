@@ -75,9 +75,9 @@
 
 <p><img src="../images/2_5_1.png" alt=""></p>
 
-<p>CakePHPの他に有名なフレームワークとしてはZend FrameworkやSymfonyなどがありますが、いずれもMVCアーキテクチャを採用しています。CakePHPを選んだ理由は、日本で最も使用されているからです。</p>
+<p>CakePHPの他に有名なフレームワークとしては(Zend Framework)[http://framework.zend.com/]や(Symfony)[http://symfony.com/]などがありますが、いずれもMVCアーキテクチャを採用しています。CakePHPを紹介する理由は、日本で最も使用されているからです。</p>
 
-<p>それではCakePHPをインストールしてみましょう。<a href="http://cakephp.jp/">CakePHP</a>から安定版をダウンロードします。zipファイルを解凍し、フォルダごとhtdocsに置き、適当にフォルダ名を変更します。（cakephpに変更したものとして話を進めます。）Webブラウザから<a href="http://localhost/cakephp/">http://localhost/cakephp/</a>にアクセスしてみるとCakePHPの初期ページが表示されるはずです。いくつかエラーが表示されていると思います。/app/Config/core.phpを開いてSecurity.saltとSecurity.cipherSeedを適当な値に変更しておきましょう。これらは今まで説明したようにハッシュ化や暗号化をより解析されにくくするための値ですが、初期値のままにしておくとsaltの意味を成さないので変更する必要があります。</p>
+<p>それではCakePHPをインストールしてみましょう。<a href="http://cakephp.jp/">CakePHP</a>から安定版をダウンロードします。zipファイルを解凍し、フォルダごとhtdocsに置き、適当にフォルダ名を変更します。（cakephpに変更したものとして話を進めます。）Webブラウザから<a href="http://localhost/cakephp/">http://localhost/cakephp/</a>にアクセスしてみるとCakePHPの初期ページが表示されるはずです。いくつかエラーが表示されていると思います。/app/Config/core.phpを開いてSecurity.saltとSecurity.cipherSeedを適当な値に変更しておきましょう。これらは今まで説明したようにハッシュ化や暗号化をより解析されにくくするための値ですが、初期値のままにしておくとバレバレですのでsaltの意味を成さなくなってしまいます。</p>
 
 <h1>規約</h1>
 

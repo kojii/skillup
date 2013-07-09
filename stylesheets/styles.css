@@ -70,3 +70,9 @@ tr:nth-child(even) {
 tr:nth-child(1) {
 	background-color: #eee;
 }
+
+/* ŒÂ•Ê ***************************************/
+
+#dom_test {
+	background-color: #fee;
+}
