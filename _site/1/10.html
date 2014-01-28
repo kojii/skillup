@@ -60,9 +60,10 @@
             <li><a href="../3/4.html">4.単体テストを書いてみる</a>
             <li><a href="../3/5.html">5.IDEを使ってみる</a>
             <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
-            <li><a href="../3/7.html">7.サイトを公開してみる</a>
-            <li><a href="../3/8.html">8.セキュリティ対策をしてみる</a>
-            <li><a href="../3/9.html">最終課題</a>
+            <li>7.CentOSとは
+            <li>8.CentOS上でサイトを公開してみる
+            <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+            <li><a href="../3/10.html">最終課題</a>
           </ul>
         </div>
         <div id="contents">
@@ -82,7 +83,6 @@
 <h3>仕様</h3>
 
 <ul>
-<li>URLはhttp://localhost/bbs.phpとする。</li>
 <li>投稿は名前と本文からなる。</li>
 <li>投稿はPOST送信のみ受け付ける。</li>
 <li>投稿データはデータベースへ保存する。</li>
@@ -93,18 +93,32 @@
 
 <h3>提出方法</h3>
 
-<p>以下のファイルをzipにまとめて送信してください。</p>
+<p>基本的に動作はレンタルサーバ上で確認します。そのため動作するURLを提出してください。さらに以下のファイルをzipにまとめて送信してください。</p>
 
 <ul>
 <li>データベースのエクスポートデータ(後述)</li>
-<li>bbs.php</li>
-<li>CSSや画像ファイルなどを使用した場合はそれらのファイル</li>
+<li>アップロードした全ファイル</li>
 <li>機能を追加した場合はその概要を説明したread_me.txtファイル</li>
 </ul>
 
-<h3>データベースのエクスポート方法</h3>
+<h3>[補足]サーバにデータベースをコピーする方法</h3>
 
-<p><a href="http://localhost/phpmyadmin/">http://localhost/phpmyadmin/</a>にアクセスします。左のメニューから該当のデータベースを選び、エクスポートタブに移動し実行を押します。.sqlファイルでエクスポートされますのでそれを送信してください。</p>
+<p><a href="http://localhost/phpmyadmin/">http://localhost/phpmyadmin/</a>にアクセスします。左のメニューから該当のデータベースを選び、エクスポートタブに移動し実行を押すと.sqlファイルでエクスポートされます。</p>
+
+<p>次にサーバの管理画面へ移動します。「データベース」からMySQLデータベースを作成します。その後、PhpMyAdmin自動インストールからphpMyAdminをインストールしてログインします。ここで該当のデータベースのインポートタブから先ほどエクスポートしたデータをインポートします。</p>
+
+<p>これでデータベースのコピーが完了しましたが、接続設定がローカルとは異なるためPHPの修正が必要です。以下のようにしておくと楽かもしれません。</p>
+<div class="highlight"><pre><code class="php language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;SERVER_NAME&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;localhost&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//ローカルの接続設定</span>
+    <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;ホスト名&#39;</span><span class="p">,</span> <span class="s1">&#39;ユーザ名&#39;</span><span class="p">,</span> <span class="s1">&#39;パスワード&#39;</span><span class="p">,</span> <span class="s1">&#39;データベース名&#39;</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">//XREAサーバの接続設定</span>
+    <span class="nv">$mysqli</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="s1">&#39;ホスト名&#39;</span><span class="p">,</span> <span class="s1">&#39;ユーザ名&#39;</span><span class="p">,</span> <span class="s1">&#39;パスワード&#39;</span><span class="p">,</span> <span class="s1">&#39;データベース名&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</code></pre></div>
+<p>また、ローカルとレンタルサーバではPHPやMySQLのバージョン、もしくは設定が異なるために同じ動作にならない場合があります。こまめに確認しましょう。</p>
 
         </div>
       </section>
