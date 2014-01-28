@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>STEP3-8.CentOS上でサイトを公開してみる / チームラボ オンラインスキルアップ課題</title>
+    <title>STEP3-8.レンタルサーバ上にサイトを公開してみる / チームラボ オンラインスキルアップ課題</title>
     <link rel="stylesheet" href="../stylesheets/styles.css">
     <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
     <!--[if lt IE 9]>
@@ -60,50 +60,27 @@
             <li><a href="../3/4.html">4.単体テストを書いてみる</a>
             <li><a href="../3/5.html">5.IDEを使ってみる</a>
             <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
-            <li><a href="../3/7.html">7.CentOSとは</a>
-            <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
-            <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+            <li><a href="../3/8.html">7.サイトを公開してみる</a>
+            <li><a href="../3/9.html">8.セキュリティ対策をしてみる</a>
             <li><a href="../3/10.html">最終課題</a>
           </ul>
         </div>
         <div id="contents">
-          <h1>STEP3-8.CentOS上でサイトを公開してみる</h1>
+          <h1>STEP3-8.レンタルサーバ上にサイトを公開してみる</h1>
 
-<p>Linuxではパッケージという形式でプログラムが配布されており、パッケージ管理システムを利用してインストールや削除、管理などを行います。パッケージには主にRPM形式とdeb形式の2種類があり、CentOSではRPM形式のパッケージを、yumというパッケージ管理システムを用いて管理しています。</p>
+<p>サイトを公開するには様々な方法がありますが、今回はレンタルサーバで公開します。OSのセットアップ、ApacheやMySQLのインストールなどのサーバ設定をしなくても良いことが強みですが、その分使用できる機能は限られています。</p>
 
-<h2>Apache</h2>
+<h2>データベースのコピー</h2>
 
-<p>まずはApacheを導入します。以下のコマンドでインストールします。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo yum -y install httpd
-</code></pre></div>
-<p>インストールが終わったら起動します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo service httpd start
-</code></pre></div>
-<p>起動後、http://IPアドレス/にアクセスしてテストページが表示されることを確認します。</p>
+<p>サーバレンタルの前にローカルで作成したデータベースをエクスポートしておきます。 <a href="http://localhost/phpmyadmin/">http://localhost/phpmyadmin/</a>の該当のデータベースのエクスポートタブからデータをエクスポートします。フォーマットはSQLで大丈夫です。</p>
 
-<h2>MySQL</h2>
+<p>今回、レンタルサーバには<a href="http://atpages.jp/">@PAGES</a>を使用します。ユーザ登録を行い、送られてくるメールから管理画面へ移動します。管理画面左側の「DB(mysql)利用」からデータベースを作成します。データベース(mysql)利用情報が表示されたら「ブラウザからデータベースを操作する」をクリックし、phpMyAdminを開きます。ここでインポートタブから先ほどエクスポートしたデータをインポートします。これでデータベースのコピーが完了しました。</p>
 
-<p>次にMySQLをインストールします。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo yum install mysql-server
-</code></pre></div>
-<p>インストールが終わったら起動します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo service mysqld start
-</code></pre></div>
-<p>ローカルで作成したデータベースをコピーします。まずは<a href="http://localhost/phpmyadmin/">http://localhost/phpmyadmin/</a>の該当のデータベースのエクスポートタブからデータをエクスポートします。フォーマットはSQLで大丈夫です。エクスポートしたデータをサーバ上にアップロード（後述）したあと、以下のコマンドを実行します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo mysql -u root
-</code></pre></div>
-<p>rootユーザーでMySQLコマンドラインツールに入ることができました。<code>mysql&gt;</code>と表示されていると思います。ここでは今までどおりSQL文を実行できます。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">mysql&gt; create database データベース名;
-mysql&gt; quit;
-</code></pre></div>
-<p>データベースを作成して、MySQLコマンドラインツールから抜けました。最後にエクスポートしたデータを取り込みます。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">sudo mysql -u root データベース名 &lt; エクスポートしたファイル
-</code></pre></div>
-<h2>ファイル転送</h2>
+<h2>ファイルのコピー</h2>
 
-<p>それではファイルをアップロードします。ファイルアップロードはSFTPというプロトコルを使用します。SFTPはSSH上でFTP通信を行うプロトコルです。<a href="http://sourceforge.jp/projects/winscp/releases/">ダウンロード - WinSCP</a>からWinSCPをダウンロード・インストールします。起動してサーバ情報を入力して接続するとファイル一覧が表示されます。あとはドラッグ＆ドロップでファイルをアップロード・ダウンロードできます。なお、/var/www/htmlがWebページのルート部分にあたるのでここにアップロードしましょう。逆に他人から見えてはいけないファイル（先ほどエクスポートしたデータなど）は/var/www/htmlに置いてはいけません。</p>
+<p>ファイルをアップロードする前にMySQLの接続情報を書き換える必要があります。CakePHPであれば/app/Config/database.phpを管理画面のデータベース(mysql)利用情報に従って書き直します。</p>
 
-<p>これでサイトが公開できました。しかしセキュリティ対策を施していないためまだ広めないようにしましょう。</p>
+<p>それではファイルをアップロードします。<a href="http://sourceforge.jp/projects/winscp/releases/">ダウンロード - WinSCP</a>からWinSCPをダウンロード・インストールします。起動してサーバ情報を入力して接続します。プロトコルはFTPにしてください。するとファイル一覧が表示されます。あとはドラッグ＆ドロップでファイルをアップロード・ダウンロードできます。実際にアクセスして確認してみましょう。</p>
 
         </div>
       </section>

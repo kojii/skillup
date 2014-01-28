@@ -60,9 +60,8 @@
             <li><a href="../3/4.html">4.単体テストを書いてみる</a>
             <li><a href="../3/5.html">5.IDEを使ってみる</a>
             <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
-            <li><a href="../3/7.html">7.CentOSとは</a>
-            <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
-            <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
+            <li><a href="../3/8.html">7.サイトを公開してみる</a>
+            <li><a href="../3/9.html">8.セキュリティ対策をしてみる</a>
             <li><a href="../3/10.html">最終課題</a>
           </ul>
         </div>
@@ -79,7 +78,7 @@
 <p>これはdatasテーブルにnameカラムの値がA_sanでありmessageカラムの値がhelloであるデータを追加するクエリです。createdカラムは省略することができます。これはテーブルの作成時（<a href="7.html">7.データベースを作成してみる</a>）にデフォルト値を設定してあるためで、省略することでデフォルト値が設定されます。デフォルト値を設定していないカラムは省略できません。</p>
 
 <p>ちなみに値はカンマで区切ることで複数同時に追加することもできます。いくつか値を追加してみましょう。</p>
-<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">datas</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="ss">&quot;A_san&quot;</span><span class="p">,</span> <span class="ss">&quot;bye&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;B_san&quot;</span><span class="p">,</span> <span class="ss">&quot;Nice to meet you&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;B_san&quot;</span><span class="p">,</span> <span class="ss">&quot;bye&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;C_san&quot;</span><span class="p">,</span> <span class="ss">&quot;I am C&quot;</span><span class="p">),</span>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">datas</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="ss">&quot;A_san&quot;</span><span class="p">,</span> <span class="ss">&quot;bye&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;B_san&quot;</span><span class="p">,</span> <span class="ss">&quot;Nice to meet you&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;B_san&quot;</span><span class="p">,</span> <span class="ss">&quot;bye&quot;</span><span class="p">),</span> <span class="p">(</span><span class="ss">&quot;C_san&quot;</span><span class="p">,</span> <span class="ss">&quot;I am C&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2>SELECT文</h2>
 
@@ -91,7 +90,7 @@
 <h3>WHERE句</h3>
 
 <p>データを取り出す条件を指定します。</p>
-<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">data</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="o">=</span> <span class="ss">&quot;A_san&quot;</span>
+<div class="highlight"><pre><code class="sql language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">datas</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="o">=</span> <span class="ss">&quot;A_san&quot;</span>
 </code></pre></div>
 <p>これはnameカラムの値がA_sanである行のみを取り出すクエリです。</p>
 
