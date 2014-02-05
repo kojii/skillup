@@ -98,9 +98,52 @@
 <li>作成したコードをまとめたフォルダ</li>
 </ul>
 
-<h3>[補足]データベースの削除</h3>
+<h2>補足</h2>
+
+<h3>アップロードする場所</h3>
+
+<p>public_html直下にアップロードしてしまうとphpMyAdminにアクセスできなくなってしまう（実はmod_rewriteなどで回避可能）ので適当にディレクトリを作ってアップロードします。以下のような構成になるはずです。</p>
+
+<ul>
+<li>log</li>
+<li>Maildir</li>
+<li>public_html
+
+<ul>
+<li>log
+
+<ul>
+<li>phpmyadmin</li>
+</ul></li>
+<li>適当な名前
+
+<ul>
+<li>app</li>
+<li>lib</li>
+<li>index.php</li>
+<li>その他色々</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>また以下のフォルダはアップロードしないほうが良いかもしれません。</p>
+
+<ul>
+<li>/app/tmp/cache/models</li>
+<li>/app/tmp/cache/persistent</li>
+<li>/app/tmp/cache/views</li>
+</ul>
+
+<h3>データベースの削除</h3>
 
 <p>XREA無料プランではデータベースは一つしか作成できません。そのためSTEP1のデータを消す必要があります。嫌な場合はもうひとつアカウントを作成してもかまいません。</p>
+
+<h3>XREA以外のサーバの場合</h3>
+
+<ul>
+<li>PHPの実行者とファイルのOwnerが異なる場合は、/app/tmpにGroupまたはOtherに対して書き込み権限を付加する必要があります。</li>
+<li>.htaccessやmod_rewriteが使えないサーバの場合は<a href="http://www.exgear.jp/tech/doc/detail/82">CakePHPでmod_rewriteが使えない場合</a>を参考にしてください。それでも動かない場合は諦めてXREAを使うことをお勧めします。</li>
+</ul>
 
         </div>
       </section>
