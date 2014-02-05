@@ -35,6 +35,7 @@
             <li><a href="../1/7.html">7.データベースを作成してみる</a>
             <li><a href="../1/8.html">8.SQLを書いてみる</a>
             <li><a href="../1/9.html">9.PHPからデータベースを操作してみる</a>
+            <li><a href="../1/s1.html">10.サイトを公開してみる</a>
             <li><a href="../1/10.html">最終課題</a>
           </ul>
           
@@ -60,8 +61,8 @@
             <li><a href="../3/4.html">4.単体テストを書いてみる</a>
             <li><a href="../3/5.html">5.IDEを使ってみる</a>
             <li><a href="../3/6.html">6.バージョン管理をしてみる</a>
-            <li><a href="../3/7.html">7.CentOSとは</a>
-            <li><a href="../3/8.html">8.CentOS上でサイトを公開してみる</a>
+            <li>7.CentOSとは
+            <li>8.CentOS上でサイトを公開してみる
             <li><a href="../3/9.html">9.セキュリティ対策をしてみる</a>
             <li><a href="../3/10.html">最終課題</a>
           </ul>
@@ -89,7 +90,15 @@
 
 <h3>ユーザからの入力を信用しない</h3>
 
-<p>ユーザからの入力は悪意があるという前提で考えます。入力を受け取る際は適切にバリデーションを行う、SQL発行の際にはプリペアドステートメントを使用する、表示の際にはHTMLエスケープを行う、の3点に注意します。また、エスケープは必ず表示する直前に行うようにします。これはエスケープ漏れや多重エスケープを避けるためです。</p>
+<p>ユーザからの入力は悪意があるという前提で考えます。入力を受け取る際は</p>
+
+<ul>
+<li>適切にバリデーションを行う</li>
+<li>SQL発行の際にはプリペアドステートメントを使用する</li>
+<li>表示の際にはHTMLエスケープを行う</li>
+</ul>
+
+<p>の3点に注意します。また、エスケープは必ず表示する直前に行うようにします。これはエスケープ漏れや多重エスケープを避けるためです。</p>
 
 <p>ここで気をつけるべき点は、「入力」にはFormのinputタグなどから送信されたものだけでなく、様々なものがあるということです。ユーザが書き換え可能なデータは全てエスケープする必要があります。例えば以下のようなものがあります。</p>
 
@@ -99,9 +108,9 @@
 <li>ユーザーエージェント</li>
 </ul>
 
-<h3>OSやソフトウェアをバージョンアップする</h3>
+<h3>ソフトウェアをバージョンアップする</h3>
 
-<p>OSやソフトウェアには脆弱性が存在し、日々アップデートパッチが公開されています。パッチが公開されることによって攻撃者にも脆弱性の存在が明らかになってしまうため、OSやソフトウェアは常に最新のバージョンにしておくことが大切です。</p>
+<p>ソフトウェアには脆弱性が存在し、日々アップデートパッチが公開されています。パッチが公開されることによって攻撃者にも脆弱性の存在が明らかになってしまうため、ソフトウェアは常に最新のバージョンにしておくことが大切です。</p>
 
 <h2>保険的対策</h2>
 
@@ -109,60 +118,18 @@
 
 <h3>見えてはいけない情報を隠す</h3>
 
-<p>OSのバージョンやディレクトリ構成、またはエラーの内容などの情報を表示してしまうと、それを利用して攻撃される可能性があるため、これらの情報は表示しないようにします。</p>
-
-<p>まず、Apacheの設定ファイル(/etc/httpd/conf/httpd.conf)を編集します。OSの情報を消すために以下のように変更します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">ServerSignature Off
-ServerTokens ProductOnly
-</code></pre></div>
-<p>indexが存在しないディレクトリにアクセスしてもディレクトリ構成を表示しないようにするために</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;Directory &quot;/var/www/html&quot;&gt;
-  ~
-&lt;/Directory&gt;
-</code></pre></div>
-<p>内に</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">Options -Indexes FollowSymLinks
-</code></pre></div>
-<p>を追加します。</p>
-
-<p>また、CakePHPではデバッグレベルを0にすることにより最小限のエラーしか表示されなくなります。デバッグレベルは/app/Config/core.php内で指定できます。</p>
+<p>エラーの内容などの情報を表示してしまうと、それを利用して攻撃される可能性があるため、これらの情報は表示しないようにします。CakePHPではデバッグレベルを0にすることにより最小限のエラーしか表示されなくなります。デバッグレベルは/app/Config/core.php内で指定できます。</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">Configure::write(&#39;debug&#39;, 0);
 </code></pre></div>
 <p>また、HTTPステータスコードで言うと400や500の場合のエラー画面は/app/View/Errors内のファイルを変更することで変更できます。</p>
 
-<h3>必要なものだけ許可する</h3>
-
-<p>まず全てを禁止して、そこから必要最小限の要素のみを許可します。フォームバリデーションやファイルアクセス権など、あらゆるものの基本となる考え方です。</p>
-
-<p>以下では例としてポートの制限を行います。iptablesというパケットフィルタリングツールを利用してSSHとHTTPの接続を許可し、それ以外の接続を禁止するファイアウォールを構築します。/etc/sysconfig/iptablesを以下のように編集します。</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="o">*</span><span class="n">filter</span>
-<span class="ss">:INPUT</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
-<span class="ss">:FORWARD</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
-<span class="ss">:OUTPUT</span> <span class="no">ACCEPT</span> <span class="o">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
-
-<span class="c1">#ここからINPUTの個別設定</span>
-<span class="c1">#接続状態がRELATED,ESTABLISHEDなら許可</span>
-<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="n">m</span> <span class="n">state</span> <span class="o">--</span><span class="n">state</span> <span class="no">RELATED</span><span class="p">,</span><span class="no">ESTABLISHED</span> <span class="o">-</span><span class="n">j</span> <span class="no">ACCEPT</span>
-<span class="c1">#ループバックは許可</span>
-<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="n">i</span> <span class="n">lo</span> <span class="o">-</span><span class="n">j</span> <span class="no">ACCEPT</span>
-<span class="c1">#SSH(ポート22)は許可</span>
-<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="nb">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">m</span> <span class="n">state</span> <span class="o">--</span><span class="n">state</span> <span class="no">NEW</span> <span class="o">-</span><span class="n">m</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">22</span> <span class="o">-</span><span class="n">j</span> <span class="no">ACCEPT</span>
-<span class="c1">#HTTP(ポート80)は許可</span>
-<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="nb">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">m</span> <span class="n">state</span> <span class="o">--</span><span class="n">state</span> <span class="no">NEW</span> <span class="o">-</span><span class="n">m</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">80</span> <span class="o">-</span><span class="n">j</span> <span class="no">ACCEPT</span>
-<span class="c1">#それ以外は拒否</span>
-<span class="o">-</span><span class="n">A</span> <span class="no">INPUT</span> <span class="o">-</span><span class="n">j</span> <span class="no">REJECT</span> <span class="o">--</span><span class="n">reject</span><span class="o">-</span><span class="n">with</span> <span class="n">icmp</span><span class="o">-</span><span class="n">host</span><span class="o">-</span><span class="n">prohibited</span>
-
-<span class="c1">#反映させる</span>
-<span class="no">COMMIT</span>
-</code></pre></div>
-<p>iptablesを起動（再起動）します。</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">service iptables restart
-</code></pre></div>
 <h3>進入された時のための対策を行う</h3>
 
-<p>万が一脆弱性を突かれ、サーバに進入されてしまった場合に備え、被害を最小限に抑えるための対策を行います。ユーザのパスワードをハッシュ化してデータベースに保存するのもその一環です。サーバやMySQLのユーザの権限を必要最小限に設定しておくのも大切です。</p>
+<p>万が一脆弱性を突かれ、サーバに進入されてしまった場合に備え、被害を最小限に抑えるための対策を行います。ユーザのパスワードをハッシュ化してデータベースに保存するのもその一環です。</p>
 
-<p>ここで紹介したのは必要最低限の内容です。繰り返しになりますが<a href="http://www.ipa.go.jp/security/vuln/websecurity.html">安全なウェブサイトの作り方</a>をしっかり読んでおきましょう。</p>
+<h2>その他</h2>
+
+<p>ここで紹介したのは必要最低限の内容です。レンタルサーバの場合は自動でやってくれますが、自分でサーバを立てる際にはファイアウォールの設定なども行う必要があります。繰り返しになりますが<a href="http://www.ipa.go.jp/security/vuln/websecurity.html">安全なウェブサイトの作り方</a>をしっかり読んでおきましょう。</p>
 
         </div>
       </section>
