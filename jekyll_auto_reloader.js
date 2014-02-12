@@ -6,6 +6,7 @@ var jekyll = exec('jekyll server');
 fs.watch('1', reload);
 fs.watch('2', reload);
 fs.watch('3', reload);
+fs.watch('_layouts', reload);
 
 function reload(event, fileName){
 	var now = new Date();
